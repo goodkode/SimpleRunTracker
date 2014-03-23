@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <RelativeLayout android:layout_width="match_parent"
+        			android:layout_height="0dp"
+        			android:layout_weight="2"
+        			android:gravity="center">
+	    <net.takoli.simpleruntracker.MyNumberPicker 
+	        android:id="@+id/d10"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" />
+	    <net.takoli.simpleruntracker.MyNumberPicker 
+	        android:id="@+id/d1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_toRightOf="@id/d10" />
+	    <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="."
+	        android:layout_toRightOf="@id/d1"/>
+	    <net.takoli.simpleruntracker.MyNumberPicker 
+	        android:id="@+id/d_1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_toRightOf="@id/d1" />
+	    <net.takoli.simpleruntracker.MyNumberPicker 
+	        android:id="@+id/d_01"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_toRightOf="@id/d_1" />
+	    
+    </RelativeLayout>
+    
+    <RelativeLayout android:layout_width="match_parent"
+        			android:layout_height="0dp"
+        			android:layout_weight="1">
+	    <Button 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_margin="10dp"
+	        android:text="Enter run"
+	        android:textSize="30sp"/>
+	    
+	</RelativeLayout>
+    
+
+</LinearLayout>
