@@ -3,20 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    <!-- SPACE ON TOP -->
+    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
     
-   <LinearLayout android:layout_width="match_parent"
+    <!-- ENTER DETAILS SECTION -->
+	<LinearLayout android:layout_width="match_parent"
         			android:layout_height="0dp"
         			android:layout_weight="2"
         			android:gravity="center">
-        <View android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:layout_weight="20" />
+        <View android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="20" />
         
 	    <net.takoli.simpleruntracker.MyNumberPicker 
 	        android:id="@+id/d10"
 	        android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:layout_weight="4"/>
+            android:layout_weight="4"
+            selectionDividersDistance="1dp"
+            selectionDivider="#fff" />
 	    <net.takoli.simpleruntracker.MyNumberPicker 
 	        android:id="@+id/d1"
 	        android:layout_height="wrap_content"
@@ -25,7 +28,7 @@
 	    <TextView 
 	        android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:layout_weight="4"
+            android:layout_weight="1"
 	        android:text="." />
 	    <net.takoli.simpleruntracker.MyNumberPicker 
 	        android:id="@+id/d_1"
@@ -38,9 +41,7 @@
             android:layout_width="0dp"
             android:layout_weight="4" />
 	    
-	    <View android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:layout_weight="10" />
+	    <View android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="10" />
 	    
 	    <net.takoli.simpleruntracker.MyNumberPicker 
 	        android:id="@+id/hour"
@@ -68,10 +69,11 @@
             android:layout_width="0dp"
             android:layout_weight="4" />
 	    
-	    <View android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:layout_weight="20" />
-    </LinearLayout>
+	    <View android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="20" />
+	</LinearLayout>
+    
+    <!-- SPACE BTWN DETAILS AND BUTTON -->
+    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
     
     <RelativeLayout android:layout_width="match_parent"
         			android:layout_height="0dp"
@@ -81,15 +83,15 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentBottom="true"
 	        android:layout_centerHorizontal="true"
-	        android:layout_margin="30dp"
 	        android:text="Enter run"
 	        android:padding="5dp"
 	        android:paddingLeft="12dp"
 	        android:paddingRight="12dp"
-	        android:textSize="25sp"
+	        android:textSize="20sp"
 	        android:background="@drawable/enter_run_button"/>
 	    
 	</RelativeLayout>
-    
+    <!-- SPACE ON BOTTOM -->
+    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
 
 </LinearLayout>

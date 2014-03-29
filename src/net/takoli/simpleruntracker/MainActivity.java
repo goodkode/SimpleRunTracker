@@ -27,15 +27,15 @@ public class MainActivity extends Activity {
 	
 	Fragment enterRun;
 	FragmentTransaction fragTrans;
-	FrameLayout fragLayout;
+	FrameLayout runFragLayout;
 	RelativeLayout mainLayout;
 	DisplayMetrics dm;
 	int screenHeight, screenWidth;
-	
 	GestureDetector gestDect;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.i("run", "onCreate");
 		super.onCreate(savedInstanceState);
 		
 		// Set up variables
@@ -45,27 +45,26 @@ public class MainActivity extends Activity {
 		screenHeight = (int)(dm.heightPixels);
 		screenWidth = (int)(dm.widthPixels);
 		mainLayout = (RelativeLayout) findViewById(R.id.main);
-		fragLayout = new FrameLayout(this);
+		runFragLayout = new FrameLayout(this);
 		enterRun = new EnterRun();
 		
-		// "Enter Run" Fragment setup
-		fragLayout.setLayoutParams(new FrameLayout.LayoutParams(screenWidth, screenHeight / 2));
-		fragLayout.setId(R.id.enter_run_frame);
-		fragLayout.setBackgroundColor(Color.WHITE);
-		mainLayout.addView(fragLayout);
-		
+		// "Enter Run" top fragment setup
+		runFragLayout.setLayoutParams(new FrameLayout.LayoutParams(screenWidth, screenHeight / 2));
+		runFragLayout.setId(R.id.enter_run_frame);
+		runFragLayout.setBackgroundColor(Color.WHITE);
 		fragTrans = getFragmentManager().beginTransaction();
-		fragTrans.add(R.id.enter_run_frame, enterRun);
+		fragTrans.replace(R.id.enter_run_frame, enterRun);
 		fragTrans.commit();
+		mainLayout.addView(runFragLayout);
 		
 		gestDect = new GestureDetector(this, new MyGestureListener());
-		fragLayout.setOnTouchListener(new OnTouchListener() {
+		runFragLayout.setOnTouchListener(new OnTouchListener() {
 		    public boolean onTouch(View v, MotionEvent event) {
 		        return gestDect.onTouchEvent(event);
 		    }
 		});
 		
-		// "My runs" mid-section setup
+		// "My Runs" mid-section setup
 		findViewById(R.id.my_runs).setBackgroundColor(Color.LTGRAY); //for testing
 		// CursorLoader for async load... change later??
 		ListView myRuns = (ListView) findViewById(R.id.my_runs);
@@ -83,7 +82,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {		
 		super.onResume();
-		fragLayout.setY(screenHeight * -3/10);
+		runFragLayout.setY(screenHeight * -3/10);
 		slideDown();
 	}
 
@@ -94,10 +93,10 @@ public class MainActivity extends Activity {
 	}
 	
 	public void slideUp() {
-		fragLayout.animate().setDuration(700).translationY(screenHeight * -3/10);
+		runFragLayout.animate().setDuration(700).translationY(screenHeight * -3/10);
 	}
 	public void slideDown() {
-		fragLayout.animate().setDuration(700).translationY(0);
+		runFragLayout.animate().setDuration(700).translationY(0);
 	}
 	
 	
