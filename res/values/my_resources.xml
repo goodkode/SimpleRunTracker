@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-        <item type="id" name="enter_run_frame" />
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item name="enter_run_frame" type="id"/>
+
+    <style name="Distance" >
+        <item name="android:textColor">#FF444444</item>
+    </style>
+
 </resources>

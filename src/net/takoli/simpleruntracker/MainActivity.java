@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
 	Fragment enterRun;
 	FragmentTransaction fragTrans;
 	FrameLayout runFragLayout;
+	boolean runOpen;
 	RelativeLayout mainLayout;
 	DisplayMetrics dm;
 	int screenHeight, screenWidth;
@@ -35,7 +36,6 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.i("run", "onCreate");
 		super.onCreate(savedInstanceState);
 		
 		// Set up variables
@@ -57,12 +57,13 @@ public class MainActivity extends Activity {
 		fragTrans.commit();
 		mainLayout.addView(runFragLayout);
 		
-		gestDect = new GestureDetector(this, new MyGestureListener());
-		runFragLayout.setOnTouchListener(new OnTouchListener() {
-		    public boolean onTouch(View v, MotionEvent event) {
-		        return gestDect.onTouchEvent(event);
-		    }
-		});
+			// enable fling up and down to open/close the top panel
+			gestDect = new GestureDetector(this, new MyGestureListener());
+			runFragLayout.setOnTouchListener(new OnTouchListener() {
+			    public boolean onTouch(View v, MotionEvent event) {
+			        return gestDect.onTouchEvent(event);
+			    }
+			});
 		
 		// "My Runs" mid-section setup
 		findViewById(R.id.my_runs).setBackgroundColor(Color.LTGRAY); //for testing
@@ -72,6 +73,13 @@ public class MainActivity extends Activity {
 				new String[] {"firstrun", "secondrun", "thirdrun", "fourthrun", "fifthrun"}));  // just testing
 		myRuns.setAdapter(new RunAdapter(this, R.layout.one_run, justTest));
 		//myRuns.setOnItemClickListener...myRuns  -> expand details (eg two lines)
+		
+		myRuns.setOnTouchListener(new OnTouchListener() {
+			public boolean onTouch(View arg0, MotionEvent event) {
+				if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+					slideUp(); return true; }
+				return false; }
+		});
 	}
 	
 	@Override
@@ -94,12 +102,14 @@ public class MainActivity extends Activity {
 	
 	public void slideUp() {
 		runFragLayout.animate().setDuration(700).translationY(screenHeight * -3/10);
+		runOpen = false;
 	}
 	public void slideDown() {
 		runFragLayout.animate().setDuration(700).translationY(0);
+		runOpen = true;
 	}
 	
-	
+	// TO OPEN AND CLOSE TOP PANEL gesturelistener
 	class MyGestureListener extends SimpleOnGestureListener {
 		private static final int SWIPE_MIN_DISTANCE = 20;
 		private static final int SWIPE_BAD_MAX_DIST = 200;
@@ -109,20 +119,27 @@ public class MainActivity extends Activity {
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 			float deltaY = e2.getY() - e1.getY();
 			float absDeltaX = Math.abs(e2.getX() - e1.getX());
+				if ((e1.getX() / screenWidth > 0.15 &&  e1.getX() / screenWidth < 0.85) 
+						&&  e1.getY() / screenHeight < 0.33) {
+					//Log.i("run", "onFling invalid");
+					return false; }
 				if (absDeltaX > SWIPE_BAD_MAX_DIST || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
 					return false; }
 				else if (deltaY < -(SWIPE_MIN_DISTANCE)) {
-					Log.i("run", "onFling UP");
+					//Log.i("run", "onFling UP");
 					slideUp();
 					return true; }
 				else if (deltaY > SWIPE_MIN_DISTANCE) {
-					Log.i("run", "onFling DOWN");
+					//Log.i("run", "onFling DOWN");
 					slideDown();
 					return true; }
 				return false;
 		}
 		@Override
 		public boolean onDown(MotionEvent e) {
+			Log.i("run", "onDown pos: "+e.getX()+", "+e.getY());
+			if (!runOpen)
+				slideDown();
 			return true; }
 	}
 }
