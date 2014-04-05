@@ -8,20 +8,19 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.TextView;
 
 import com.example.simpleruntracker.R;
 
-public class DistNumberPicker extends NumberPicker {
+public class MyNumberPicker extends NumberPicker {
 	
-	DisplayMetrics dispMet;
+	DisplayMetrics dm;
 	float textSize;
-	final int DIVIDER_SCALE = 9;
-	final int TEXT_SCALE = 23;
+	final int DIVIDER_SCALE = 15;
+	final int TEXT_SCALE = 22;
 	
-	public DistNumberPicker(Context context, AttributeSet attrs) {
+	public MyNumberPicker(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		dispMet = getResources().getDisplayMetrics();
+		dm = getResources().getDisplayMetrics();
 		setMinValue(0);
 		setMaxValue(9);
 		Field[] pickerFields = NumberPicker.class.getDeclaredFields();
@@ -30,7 +29,7 @@ public class DistNumberPicker extends NumberPicker {
 				pf.setAccessible(true);
 				try {
 					//Log.i("run", "mSelectionDividersDistance1: " + pf.getInt(this));
-					pf.set(this, (int)(dispMet.heightPixels/dispMet.density / DIVIDER_SCALE));
+					pf.set(this, dm.heightPixels / DIVIDER_SCALE);
 					//Log.i("run", "mSelectionDividersDistance2: " + pf.getInt(this));
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -64,12 +63,11 @@ public class DistNumberPicker extends NumberPicker {
 			textSize = getTextSize();
 			//Log.i("run", "updateView: "+textSize);
 			((EditText) view).setTextSize(textSize);
-			((EditText) view).setTextAppearance(getContext(), R.style.Distance);
 		}
 	}
 	
 	public float getTextSize() {
-		dispMet = getResources().getDisplayMetrics();
-		return dispMet.heightPixels/dispMet.density / TEXT_SCALE;
+		dm = getResources().getDisplayMetrics();
+		return dm.heightPixels / dm.density / TEXT_SCALE;
 	}
 }

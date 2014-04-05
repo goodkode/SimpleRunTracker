@@ -3,8 +3,9 @@
 
     <item name="enter_run_frame" type="id"/>
 
-    <style name="Distance" >
+    <style name="distance" >
         <item name="android:textColor">#FF444444</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
 </resources>

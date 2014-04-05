@@ -1,107 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="HardcodedText">
-    <!-- SPACE ON TOP -->
-    					<!-- OPTION 1: labels on top, keep sides leaner (weight left/right: 10) -->
-    <!-- <RelativeLayout android:id="@+id/top" android:layout_width="match_parent" 
-              android:layout_height="0dp" android:layout_weight="15" /> -->
-    					<!-- OPTION 2: labels on side, wider sides (weight left/right: 15) --> 
-    <RelativeLayout android:id="@+id/top" android:layout_width="match_parent" 
-              android:layout_height="0dp" android:layout_weight="8" />
     
-    <!-- ENTER DETAILS SECTION -->
-	<LinearLayout android:layout_width="match_parent"
-        			android:layout_height="0dp"
-        			android:layout_weight="20"
-        			android:gravity="center" >
-        <View android:id="@+id/left" android:layout_height="match_parent" 
-              android:layout_width="0dp" android:layout_weight="15" />
+    <!-- PLACEHOLDER for the WHOLE TOP PART except for the button and some bottom space -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="60">
         
-	    <net.takoli.simpleruntracker.DistNumberPicker 
-	        android:id="@+id/dist10"
-	        android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="4"
-            selectionDividersDistance="1dp"
-            selectionDivider="#fff" />
-	    <net.takoli.simpleruntracker.DistNumberPicker 
-	        android:id="@+id/dist1"
-	        android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="4" />
-	    <TextView android:id="@+id/div_d"  android:layout_height="wrap_content" android:layout_width="0dp" 
-	        android:layout_weight="1"      android:text="." />
-	    <net.takoli.simpleruntracker.DistNumberPicker 
-	        android:id="@+id/dist_1"
-	        android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="4" />
-	    <net.takoli.simpleruntracker.DistNumberPicker 
-	        android:id="@+id/dist_01"
-	        android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="4" />
+        <!-- SPACE ON LEFT: Distance -->	  
+        <RelativeLayout android:id="@+id/left" android:layout_height="match_parent" 
+	              android:layout_width="0dp" android:layout_weight="20"
+	              android:gravity="center" >
+	              <net.takoli.simpleruntracker.VerticalTextView android:id="@+id/distance" 
+	                  android:layout_width="match_parent" android:layout_height="wrap_content" 
+	                  android:gravity="bottom" android:text="Distance"  />
+	    </RelativeLayout>
 	    
-	    <View android:id="@+id/middle" android:layout_height="match_parent" 
-              android:layout_width="0dp" android:layout_weight="8" />
+	    <!-- TOP  /  MILES & TIME SECTION  /  BOTTOM -->
+		<LinearLayout android:layout_width="0dp" android:layout_height="match_parent"
+	        		  android:layout_weight="70" android:orientation="vertical" android:gravity="center" >
+	        
+		    <!-- TOP -->
+	    	<RelativeLayout android:id="@+id/top" android:layout_width="match_parent" 
+	              android:layout_height="0dp" android:layout_weight="5" />
+	    	
+	    	<!-- MILES & TIME SECTION -->
+	    	<LinearLayout  android:id="@+id/top" android:gravity="center"  android:layout_width="match_parent" 
+	              android:layout_height="0dp" android:layout_weight="18">
+	        
+			    <net.takoli.simpleruntracker.MyNumberPicker 
+			        android:id="@+id/dist10"
+			        android:layout_height="wrap_content"
+		            android:layout_width="0dp"
+		            android:layout_weight="4" />
+			    <net.takoli.simpleruntracker.MyNumberPicker 
+			        android:id="@+id/dist1"
+			        android:layout_height="wrap_content"
+		            android:layout_width="0dp"
+		            android:layout_weight="4" />
+			    <TextView android:id="@+id/div_d"  android:layout_height="wrap_content" android:layout_width="0dp" 
+			        android:layout_weight="1"      android:text="." />
+			    <net.takoli.simpleruntracker.MyNumberPicker 
+			        android:id="@+id/dist_1"
+			        android:layout_height="wrap_content"
+		            android:layout_width="0dp"
+		            android:layout_weight="4" />
+			    <net.takoli.simpleruntracker.MyNumberPicker 
+			        android:id="@+id/dist_01"
+			        android:layout_height="wrap_content"
+		            android:layout_width="0dp"
+		            android:layout_weight="4" />
+			    
+			    <View android:id="@+id/middle" android:layout_height="match_parent" 
+		              android:layout_width="0dp" android:layout_weight="8" />
+			    
+			    <net.takoli.simpleruntracker.MyNumberPicker 
+			        android:id="@+id/hour"
+			        android:layout_height="wrap_content"
+		            android:layout_width="0dp"
+		            android:layout_weight="4" />
+			    <TextView android:id="@+id/div_th"  android:layout_height="wrap_content" android:layout_width="0dp" 
+			        android:layout_weight="1"       android:text=":" />
+			    <net.takoli.simpleruntracker.MyNumberPicker 
+			        android:id="@+id/min10"
+			        android:layout_height="wrap_content"
+		            android:layout_width="0dp"
+		            android:layout_weight="4" />
+			    <net.takoli.simpleruntracker.MyNumberPicker 
+			        android:id="@+id/min1"
+			        android:layout_height="wrap_content"
+		            android:layout_width="0dp"
+		            android:layout_weight="4"/>
+			    <TextView android:id="@+id/div_tm"  android:layout_height="wrap_content" android:layout_width="0dp" 
+			        android:layout_weight="1"       android:text=":" />
+			    <net.takoli.simpleruntracker.MyNumberPicker 
+			        android:id="@+id/sec10"
+			        android:layout_height="wrap_content"
+		            android:layout_width="0dp"
+		            android:layout_weight="4" />
+			    <net.takoli.simpleruntracker.MyNumberPicker 
+			        android:id="@+id/sec1"
+			        android:layout_height="wrap_content"
+		            android:layout_width="0dp"
+		            android:layout_weight="4" />
+			    
+			</LinearLayout>
+	        
+		   	<!-- BOTTOM (above button) -->
+	    	<View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="5" />
+		    
+		</LinearLayout>
 	    
-	    <net.takoli.simpleruntracker.TimeNumberPicker 
-	        android:id="@+id/hour"
-	        android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="4" />
-	    <TextView android:id="@+id/div_th"  android:layout_height="wrap_content" android:layout_width="0dp" 
-	        android:layout_weight="1"       android:text=":" />
-	    <net.takoli.simpleruntracker.TimeNumberPicker 
-	        android:id="@+id/min10"
-	        android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="4" />
-	    <net.takoli.simpleruntracker.TimeNumberPicker 
-	        android:id="@+id/min1"
-	        android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="4"/>
-	    <TextView android:id="@+id/div_tm"  android:layout_height="wrap_content" android:layout_width="0dp" 
-	        android:layout_weight="1"       android:text=":" />
-	    <net.takoli.simpleruntracker.TimeNumberPicker 
-	        android:id="@+id/sec10"
-	        android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="4" />
-	    <net.takoli.simpleruntracker.TimeNumberPicker 
-	        android:id="@+id/sec1"
-	        android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="4" />
+		<!-- SPACE ON RIGHT: Time -->	  
+        <RelativeLayout android:id="@+id/right" android:layout_height="match_parent" 
+	              android:layout_width="0dp" android:layout_weight="20" 
+	              android:gravity="center" >
+	              <net.takoli.simpleruntracker.VerticalTextView android:id="@+id/time" 
+	                  android:layout_width="match_parent" android:layout_height="wrap_content" 
+	                  android:gravity="top" android:text="My Time"  />
+	    </RelativeLayout>
 	    
-	    <View android:id="@+id/right" android:layout_height="match_parent" 
-              android:layout_width="0dp" android:layout_weight="15" />
-	</LinearLayout>
-    
-    <!-- SPACE BTWN DETAILS AND BUTTON -->
-    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="5" />
-    
-    <RelativeLayout android:layout_width="match_parent"
-        			android:layout_height="0dp"
-        			android:layout_weight="10">
-	    <Button 
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentBottom="true"
-	        android:layout_centerHorizontal="true"
-	        android:text="Enter run"
-	        android:paddingLeft="20dp"
-	        android:paddingRight="20dp"
-	        android:textSize="20sp"
-	        android:background="@drawable/enter_run_button"/>	    
+	</LinearLayout>    
+	    
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="10">
+	    <Button android:layout_width="wrap_content"
+		        android:layout_height="match_parent"
+		        android:layout_alignParentBottom="true"
+		        android:layout_centerHorizontal="true"
+		        android:text="Enter run"
+		        android:paddingLeft="20dp"
+		        android:paddingRight="20dp"
+		        android:textSize="20sp"
+		        android:background="@drawable/enter_run_button"/>	    
 	</RelativeLayout>
 	
     <!-- SPACE ON BOTTOM -->
-    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="7" />
+    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="12" />
 
 </LinearLayout>

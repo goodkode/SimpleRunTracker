@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -42,8 +43,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		dm = getResources().getDisplayMetrics();
-		screenHeight = (int)(dm.heightPixels);
-		screenWidth = (int)(dm.widthPixels);
+		screenHeight = (dm.heightPixels);
+		screenWidth = (dm.widthPixels);
 		mainLayout = (RelativeLayout) findViewById(R.id.main);
 		runFragLayout = new FrameLayout(this);
 		enterRun = new EnterRun();
@@ -60,7 +61,8 @@ public class MainActivity extends Activity {
 			// enable fling up and down to open/close the top panel
 			gestDect = new GestureDetector(this, new MyGestureListener());
 			runFragLayout.setOnTouchListener(new OnTouchListener() {
-			    public boolean onTouch(View v, MotionEvent event) {
+			    @Override
+				public boolean onTouch(View v, MotionEvent event) {
 			        return gestDect.onTouchEvent(event);
 			    }
 			});
@@ -71,10 +73,12 @@ public class MainActivity extends Activity {
 		ListView myRuns = (ListView) findViewById(R.id.my_runs);
 		ArrayList<String> justTest = new ArrayList<String>(Arrays.asList(
 				new String[] {"firstrun", "secondrun", "thirdrun", "fourthrun", "fifthrun"}));  // just testing
-		myRuns.setAdapter(new RunAdapter(this, R.layout.one_run, justTest));
+		RunAdapter myAdapter = new RunAdapter(this, R.layout.one_run, R.id.run_date, justTest);
+		myRuns.setAdapter(myAdapter);
 		//myRuns.setOnItemClickListener...myRuns  -> expand details (eg two lines)
 		
 		myRuns.setOnTouchListener(new OnTouchListener() {
+			@Override
 			public boolean onTouch(View arg0, MotionEvent event) {
 				if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
 					slideUp(); return true; }
@@ -93,6 +97,11 @@ public class MainActivity extends Activity {
 		runFragLayout.setY(screenHeight * -3/10);
 		slideDown();
 	}
+	@Override
+	protected void onPause() {
+		slideUp();
+		super.onPause();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -101,10 +110,21 @@ public class MainActivity extends Activity {
 	}
 	
 	public void slideUp() {
+		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
+		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);
+		
+		distance.animate().translationX(0).setDuration(1000);
+		time.animate().translationX(0).setDuration(1000);
 		runFragLayout.animate().setDuration(700).translationY(screenHeight * -3/10);
 		runOpen = false;
 	}
 	public void slideDown() {
+		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
+		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);
+		float moveTextBy = dm.widthPixels / 5.5f - ((MyNumberPicker) findViewById(R.id.dist10)).getTextSize()*dm.density*2;
+		
+		distance.animate().translationXBy(moveTextBy).setDuration(1000);
+		time.animate().translationXBy(- moveTextBy).setDuration(1000);
 		runFragLayout.animate().setDuration(700).translationY(0);
 		runOpen = true;
 	}

@@ -3,8 +3,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp" 
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
@@ -29,6 +27,8 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="0dp"
 	        android:layout_weight="6"
+	        android:paddingLeft="10dp"
+    		android:paddingRight="10dp" 
 	        android:stackFromBottom="true" />
 	    
 	    <FrameLayout

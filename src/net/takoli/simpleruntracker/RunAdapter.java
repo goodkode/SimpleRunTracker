@@ -12,7 +12,7 @@ public class RunAdapter extends ArrayAdapter<String> {
 
 	HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
-	public RunAdapter(Context context, int textViewResourceId, List<String> objects) {
+	public RunAdapter(Context context, int textViewResourceId, int ResourceId, List<String> objects) {
 		super(context, textViewResourceId, objects);
 		for (int i = 0; i < objects.size(); ++i) {
 			mIdMap.put(objects.get(i), i);
