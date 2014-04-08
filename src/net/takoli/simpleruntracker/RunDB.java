@@ -15,18 +15,27 @@ public class RunDB {
 
 	private ArrayList<Run> listOfRuns;
 	private final String FILE_NAME = "SimpleRunTracker_runList.csv";
-	File appIntDir, appSDDir, appSDCardDOCSDir;
+	File appIntDir, appSDCardDOCSDir;
 	File intFile, extFile;
 	FileReader fileReader;
 	FileOutputStream outputStream;
 
 	public RunDB(Context context) {
-		appIntDir = context.getFilesDir();
-		appSDDir = context.getDir("SimpleRunTracker", Context.MODE_WORLD_READABLE);
-		// File f = context.getExternalFilesDir(type) see help in here
-		appSDCardDOCSDir = new File(Environment.getExternalStoragePublicDirectory
-										(Environment.DIRECTORY_DOWNLOADS), FILE_NAME);
-		intFile = new File(appIntDir, FILE_NAME);
+		File path1 = context.getFilesDir();  // where files created with openFileOutput(String, int) are stored.
+		Log.i("run", "context.getFilesDir():" path1.toString());
+		File path2 = context.getDir("getDir", Context.MODE_PRIVATE);  // data/data/net.takoli.simpleruntracker/getDir/..??
+		Log.i("run", "context.getDir():" path2.toString());
+		File path3 = context.getExternalFilesDir(Context.MODE_PRIVATE); //or:(null) // somewhere on Environment.getExternalStorageDirectory()
+		Log.i("run", "context.getExternalFilesDir():" path3.toString());
+		File path4 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);  // CHECK STATE!
+		Log.i("run", "Environment.getExternalStoragePublicDirectory():" path4.toString());
+		
+		File f1 = new File(path1, "path1");
+		File f2 = new File(path2, "path2");
+		File f3 = new File(path3, "path3");
+		File f4 = new File(path4, "path4");
+		
+		
 		listOfRuns = new ArrayList<Run>();
 	}
 
@@ -50,18 +59,22 @@ public class RunDB {
 			return;
 		}
 		try {
-			String sdCard = Environment.getExternalStorageDirectory().toString();	         
-	        
+			appSDCardDOCSDir =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 			File src = new File(context.getFilesDir(), FILE_NAME);
-			//File dst = new File (sdCard + "/SimpleRunTracker/SRT.txt");
-			File dst = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "SimpleRunTracker");
-			FileInputStream inStream = new FileInputStream(src);
-			FileOutputStream outStream = new FileOutputStream(dst);
-			FileChannel inChannel = inStream.getChannel();
-			FileChannel outChannel = outStream.getChannel();
-			inChannel.transferTo(0, inChannel.size(), outChannel);
-			inStream.close();
-			outStream.close();
+			if (src == null) 
+        			Toast.makeText(context, "src not found",Toast.LENGTH_LONG).show();
+			File dst = new File(appSDCardDOCSDir, "test.csv");
+			if (dst == null) 
+        			Toast.makeText(context, "dst not found",Toast.LENGTH_LONG).show();
+			
+			InputStream is = new FileOutputStream(src);
+        		OutputStream os = new FileOutputStream(dst);
+        		byte[] data = new byte[is.available()];
+			is.read(data);
+        		os.write(data);
+        		is.close();
+        		os.close();
+        		
 			Toast.makeText(context, "Saved on SD Card",Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			Toast.makeText(context, "File write error", Toast.LENGTH_LONG)
