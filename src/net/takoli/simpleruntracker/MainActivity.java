@@ -6,31 +6,37 @@ import java.util.Arrays;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.example.simpleruntracker.R;
+import net.takoli.simpleruntracker.R;
 
 public class MainActivity extends Activity {
 	
+	RunDB runList;
 	Fragment enterRun;
 	FragmentTransaction fragTrans;
 	FrameLayout runFragLayout;
 	boolean runOpen;
 	RelativeLayout mainLayout;
+	RunAdapter myAdapter;
 	DisplayMetrics dm;
 	int screenHeight, screenWidth;
 	GestureDetector gestDect;
@@ -38,6 +44,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// instantiate the RunDB
+		runList = new RunDB(this);
+		runList.newRun(this);
+		runList.saveToExternal(this);
 		
 		// Set up variables
 		setContentView(R.layout.activity_main);
@@ -71,11 +82,26 @@ public class MainActivity extends Activity {
 		findViewById(R.id.my_runs).setBackgroundColor(Color.LTGRAY); //for testing
 		// CursorLoader for async load... change later??
 		ListView myRuns = (ListView) findViewById(R.id.my_runs);
-		ArrayList<String> justTest = new ArrayList<String>(Arrays.asList(
-				new String[] {"firstrun", "secondrun", "thirdrun", "fourthrun", "fifthrun"}));  // just testing
-		RunAdapter myAdapter = new RunAdapter(this, R.layout.one_run, R.id.run_date, justTest);
+		myAdapter = new RunAdapter(this, R.layout.one_run, new ArrayList<String>(Arrays.asList(
+				new String[] {"firstrun", "secondrun", "thirdrun", "fourthrun", "fifthrun"})));  // just testing
 		myRuns.setAdapter(myAdapter);
-		//myRuns.setOnItemClickListener...myRuns  -> expand details (eg two lines)
+		myRuns.setOnItemClickListener(new OnItemClickListener() {  // open items in two lines with details
+			@Override
+			public void onItemClick(AdapterView<?> parent, View runView, int pos, long id) {
+				myAdapter.getRunItem(pos).switchDetails();
+				myAdapter.notifyDataSetChanged();
+//				runView.animate().setDuration(2000).alpha(0)
+//	            .withEndAction(new Runnable() {
+//	              @Override
+//	              public void run() {
+//	                list.remove(item);
+//	                myAdapter.notifyDataSetChanged();
+//	                runView.setAlpha(1);
+//	              }
+//	            });
+			}
+			
+		});
 		
 		myRuns.setOnTouchListener(new OnTouchListener() {
 			@Override

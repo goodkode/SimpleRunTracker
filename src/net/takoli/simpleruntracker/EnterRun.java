@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.simpleruntracker.R;
+import net.takoli.simpleruntracker.R;
 
 public class EnterRun extends Fragment {
 

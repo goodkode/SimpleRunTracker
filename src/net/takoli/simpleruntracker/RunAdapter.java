@@ -1,33 +1,55 @@
 package net.takoli.simpleruntracker;
 
-import java.util.HashMap;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
+
+import net.takoli.simpleruntracker.R;
 
 public class RunAdapter extends ArrayAdapter<String> {
 
-	HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+	private Context thisContext;
+	private File runDb;
+	private ArrayList<Run> runList = new ArrayList<Run>();
 
-	public RunAdapter(Context context, int textViewResourceId, int ResourceId, List<String> objects) {
-		super(context, textViewResourceId, objects);
-		for (int i = 0; i < objects.size(); ++i) {
-			mIdMap.put(objects.get(i), i);
+	// This is for testing, in practice CSV will be read in from FILE
+	public RunAdapter(Context context, int layoutResourceId, List<String> justTest) {
+		super(context, layoutResourceId, justTest);
+		thisContext = context;
+		for (String st: justTest)
+			runList.add(new Run(st));
+	}
+	
+	public RunAdapter(Context context, int layoutResourceId) {
+		super(context, layoutResourceId);
+		//runDB - read in data
+	}
+
+	public Run getRunItem(int pos) {
+		return runList.get(pos);
+	}
+
+	@Override
+	public View getView(int pos, View convertView, ViewGroup parent) {
+		View oneRun;
+		LayoutInflater inflater = (LayoutInflater) thisContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// show summary - DEFAULT
+		if (!runList.get(pos).expanded) {
+			oneRun = inflater.inflate(R.layout.one_run, parent, false);
+			return oneRun;
 		}
-	}
-
-	@Override
-	public long getItemId(int position) {
-		String item = getItem(position);
-		return mIdMap.get(item);
-	}
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		return super.getView(position, convertView, parent);
-		// custom view
+		// show details - if it is clicked
+		else {
+			oneRun = inflater.inflate(R.layout.one_run_details, parent, false);
+			return oneRun;
+		}
 	}
 }

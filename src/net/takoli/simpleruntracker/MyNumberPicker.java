@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
-import com.example.simpleruntracker.R;
+import net.takoli.simpleruntracker.R;
 
 public class MyNumberPicker extends NumberPicker {
 	
