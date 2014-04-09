@@ -4,37 +4,27 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.nio.channels.FileChannel;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 public class RunDB {
 
 	private ArrayList<Run> listOfRuns;
 	private final String FILE_NAME = "SimpleRunTracker_runList.csv";
-	File appIntDir, appSDCardDOCSDir;
+	File intDir, extDownloadsDir;
 	File intFile, extFile;
 	FileReader fileReader;
 	FileOutputStream outputStream;
 
 	public RunDB(Context context) {
-		File path1 = context.getFilesDir();  // where files created with openFileOutput(String, int) are stored.
-		Log.i("run", "context.getFilesDir():" path1.toString());
-		File path2 = context.getDir("getDir", Context.MODE_PRIVATE);  // data/data/net.takoli.simpleruntracker/getDir/..??
-		Log.i("run", "context.getDir():" path2.toString());
-		File path3 = context.getExternalFilesDir(Context.MODE_PRIVATE); //or:(null) // somewhere on Environment.getExternalStorageDirectory()
-		Log.i("run", "context.getExternalFilesDir():" path3.toString());
-		File path4 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);  // CHECK STATE!
-		Log.i("run", "Environment.getExternalStoragePublicDirectory():" path4.toString());
-		
-		File f1 = new File(path1, "path1");
-		File f2 = new File(path2, "path2");
-		File f3 = new File(path3, "path3");
-		File f4 = new File(path4, "path4");
-		
+		// same as openFileOutput(String, int) /data/data/net.takoli.simpleruntracker/files/
+		File intDir = context.getFilesDir();  
 		
 		listOfRuns = new ArrayList<Run>();
 	}
@@ -59,21 +49,21 @@ public class RunDB {
 			return;
 		}
 		try {
-			appSDCardDOCSDir =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+			extDownloadsDir =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 			File src = new File(context.getFilesDir(), FILE_NAME);
 			if (src == null) 
         			Toast.makeText(context, "src not found",Toast.LENGTH_LONG).show();
-			File dst = new File(appSDCardDOCSDir, "test.csv");
+			File dst = new File(extDownloadsDir, FILE_NAME);
 			if (dst == null) 
         			Toast.makeText(context, "dst not found",Toast.LENGTH_LONG).show();
 			
-			InputStream is = new FileOutputStream(src);
-        		OutputStream os = new FileOutputStream(dst);
-        		byte[] data = new byte[is.available()];
+			InputStream is = new FileInputStream(src);
+        	OutputStream os = new FileOutputStream(dst);
+        	byte[] data = new byte[is.available()];
 			is.read(data);
-        		os.write(data);
-        		is.close();
-        		os.close();
+        	os.write(data);
+        	is.close();
+        	os.close();
         		
 			Toast.makeText(context, "Saved on SD Card",Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
