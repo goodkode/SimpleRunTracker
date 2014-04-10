@@ -114,7 +114,8 @@
 		        android:paddingLeft="20dp"
 		        android:paddingRight="20dp"
 		        android:textSize="20sp"
-		        android:background="@drawable/enter_run_button"/>	    
+		        android:background="@drawable/enter_run_button"
+		        android:onClick="enterRun" />	    
 	</RelativeLayout>
 	
     <!-- SPACE ON BOTTOM -->
