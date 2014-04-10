@@ -63,4 +63,11 @@ public class EnterRun extends Fragment {
 		time.setTextColor(0xaaFF0000);
 		time.setTextSize(dist1.getTextSize());
 	}
+	
+	public void enterRun() {
+		float dist;
+		int h, m, s;
+		String unit;
+		
+	}
 }
