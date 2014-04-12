@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
 
 public class RunDB {
@@ -25,15 +24,14 @@ public class RunDB {
 	public RunDB(Context context) {
 		// same as openFileOutput(String, int) /data/data/net.takoli.simpleruntracker/files/
 		File intDir = context.getFilesDir();  
-		
-		listOfRuns = new ArrayList<Run>();
+		//listOfRuns = new ArrayList<Run>();
 	}
 
-	public void newRun(Context context) {
+	public void addNewRun(Context context, String line) {
 		// to append the file with new runs
 		try {
 			outputStream = context.openFileOutput(FILE_NAME, Context.MODE_APPEND);
-			outputStream.write("1, 2, test, 1/2/3".getBytes());
+			outputStream.write((line+"\n").getBytes());
 			outputStream.close();
 		} catch (Exception e) {
 			Toast.makeText(context,
@@ -51,12 +49,7 @@ public class RunDB {
 		try {
 			extDownloadsDir =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 			File src = new File(context.getFilesDir(), FILE_NAME);
-			if (src == null) 
-        			Toast.makeText(context, "src not found",Toast.LENGTH_LONG).show();
-			File dst = new File(extDownloadsDir, FILE_NAME);
-			if (dst == null) 
-        			Toast.makeText(context, "dst not found",Toast.LENGTH_LONG).show();
-			
+			File dst = new File(extDownloadsDir, FILE_NAME);			
 			InputStream is = new FileInputStream(src);
         	OutputStream os = new FileOutputStream(dst);
         	byte[] data = new byte[is.available()];

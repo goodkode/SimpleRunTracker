@@ -1,50 +1,37 @@
 package net.takoli.simpleruntracker;
 
-import java.util.Date;
-
 public class Run {
-	boolean expanded = false;
-	Date runDate;
-	String test;
+	int dd, _dd, h, mm, ss;
+	char unit;
 	int distM;
 	int distmDec;
+	boolean expanded;
 	
-	public Run(String test) {
-		this.test = test;
+	public Run(int dd, int _dd, char unit, int h, int mm, int ss) {
+		this.dd = dd;
+		this._dd = _dd;
+		this.unit = unit;
+		this.h = h;
+		this.mm = mm;
+		this.ss = ss;
+		expanded = false;
+	}
+	
+	public String getDistance() {
+		return dd + "." + _dd;
+	}
+	
+	public String getTime() {
+		String sTime = h + ":";
+		if (mm < 10)	sTime += "0" + mm;
+		else			sTime += mm;
+		if (ss < 10)	sTime += "0" + ss;
+		else			sTime += ss;
+		return  sTime;
 	}
 	
 	public void switchDetails() {
-		if (expanded)
-			expanded = false;
+		if (expanded)   expanded = false;
 		else expanded = true;
-	}
-	
-	public static class Time {
-		private h, m, s;
-		public Time(int hour, int min, int sec) {
-			h = hour;
-			m = min;
-			s = sec;
-		}
-		
-	}
-	
-	public static class Distance {
-		private char unit;
-		private float dist;
-		private final float CONV = 1.609344f  // 1 mile in km
-		
-		public Distance(float distance, char unit) {
-			dist = distance;
-			this.unit = unit;
-		}
-		
-		public void convertM2Km() {
-			
-		}
-		
-		public void convertKm2M() {
-			
-		}
 	}
 }

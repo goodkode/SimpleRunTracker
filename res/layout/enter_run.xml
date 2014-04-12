@@ -106,7 +106,8 @@
 	</LinearLayout>    
 	    
     <RelativeLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="10">
-	    <Button android:layout_width="wrap_content"
+	    <Button android:id="@+id/enter_run_button"
+	        	android:layout_width="wrap_content"
 		        android:layout_height="match_parent"
 		        android:layout_alignParentBottom="true"
 		        android:layout_centerHorizontal="true"
@@ -114,8 +115,7 @@
 		        android:paddingLeft="20dp"
 		        android:paddingRight="20dp"
 		        android:textSize="20sp"
-		        android:background="@drawable/enter_run_button"
-		        android:onClick="enterRun" />	    
+		        android:background="@drawable/enter_run_button" />	    
 	</RelativeLayout>
 	
     <!-- SPACE ON BOTTOM -->

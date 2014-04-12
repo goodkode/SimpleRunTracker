@@ -28,7 +28,7 @@ public final class R {
         public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f060023;
+        public static final int action_settings=0x7f060024;
         public static final int dist1=0x7f060009;
         public static final int dist10=0x7f060008;
         public static final int dist_01=0x7f06000c;
@@ -37,6 +37,7 @@ public final class R {
         public static final int div_d=0x7f06000a;
         public static final int div_th=0x7f06000f;
         public static final int div_tm=0x7f060012;
+        public static final int enter_run_button=0x7f060017;
         public static final int enter_run_frame=0x7f060000;
         public static final int graph=0x7f060004;
         public static final int hour=0x7f06000e;
@@ -48,18 +49,18 @@ public final class R {
         public static final int my_runs=0x7f060003;
         public static final int placeholder=0x7f060002;
         public static final int right=0x7f060015;
-        public static final int run_01=0x7f060020;
-        public static final int run_01_label=0x7f06001f;
-        public static final int run_02=0x7f060022;
-        public static final int run_02_label=0x7f060021;
-        public static final int run_date=0x7f060018;
-        public static final int run_date_label=0x7f060017;
-        public static final int run_dist=0x7f06001a;
-        public static final int run_dist_label=0x7f060019;
-        public static final int run_pace=0x7f06001e;
-        public static final int run_pace_label=0x7f06001d;
-        public static final int run_time=0x7f06001c;
-        public static final int run_time_label=0x7f06001b;
+        public static final int run_01=0x7f060021;
+        public static final int run_01_label=0x7f060020;
+        public static final int run_02=0x7f060023;
+        public static final int run_02_label=0x7f060022;
+        public static final int run_date=0x7f060019;
+        public static final int run_date_label=0x7f060018;
+        public static final int run_dist=0x7f06001b;
+        public static final int run_dist_label=0x7f06001a;
+        public static final int run_pace=0x7f06001f;
+        public static final int run_pace_label=0x7f06001e;
+        public static final int run_time=0x7f06001d;
+        public static final int run_time_label=0x7f06001c;
         public static final int sec1=0x7f060014;
         public static final int sec10=0x7f060013;
         public static final int time=0x7f060016;

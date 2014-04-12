@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
-
-import net.takoli.simpleruntracker.R;
 
 public class EnterRun extends Fragment {
 
@@ -16,7 +16,9 @@ public class EnterRun extends Fragment {
 	MyNumberPicker hour, min10, min1, sec10, sec1;
 	TextView div_d, div_th, div_tm;
 	TextView distance, time;
+	Button enterRunButton;
 	DisplayMetrics dm;
+	RunDB runList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -30,8 +32,9 @@ public class EnterRun extends Fragment {
 	}
 	
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
+		
 		dm = getResources().getDisplayMetrics();
 		
 		// Set up DISTANCE fields
@@ -62,12 +65,31 @@ public class EnterRun extends Fragment {
 		time = (VerticalTextView) getActivity().findViewById(R.id.time);
 		time.setTextColor(0xaaFF0000);
 		time.setTextSize(dist1.getTextSize());
+		
+		// Send run details to the RunDB database (write file)
+		enterRunButton = (Button) getActivity().findViewById(R.id.enter_run_button);
+		enterRunButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				char unit = 'm';  // later get it from SharedPreferences
+				int dd = dist10.getValue() * 10 + dist1.getValue();
+				int _dd = dist_1.getValue() * 10 + dist_01.getValue();
+				int h = hour.getValue();
+				int mm = min10.getValue() * 10 + min1.getValue();
+				int ss = sec10.getValue() * 10 + sec1.getValue();
+				// save it to the CSV file
+				String toSave = dd+"."+_dd+unit+" in "+h+":"+mm+":"+ss;
+				U.slog(getActivity(), toSave);
+				((MainActivity) getActivity()).saveToDB(toSave);
+				// add it to the ListView
+				Run newRun = new Run(dd, _dd, unit, h, mm, ss);
+				((MainActivity) getActivity()).addToListView(newRun);
+			}
+		});
 	}
 	
-	public void enterRun() {
-		float dist;
-		int h, m, s;
-		String unit;
-		
+	@Override
+	public void onResume() {
+		super.onResume();
 	}
 }

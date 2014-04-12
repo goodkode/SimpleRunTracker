@@ -1,19 +1,14 @@
 package net.takoli.simpleruntracker;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,19 +19,18 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import net.takoli.simpleruntracker.R;
 
 public class MainActivity extends Activity {
 	
-	RunDB runList;
 	Fragment enterRun;
 	FragmentTransaction fragTrans;
 	FrameLayout runFragLayout;
-	boolean runOpen;
+	boolean runFragOpen;
 	RelativeLayout mainLayout;
+
+	RunDB runListDB;
 	RunAdapter myAdapter;
+	
 	DisplayMetrics dm;
 	int screenHeight, screenWidth;
 	GestureDetector gestDect;
@@ -46,9 +40,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		// instantiate the RunDB
-		runList = new RunDB(this);
-		runList.newRun(this);
-		runList.saveToExternal(this);
+		runListDB = new RunDB(this);
+		//runListDB.newRun(this);
+		//runListDB.saveToExternal(this);
 		
 		// Set up variables
 		setContentView(R.layout.activity_main);
@@ -82,8 +76,7 @@ public class MainActivity extends Activity {
 		findViewById(R.id.my_runs).setBackgroundColor(Color.LTGRAY); //for testing
 		// CursorLoader for async load... change later??
 		ListView myRuns = (ListView) findViewById(R.id.my_runs);
-		myAdapter = new RunAdapter(this, R.layout.one_run, new ArrayList<String>(Arrays.asList(
-				new String[] {"firstrun", "secondrun", "thirdrun", "fourthrun", "fifthrun"})));  // just testing
+		myAdapter = new RunAdapter(this, R.layout.one_run); 
 		myRuns.setAdapter(myAdapter);
 		myRuns.setOnItemClickListener(new OnItemClickListener() {  // open items in two lines with details
 			@Override
@@ -142,7 +135,7 @@ public class MainActivity extends Activity {
 		distance.animate().translationX(0).setDuration(1000);
 		time.animate().translationX(0).setDuration(1000);
 		runFragLayout.animate().setDuration(700).translationY(screenHeight * -3/10);
-		runOpen = false;
+		runFragOpen = false;
 	}
 	public void slideDown() {
 		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
@@ -152,8 +145,23 @@ public class MainActivity extends Activity {
 		distance.animate().translationXBy(moveTextBy).setDuration(1000);
 		time.animate().translationXBy(- moveTextBy).setDuration(1000);
 		runFragLayout.animate().setDuration(700).translationY(0);
-		runOpen = true;
+		runFragOpen = true;
 	}
+	
+	// save it to the CSV DataBase
+	public void saveToDB(String toSave) {
+		if (runListDB == null)	 return;
+		runListDB.addNewRun(this, toSave);
+	}
+	
+	// save it to the ListView
+	public void addToListView(Run newRun) {
+		if (newRun == null)	  return;
+		myAdapter.addNewRun(newRun);
+		myAdapter.notifyDataSetChanged();
+	}
+	
+	
 	
 	// TO OPEN AND CLOSE TOP PANEL gesturelistener
 	class MyGestureListener extends SimpleOnGestureListener {
@@ -184,7 +192,7 @@ public class MainActivity extends Activity {
 		@Override
 		public boolean onDown(MotionEvent e) {
 			Log.i("run", "onDown pos: "+e.getX()+", "+e.getY());
-			if (!runOpen)
+			if (!runFragOpen)
 				slideDown();
 			return true; }
 	}
