@@ -81,6 +81,7 @@ public class EnterRun extends Fragment {
 				// save it to the CSV file and update the ListView
 				String saveLine = dd+"."+_dd+","+unit+","+h+":"+mm+":"+ss;
 				runListDB.addNewRun(getActivity(), saveLine);
+				((MainActivity) getActivity()).getRunAdapter().notifyDataSetChanged();
 			}
 		});
 	}

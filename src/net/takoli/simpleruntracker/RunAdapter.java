@@ -20,7 +20,6 @@ public class RunAdapter extends BaseAdapter {
 	public RunAdapter(Context context, int layoutResourceId, RunDB runListDB) {
 		thisContext = context;
 		runList = runListDB.getList();
-		runList.add(new Run(1, 2, "m", 1, 22, 33));  // testing
 		//TODO runDB - read in data
 	}
 

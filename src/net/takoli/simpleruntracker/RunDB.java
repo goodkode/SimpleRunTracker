@@ -40,14 +40,13 @@ public class RunDB {
 			Toast.makeText(context,"Can't read SimpleRunTracker_runList.csv", Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
-		//runListDB = new ArrayList<Run>();
 	}
 	
 	public Run processLine(String line) {
 		String[] fields = line.split(",");
 		Log.i("run", fields[0] +fields[1] + fields[2]);
-		String[] distSt = fields[0].split(".");
-		String[] timeSt = fields[2].split(":");
+		String[] distSt = fields[0].split("\\.");
+		String[] timeSt = fields[2].split("\\:");
 		return new Run(Integer.parseInt(distSt[0]), Integer.parseInt(distSt[1]), fields[1], 
 				Integer.parseInt(timeSt[0]), Integer.parseInt(timeSt[1]), Integer.parseInt(timeSt[2]));
 	}
@@ -57,6 +56,7 @@ public class RunDB {
 	}
 
 	public void addNewRun(Context context, String line) {
+		runList.add(processLine(line));
 		// to append the file with new runs
 		try {
 			FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_APPEND);

@@ -22,18 +22,18 @@ import android.widget.RelativeLayout;
 
 public class MainActivity extends Activity {
 	
-	Fragment enterRun;
-	FragmentTransaction fragTrans;
-	FrameLayout runFragLayout;
-	boolean runFragOpen;
-	RelativeLayout mainLayout;
+	private Fragment enterRun;
+	private FragmentTransaction fragTrans;
+	private FrameLayout runFragLayout;
+	private boolean runFragOpen;
+	private RelativeLayout mainLayout;
 
-	RunDB runListDB;       // ArrayList<Run> abstraction and file IO functions
-	RunAdapter myAdapter;  // Activity's ListView adapter - uses ArrayList<Run> received from runListDB
+	private RunDB runListDB;       // ArrayList<Run> abstraction and file IO functions
+	private RunAdapter myAdapter;  // Activity's ListView adapter - uses ArrayList<Run> received from runListDB
 	
-	DisplayMetrics dm;
-	int screenHeight, screenWidth;
-	GestureDetector gestDect;
+	private DisplayMetrics dm;
+	private int screenHeight, screenWidth;
+	private GestureDetector gestDect;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -145,8 +145,10 @@ public class MainActivity extends Activity {
 	}
 	
 	public RunDB getRunListDB() {
-		return runListDB;
-	}
+		return runListDB; }
+	
+	public RunAdapter getRunAdapter() {
+		return myAdapter; }
 	
 	
 	
