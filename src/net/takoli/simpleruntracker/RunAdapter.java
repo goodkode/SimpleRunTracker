@@ -17,10 +17,10 @@ public class RunAdapter extends BaseAdapter {
 	private TextView rDate, rDist, rTime, rPace;
 	private Run run;
 	
-	public RunAdapter(Context context, int layoutResourceId) {
+	public RunAdapter(Context context, int layoutResourceId, RunDB runListDB) {
 		thisContext = context;
-		runList = new ArrayList<Run>();
-		runList.add(new Run(1, 2, 'm', 1, 22, 33));  // testing
+		runList = runListDB.getList();
+		runList.add(new Run(1, 2, "m", 1, 22, 33));  // testing
 		//TODO runDB - read in data
 	}
 

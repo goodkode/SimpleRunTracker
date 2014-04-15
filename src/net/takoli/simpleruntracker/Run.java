@@ -2,12 +2,10 @@ package net.takoli.simpleruntracker;
 
 public class Run {
 	int dd, _dd, h, mm, ss;
-	char unit;
-	int distM;
-	int distmDec;
+	String unit;
 	boolean expanded;
 	
-	public Run(int dd, int _dd, char unit, int h, int mm, int ss) {
+	public Run(int dd, int _dd, String unit, int h, int mm, int ss) {
 		this.dd = dd;
 		this._dd = _dd;
 		this.unit = unit;

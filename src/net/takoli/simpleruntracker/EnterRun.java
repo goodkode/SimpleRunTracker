@@ -18,11 +18,12 @@ public class EnterRun extends Fragment {
 	TextView distance, time;
 	Button enterRunButton;
 	DisplayMetrics dm;
-	RunDB runList;
+	RunDB runListDB;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		runListDB = ((MainActivity) getActivity()).getRunListDB();
 	}
 	
 	@Override
@@ -71,19 +72,15 @@ public class EnterRun extends Fragment {
 		enterRunButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				char unit = 'm';  // later get it from SharedPreferences
+				String unit = "m";  // later get it from SharedPreferences
 				int dd = dist10.getValue() * 10 + dist1.getValue();
 				int _dd = dist_1.getValue() * 10 + dist_01.getValue();
 				int h = hour.getValue();
 				int mm = min10.getValue() * 10 + min1.getValue();
 				int ss = sec10.getValue() * 10 + sec1.getValue();
-				// save it to the CSV file
-				String toSave = dd+"."+_dd+unit+" in "+h+":"+mm+":"+ss;
-				U.slog(getActivity(), toSave);
-				((MainActivity) getActivity()).saveToDB(toSave);
-				// add it to the ListView
-				Run newRun = new Run(dd, _dd, unit, h, mm, ss);
-				((MainActivity) getActivity()).addToListView(newRun);
+				// save it to the CSV file and update the ListView
+				String saveLine = dd+"."+_dd+","+unit+","+h+":"+mm+":"+ss;
+				runListDB.addNewRun(getActivity(), saveLine);
 			}
 		});
 	}

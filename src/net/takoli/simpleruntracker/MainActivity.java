@@ -28,8 +28,8 @@ public class MainActivity extends Activity {
 	boolean runFragOpen;
 	RelativeLayout mainLayout;
 
-	RunDB runListDB;
-	RunAdapter myAdapter;
+	RunDB runListDB;       // ArrayList<Run> abstraction and file IO functions
+	RunAdapter myAdapter;  // Activity's ListView adapter - uses ArrayList<Run> received from runListDB
 	
 	DisplayMetrics dm;
 	int screenHeight, screenWidth;
@@ -38,11 +38,6 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		// instantiate the RunDB
-		runListDB = new RunDB(this);
-		//runListDB.newRun(this);
-		//runListDB.saveToExternal(this);
 		
 		// Set up variables
 		setContentView(R.layout.activity_main);
@@ -76,7 +71,8 @@ public class MainActivity extends Activity {
 		findViewById(R.id.my_runs).setBackgroundColor(Color.LTGRAY); //for testing
 		// CursorLoader for async load... change later??
 		ListView myRuns = (ListView) findViewById(R.id.my_runs);
-		myAdapter = new RunAdapter(this, R.layout.one_run); 
+		runListDB = new RunDB(this);
+		myAdapter = new RunAdapter(this, R.layout.one_run, runListDB); 
 		myRuns.setAdapter(myAdapter);
 		myRuns.setOnItemClickListener(new OnItemClickListener() {  // open items in two lines with details
 			@Override
@@ -148,17 +144,8 @@ public class MainActivity extends Activity {
 		runFragOpen = true;
 	}
 	
-	// save it to the CSV DataBase
-	public void saveToDB(String toSave) {
-		if (runListDB == null)	 return;
-		runListDB.addNewRun(this, toSave);
-	}
-	
-	// save it to the ListView
-	public void addToListView(Run newRun) {
-		if (newRun == null)	  return;
-		myAdapter.addNewRun(newRun);
-		myAdapter.notifyDataSetChanged();
+	public RunDB getRunListDB() {
+		return runListDB;
 	}
 	
 	
