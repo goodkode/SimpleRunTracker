@@ -4,16 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <LinearLayout android:layout_weight="2"
+    <LinearLayout android:layout_weight="3"
         android:layout_width="match_parent"
     	android:layout_height="match_parent">
     
-    <TextView android:id="@+id/run_date_label"
-        android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:textSize="12sp"
-        android:text="Date:" />
     <TextView android:id="@+id/run_date"
         android:layout_height="match_parent"
         android:layout_width="0dp"
@@ -55,31 +49,44 @@
     
     </LinearLayout>
     
-    <LinearLayout android:layout_weight="3"
+    <LinearLayout android:layout_weight="2"
         android:layout_width="match_parent"
     	android:layout_height="match_parent">
     
-        <TextView android:id="@+id/run_01_label"
+    <TextView android:text="Performance: "
         android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:textSize="12sp"
-        android:text="01" />
-    <TextView android:id="@+id/run_01"
-        android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
         android:textSize="12sp" />
-    <TextView android:id="@+id/run_02_label"
+    <TextView android:id="@+id/perf_avg"
         android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:textSize="12sp"
-        android:text="02" />
-    <TextView android:id="@+id/run_02"
+        android:layout_width="wrap_content"
+        android:textSize="12sp" />
+    <TextView android:text=" of average for similar distance"
         android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:textSize="12sp" />
+    
+    </LinearLayout>
+    
+    <LinearLayout android:layout_weight="2"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent">
+    
+    <TextView android:id="@+id/perf_dist"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:textSize="12sp" />
+    <TextView android:text=" of best distance"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:textSize="12sp" />
+    <TextView android:id="@+id/perf_pace"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:textSize="12sp" />
+    <TextView android:text=" of best pace"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
         android:textSize="12sp" />
     
     </LinearLayout>
