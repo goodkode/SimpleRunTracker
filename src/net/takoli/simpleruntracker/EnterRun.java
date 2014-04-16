@@ -19,11 +19,13 @@ public class EnterRun extends Fragment {
 	Button enterRunButton;
 	DisplayMetrics dm;
 	RunDB runListDB;
+	RunAdapter runAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		runListDB = ((MainActivity) getActivity()).getRunListDB();
+		runAdapter = ((MainActivity) getActivity()).getRunAdapter();
 	}
 	
 	@Override
@@ -67,7 +69,7 @@ public class EnterRun extends Fragment {
 		time.setTextColor(0xaaFF0000);
 		time.setTextSize(dist1.getTextSize());
 		
-		// Send run details to the RunDB database (write file)
+		// Send run details to the RunDB database
 		enterRunButton = (Button) getActivity().findViewById(R.id.enter_run_button);
 		enterRunButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -78,10 +80,9 @@ public class EnterRun extends Fragment {
 				int h = hour.getValue();
 				int mm = min10.getValue() * 10 + min1.getValue();
 				int ss = sec10.getValue() * 10 + sec1.getValue();
-				// save it to the CSV file and update the ListView
-				String saveLine = dd+"."+_dd+","+unit+","+h+":"+mm+":"+ss;
-				runListDB.addNewRun(getActivity(), saveLine);
-				((MainActivity) getActivity()).getRunAdapter().notifyDataSetChanged();
+				// save it to runDB and update the ListView
+				runListDB.addNewRun(getActivity(), new Run(dd, _dd, unit, h, mm, ss);
+				runAdapter.notifyDataSetChanged();
 			}
 		});
 	}
