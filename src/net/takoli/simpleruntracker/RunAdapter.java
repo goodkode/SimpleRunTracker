@@ -15,6 +15,7 @@ public class RunAdapter extends BaseAdapter {
 	private Context thisContext;
 	private ArrayList<Run> runList;
 	private TextView rDate, rDist, rTime, rPace;
+	private TextView rPerfAvg, rPerfDist, rPerfPace, rPerfScore;
 	private Run run;
 	
 	public RunAdapter(Context context, int layoutResourceId, RunDB runListDB) {
@@ -38,9 +39,10 @@ public class RunAdapter extends BaseAdapter {
 			rDate = (TextView) oneRun.findViewById(R.id.run_date);
 			rDist = (TextView) oneRun.findViewById(R.id.run_dist);
 			rTime = (TextView) oneRun.findViewById(R.id.run_time);
-			rDate.setText("today");
+			rDate.setText(run.getDate());
 			rDist.setText(run.getDistance());
 			rTime.setText(run.getTime());
+			rPace.setText(run.getPace());
 			return oneRun;
 		}
 		// show details - if it is clicked
