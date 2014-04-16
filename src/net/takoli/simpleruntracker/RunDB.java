@@ -63,14 +63,27 @@ public class RunDB {
 	public void addNewRun(Context context, String line) {
 		runList.add(new Run(line));
 		// to append the file with new runs
-		try {
-			FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_APPEND);
-			outputStream.write((line+"\n").getBytes());
-			outputStream.close();
-		} catch (Exception e) {
-			Toast.makeText(context,"SimpleRunTracker_runList.csv is not reachable to append",Toast.LENGTH_LONG).show();
-			e.printStackTrace();
-		}
+		// try {
+		// 	FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_APPEND);
+		// 	outputStream.write((line+"\n").getBytes());
+		// 	outputStream.close();
+		// } catch (Exception e) {
+		// 	Toast.makeText(context,"SimpleRunTracker_runList.csv is not reachable to append",Toast.LENGTH_LONG).show();
+		// 	e.printStackTrace();
+		// }
+	}
+	
+	public void addNewRun(Context context, Run newRun) {
+		runList.add(newRun);
+		// to append the file with new runs
+		// try {
+		// 	FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_APPEND);
+		// 	outputStream.write((line+"\n").getBytes());
+		// 	outputStream.close();
+		// } catch (Exception e) {
+		// 	Toast.makeText(context,"SimpleRunTracker_runList.csv is not reachable to append",Toast.LENGTH_LONG).show();
+		// 	e.printStackTrace();
+		// }
 	}
 
 	// NOT USED - will implement Share Intent instead. Also considering Google Docs sync in the future
