@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
@@ -17,7 +16,9 @@ import android.widget.Toast;
 public class RunDB {
 
 	private ArrayList<Run> runList;
-	private final String FILE_NAME = "SimpleRunTracker_runList.csv";
+	private final String FILE_NAME = "SimpleRunTrackerDB.csv";
+	private final String TEMP_FILE_NAME = "SimpleRunTrackerDB_temp.csv";
+	private final int MAX = 100;
 	File intDir, extDownloadsDir;
 
 	public RunDB(Context context) {
@@ -31,8 +32,7 @@ public class RunDB {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			String line;
 			while ((line = reader.readLine()) != null) {
-				nRun = processLine(line);
-				runList.add(nRun);
+				runList.add(new Run(line));
 				Log.i("run", runList.size() + ": " + line);
 			}
 			inputStream.close();
@@ -42,21 +42,26 @@ public class RunDB {
 		}
 	}
 	
-	public Run processLine(String line) {
-		String[] fields = line.split(",");
-		Log.i("run", fields[0] +fields[1] + fields[2]);
-		String[] distSt = fields[0].split("\\.");
-		String[] timeSt = fields[2].split("\\:");
-		return new Run(Integer.parseInt(distSt[0]), Integer.parseInt(distSt[1]), fields[1], 
-				Integer.parseInt(timeSt[0]), Integer.parseInt(timeSt[1]), Integer.parseInt(timeSt[2]));
+	public ArrayList<Run> getRunList() {
+		return runList;
 	}
 	
-	public ArrayList<Run> getList() {
-		return runList;
+	public void updateAndSaveRunDB(Context context) {  // might consider serialization instaed of CSV in the future
+		int size = runList.size();
+		int start = size > MAX ? runList.size()-MAX : 0;
+		try {
+			FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+			for (int i = start; i < size; i++)
+				outputStream.write((runList.get(i).toString()+"\n").getBytes());
+			outputStream.close();
+		} catch (Exception e) {
+			Toast.makeText(context,"SimpleRunTracker_runList.csv is not reachable to append",Toast.LENGTH_LONG).show();
+			e.printStackTrace();
+		}
 	}
 
 	public void addNewRun(Context context, String line) {
-		runList.add(processLine(line));
+		runList.add(new Run(line));
 		// to append the file with new runs
 		try {
 			FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_APPEND);
@@ -68,6 +73,7 @@ public class RunDB {
 		}
 	}
 
+	// NOT USED - will implement Share Intent instead. Also considering Google Docs sync in the future
 	public void saveToExternal(Context context) {
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			Toast.makeText(context, "SD Card is not available",Toast.LENGTH_LONG).show();
@@ -92,5 +98,4 @@ public class RunDB {
 					.show();
 		}
 	}
-
 }
