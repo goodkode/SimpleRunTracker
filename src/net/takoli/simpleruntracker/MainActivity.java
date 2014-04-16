@@ -117,6 +117,12 @@ public class MainActivity extends Activity {
 		slideUp();
 		super.onPause();
 	}
+	
+	@Override
+	protected void onStop() {
+		runListDB.saveAndUpdateRunDB(this);
+		super.onStop();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
