@@ -29,6 +29,10 @@ public class Run {
 		expanded = false;
 	}
 	
+	public String getDate() {
+		return "today";
+	}
+	
 	public String getDistance() {
 		return dd + "." + _dd;
 	}
@@ -40,6 +44,12 @@ public class Run {
 		if (ss < 10)	sTime += "0" + ss;
 		else			sTime += ss;
 		return  sTime;
+	}
+	
+	public String getPace() {
+		int totalSec = h * 60*60 + mm * 60 + ss;
+		int paceInSec = totalSec * 100 / (dd * 100 + -dd);
+		return  (paceInSec / 60) + ":" + (paceInSec % 60);
 	}
 	
 	public void switchDetails() {
