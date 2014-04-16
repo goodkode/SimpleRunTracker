@@ -19,7 +19,7 @@ public class RunAdapter extends BaseAdapter {
 	
 	public RunAdapter(Context context, int layoutResourceId, RunDB runListDB) {
 		thisContext = context;
-		runList = runListDB.getList();
+		runList = runListDB.getRunList();
 		//TODO runDB - read in data
 	}
 
