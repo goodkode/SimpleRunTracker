@@ -29,7 +29,7 @@
 	    	
 	    	<!-- MILES & TIME SECTION -->
 	    	<LinearLayout  android:id="@+id/top" android:gravity="center"  android:layout_width="match_parent" 
-	              android:layout_height="0dp" android:layout_weight="18">
+	              android:layout_height="0dp" android:layout_weight="30">
 	        
 			    <net.takoli.simpleruntracker.MyNumberPicker 
 			        android:id="@+id/dist10"
@@ -103,8 +103,39 @@
 	                  android:gravity="top" android:text="My Time"  />
 	    </RelativeLayout>
 	    
-	</LinearLayout>    
+	</LinearLayout> 
+	
+    <!-- SPACE FOR DATE SELECTOR -->
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="0dp" 
+    	android:layout_weight="10" android:gravity="center" >
+    	<RadioGroup android:orientation="vertical"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
+		<RadioButton android:id="@+id/date_today"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="today" />
+		<RadioButton android:id="@+id/date_yesterday"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="yesterday" />
+		<RadioButton android:id="@+id/date_x_days_ago"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" />
+	</RadioGroup>
+	<net.takoli.simpleruntracker.MyNumberPicker 
+		android:id="@+id/date_days_ago_picker"
+		android:layout_toRightOf="@id/date_x_days_ago"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:orientation="horizontal" />
+	<TextView   android:text="days ago" 
+		android:layout_toRightOf="@id/date_days_ago_picker"
+		android:layout_height="wrap_content" 
+		android:layout_width="wrap_content" />
+    </RelativeLayout>
 	    
+    <!-- BUTTON -->
     <RelativeLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="10">
 	    <Button android:id="@+id/enter_run_button"
 	        	android:layout_width="wrap_content"
@@ -119,6 +150,6 @@
 	</RelativeLayout>
 	
     <!-- SPACE ON BOTTOM -->
-    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="12" />
+    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="8" />
 
 </LinearLayout>
