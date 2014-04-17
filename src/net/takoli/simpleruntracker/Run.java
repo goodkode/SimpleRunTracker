@@ -1,5 +1,7 @@
 package net.takoli.simpleruntracker;
 
+import android.util.Log;
+
 public class Run {
 	int dd, _dd, h, mm, ss;
 	String unit;
@@ -24,8 +26,8 @@ public class Run {
 		this._dd = Integer.parseInt(distSt[1]);
 		this.unit = fields[1];
 		this.h = Integer.parseInt(timeSt[0]);
-		this.mm = Integer.parseInt(timeSt[1];
-		this.ss = Integer.parseInt(timeSt[2];
+		this.mm = Integer.parseInt(timeSt[1]);
+		this.ss = Integer.parseInt(timeSt[2]);
 		expanded = false;
 	}
 	
@@ -40,7 +42,7 @@ public class Run {
 	public String getTime() {
 		String sTime = h + ":";
 		if (mm < 10)	sTime += "0" + mm;
-		else			sTime += mm;
+		else			sTime += mm + ":";
 		if (ss < 10)	sTime += "0" + ss;
 		else			sTime += ss;
 		return  sTime;
@@ -48,8 +50,10 @@ public class Run {
 	
 	public String getPace() {
 		int totalSec = h * 60*60 + mm * 60 + ss;
-		int paceInSec = totalSec * 100 / (dd * 100 + -dd);
-		return  (paceInSec / 60) + ":" + (paceInSec % 60);
+		if (totalSec < 30 || (dd + _dd == 0))
+			return "N/A";
+		int paceInSec = totalSec * 100 / (dd * 100 + _dd);
+		return  (paceInSec / 60) + ":" + ((paceInSec % 60) < 10 ? "0"+paceInSec % 60 : paceInSec % 60);
 	}
 	
 	public void switchDetails() {

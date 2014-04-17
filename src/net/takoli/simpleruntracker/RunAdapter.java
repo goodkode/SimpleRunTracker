@@ -6,7 +6,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -39,6 +38,7 @@ public class RunAdapter extends BaseAdapter {
 			rDate = (TextView) oneRun.findViewById(R.id.run_date);
 			rDist = (TextView) oneRun.findViewById(R.id.run_dist);
 			rTime = (TextView) oneRun.findViewById(R.id.run_time);
+			rPace = (TextView) oneRun.findViewById(R.id.run_pace);
 			rDate.setText(run.getDate());
 			rDist.setText(run.getDistance());
 			rTime.setText(run.getTime());

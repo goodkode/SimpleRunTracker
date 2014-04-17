@@ -120,7 +120,7 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onStop() {
-		runListDB.saveAndUpdateRunDB(this);
+		runListDB.updateAndSaveRunDB(this);
 		super.onStop();
 	}
 

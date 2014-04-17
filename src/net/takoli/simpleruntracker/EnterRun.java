@@ -81,7 +81,7 @@ public class EnterRun extends Fragment {
 				int mm = min10.getValue() * 10 + min1.getValue();
 				int ss = sec10.getValue() * 10 + sec1.getValue();
 				// save it to runDB and update the ListView
-				runListDB.addNewRun(getActivity(), new Run(dd, _dd, unit, h, mm, ss);
+				runListDB.addNewRun(getActivity(), new Run(dd, _dd, unit, h, mm, ss));
 				runAdapter.notifyDataSetChanged();
 			}
 		});
