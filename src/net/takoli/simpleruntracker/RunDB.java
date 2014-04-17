@@ -17,7 +17,6 @@ public class RunDB {
 
 	private ArrayList<Run> runList;
 	private final String FILE_NAME = "SimpleRunTrackerDB.csv";
-	private final String TEMP_FILE_NAME = "SimpleRunTrackerDB_temp.csv";
 	private final int MAX = 100;
 	File intDir, extDownloadsDir;
 
@@ -37,7 +36,7 @@ public class RunDB {
 			}
 			inputStream.close();
 		} catch (Exception e) {
-			Toast.makeText(context,"Can't read SimpleRunTracker_runList.csv", Toast.LENGTH_LONG).show();
+			Toast.makeText(context,"Can't read SimpleRunTrackerDB.csv", Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
 	}
@@ -46,7 +45,7 @@ public class RunDB {
 		return runList;
 	}
 	
-	public void updateAndSaveRunDB(Context context) {  // might consider serialization instaed of CSV in the future
+	public void updateAndSaveRunDB(Context context) {  // might consider serialization instead of CSV in the future
 		int size = runList.size();
 		int start = size > MAX ? runList.size()-MAX : 0;
 		try {
