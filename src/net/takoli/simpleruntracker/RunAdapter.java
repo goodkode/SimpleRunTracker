@@ -63,8 +63,8 @@ public class RunAdapter extends BaseAdapter {
 			rTime.setText(run.getTime() + "s ");
 			rPace.setText(run.getPace());
 			//rPerfAvg.setText(run.getPerfAvg());
-			rPerfDist.setText(run.getPerfDist(runListDB.getSumDist(), runListDB.getNumOfRuns()));
-			rPerfPace.setText(run.getPerfPace((double) runListDB.getSumTime() / runListDB.getNumOfRuns()));
+			rPerfDist.setText(run.getPerfDist(runListDB.getAvgDistDec()));
+			rPerfPace.setText(run.getPerfPace(runListDB.getAvgPaceSec()));
 			//rPerfScore.setText(run.getPerfScore());
 			return oneRun;
 		}
