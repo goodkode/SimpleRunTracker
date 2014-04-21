@@ -91,6 +91,14 @@ public class Run {
 				"0"+paceInSec % 60 : paceInSec % 60) + " min/" + unit;
 	}
 	
+	public long getDistDec() {
+		return (100 * dd + _dd);
+	}
+	
+	public long getTimeSec() {
+		return (60 * 60 * h + 60 * mm + ss);
+	}
+	
 	public String getPerfAvg() {
 		return "";
 	}
@@ -111,16 +119,6 @@ public class Run {
 	public String toString() {
 		return (date.get(Calendar.MONTH) + 1)+"/"+date.get(Calendar.DAY_OF_MONTH)+"/"+
 					date.get(Calendar.YEAR)+","+dd+"."+_dd+","+unit+","+h+":"+mm+":"+ss;
-	}
-	
-	public long updateSumDist(long sumDistDec) {
-		sumDistDec += _dd + 100 * dd;
-		return sumDistDec;
-	}
-	
-	public long updateSumTime(long sumTimeSec) {
-		sumTimeSec += ss + 60 * mm + 60 * 60 * h;
-		return sumTimeSec;
 	}
 	
 	public void switchDetails() {
