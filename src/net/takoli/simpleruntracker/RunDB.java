@@ -22,6 +22,7 @@ public class RunDB {
 	private final int MAX = 100;
 	private File intDir, extDownloadsDir;
 
+	// This wil run every time the app starts up (or OnCreate is called...)
 	public RunDB(Context context) {
 		runList = new ArrayList<Run>();
 		sumDistDec = sumTimeSec = 0;
@@ -35,15 +36,18 @@ public class RunDB {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				nRun = new Run(line);
-				sumDistDec = nRun.updateSumDist(sumDistDec);
-				sumTimeSec = nRun.updateSumTime(sumTimeSec);
 				runList.add(nRun);
+				// for statistics:
+				sumDistDec += nRun.getDistDec();
+				sumTimeSec += nRun.getTimeSec();
 			}
 			inputStream.close();
 		} catch (Exception e) {
 			Toast.makeText(context,"Can't read SimpleRunTrackerDB.csv", Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
+		// order runList according to date:    - TODO: implement priority queue? with max items:100? (ie,addrun changes)
+		//runList...
 	}
 	
 	public ArrayList<Run> getRunList() {
@@ -72,11 +76,11 @@ public class RunDB {
 		runList.add(newRun);
 	}
 	
-	public long getSumDist() {
+	public long getSumDistDec() {
 		return sumDistDec;
 	}
 	
-	public long getSumTime() {
+	public long getSumTimeSec() {
 		return sumTimeSec;
 	}
 	
