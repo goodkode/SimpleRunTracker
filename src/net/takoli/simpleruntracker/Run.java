@@ -71,7 +71,7 @@ public class Run {
 	}
 	
 	public String getDistance() {
-		return dd + "." + _dd + " " + unit;
+		return (dd + "." + (_dd < 10 ? ("0" + _dd) : _dd) + " " + unit);
 	}
 	
 	public String getTime() {
