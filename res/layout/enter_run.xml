@@ -106,34 +106,42 @@
 	</LinearLayout> 
 	
     <!-- SPACE FOR DATE SELECTOR -->
-    <RelativeLayout android:layout_width="match_parent" android:layout_height="0dp" 
-    	android:layout_weight="10" android:gravity="center" >
-    	<RadioGroup android:orientation="vertical"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
-		<RadioButton android:id="@+id/date_today"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="today" />
-		<RadioButton android:id="@+id/date_yesterday"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="yesterday" />
-		<RadioButton android:id="@+id/date_x_days_ago"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content" />
-	</RadioGroup>
-	<net.takoli.simpleruntracker.MyNumberPicker 
-		android:id="@+id/date_days_ago_picker"
-		android:layout_toRightOf="@id/date_x_days_ago"
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:orientation="horizontal" />
-	<TextView   android:text="days ago" 
-		android:layout_toRightOf="@id/date_days_ago_picker"
-		android:layout_height="wrap_content" 
-		android:layout_width="wrap_content" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10" >
+        <RadioGroup android:id="@+id/date_radiobuttons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center" >
+            <RadioButton
+                android:id="@+id/date_today"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@drawable/red_radio_button"
+                android:checked="true"
+                android:text="Today  " />
+            <RadioButton
+                android:id="@+id/date_yesterday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@drawable/red_radio_button"
+                android:text="Yesterday  " />
+            <RadioButton
+                android:id="@+id/date_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@drawable/red_radio_button"
+                android:text="Date...  " />
+        </RadioGroup>
     </RelativeLayout>
+    
+    <!-- SPACE BTWN DATE AND BUTTON -->
+    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="5" />
 	    
     <!-- BUTTON -->
     <RelativeLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="10">
@@ -150,6 +158,6 @@
 	</RelativeLayout>
 	
     <!-- SPACE ON BOTTOM -->
-    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="8" />
+    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="7" />
 
 </LinearLayout>

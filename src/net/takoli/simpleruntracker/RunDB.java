@@ -8,20 +8,23 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
 
 public class RunDB {
 
 	private ArrayList<Run> runList;
+	private long sumDistDec, sumTimeSec;
+	
 	private final String FILE_NAME = "SimpleRunTrackerDB.csv";
 	private final int MAX = 100;
-	File intDir, extDownloadsDir;
+	private File intDir, extDownloadsDir;
 
 	public RunDB(Context context) {
 		runList = new ArrayList<Run>();
+		sumDistDec = sumTimeSec = 0;
 		Run nRun;
 		// /data/data/net.takoli.simpleruntracker/files/ - where OpenFileOutput saves
 		try {
@@ -31,8 +34,10 @@ public class RunDB {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			String line;
 			while ((line = reader.readLine()) != null) {
-				runList.add(new Run(line));
-				Log.i("run", runList.size() + ": " + line);
+				nRun = new Run(line);
+				sumDistDec = nRun.updateSumDist(sumDistDec);
+				sumTimeSec = nRun.updateSumTime(sumTimeSec);
+				runList.add(nRun);
 			}
 			inputStream.close();
 		} catch (Exception e) {
@@ -61,28 +66,22 @@ public class RunDB {
 
 	public void addNewRun(Context context, String line) {
 		runList.add(new Run(line));
-		// to append the file with new runs
-		// try {
-		// 	FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_APPEND);
-		// 	outputStream.write((line+"\n").getBytes());
-		// 	outputStream.close();
-		// } catch (Exception e) {
-		// 	Toast.makeText(context,"SimpleRunTracker_runList.csv is not reachable to append",Toast.LENGTH_LONG).show();
-		// 	e.printStackTrace();
-		// }
 	}
 	
 	public void addNewRun(Context context, Run newRun) {
 		runList.add(newRun);
-		// to append the file with new runs
-		// try {
-		// 	FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_APPEND);
-		// 	outputStream.write((line+"\n").getBytes());
-		// 	outputStream.close();
-		// } catch (Exception e) {
-		// 	Toast.makeText(context,"SimpleRunTracker_runList.csv is not reachable to append",Toast.LENGTH_LONG).show();
-		// 	e.printStackTrace();
-		// }
+	}
+	
+	public long getSumDist() {
+		return sumDistDec;
+	}
+	
+	public long getSumTime() {
+		return sumTimeSec;
+	}
+	
+	public int getNumOfRuns() {
+		return runList.size();
 	}
 
 	// NOT USED - will implement Share Intent instead. Also considering Google Docs sync in the future
@@ -108,6 +107,16 @@ public class RunDB {
 		} catch (Exception e) {
 			Toast.makeText(context, "File write error", Toast.LENGTH_LONG)
 					.show();
+		}
+	}
+	
+	public void deleteDB(Context context) {
+		try {
+			context.deleteFile(FILE_NAME);
+			runList.clear();
+		} catch (Exception e) {
+			Toast.makeText(context,"Can't delete SimpleRunTrackerDB.csv", Toast.LENGTH_LONG).show();
+			e.printStackTrace();
 		}
 	}
 }

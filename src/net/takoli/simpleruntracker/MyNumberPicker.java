@@ -13,8 +13,8 @@ import net.takoli.simpleruntracker.R;
 
 public class MyNumberPicker extends NumberPicker {
 	
-	DisplayMetrics dm;
-	float textSize;
+	private DisplayMetrics dm;
+	private float textSize;
 	final int DIVIDER_SCALE = 15;
 	final int TEXT_SCALE = 22;
 	

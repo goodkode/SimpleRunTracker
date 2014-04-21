@@ -72,6 +72,7 @@ public class MainActivity extends Activity {
 		// CursorLoader for async load... change later??
 		ListView myRuns = (ListView) findViewById(R.id.my_runs);
 		runListDB = new RunDB(this);
+		runListDB.deleteDB(this);      /// DELETE!!!!!
 		myAdapter = new RunAdapter(this, R.layout.one_run, runListDB); 
 		myRuns.setAdapter(myAdapter);
 		myRuns.setOnItemClickListener(new OnItemClickListener() {  // open items in two lines with details
@@ -133,7 +134,6 @@ public class MainActivity extends Activity {
 	public void slideUp() {
 		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
 		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);
-		
 		distance.animate().translationX(0).setDuration(1000);
 		time.animate().translationX(0).setDuration(1000);
 		runFragLayout.animate().setDuration(700).translationY(screenHeight * -3/10);
@@ -143,14 +143,13 @@ public class MainActivity extends Activity {
 		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
 		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);
 		float moveTextBy = dm.widthPixels / 5.5f - ((MyNumberPicker) findViewById(R.id.dist10)).getTextSize()*dm.density*2;
-		
 		distance.animate().translationXBy(moveTextBy).setDuration(1000);
 		time.animate().translationXBy(- moveTextBy).setDuration(1000);
 		runFragLayout.animate().setDuration(700).translationY(0);
 		runFragOpen = true;
 	}
 	
-	public RunDB getRunListDB() {
+	public RunDB getRunDB() {
 		return runListDB; }
 	
 	public RunAdapter getRunAdapter() {
@@ -158,7 +157,7 @@ public class MainActivity extends Activity {
 	
 	
 	
-	// TO OPEN AND CLOSE TOP PANEL gesturelistener
+	// TO OPEN AND CLOSE TOP PANEL GestureListener
 	class MyGestureListener extends SimpleOnGestureListener {
 		private static final int SWIPE_MIN_DISTANCE = 20;
 		private static final int SWIPE_BAD_MAX_DIST = 200;
@@ -180,7 +179,7 @@ public class MainActivity extends Activity {
 					return true; }
 				else if (deltaY > SWIPE_MIN_DISTANCE) {
 					//Log.i("run", "onFling DOWN");
-					slideDown();
+					if (!runFragOpen) slideDown();
 					return true; }
 				return false;
 		}
