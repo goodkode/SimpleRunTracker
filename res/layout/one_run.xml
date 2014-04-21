@@ -11,14 +11,14 @@
     <TextView android:id="@+id/run_dist"
         android:layout_height="match_parent"
         android:layout_width="0dp"
-        android:layout_weight="20"
+        android:layout_weight="25"
         android:gravity="right"
         android:textSize="13sp" />
     <TextView android:id="@+id/run_time"
         android:layout_height="match_parent"
         android:layout_width="0dp"
-        android:layout_weight="30"
-        android:gravity="center"
+        android:layout_weight="25"
+        android:paddingLeft="15dp"
         android:textSize="13sp" />
     <TextView android:id="@+id/run_pace"
         android:layout_height="match_parent"
