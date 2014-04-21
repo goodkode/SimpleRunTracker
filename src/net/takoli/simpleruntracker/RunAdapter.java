@@ -24,10 +24,6 @@ public class RunAdapter extends BaseAdapter {
 		this.runListDB = runListDB;
 	}
 
-	public void addNewRun(Run newRun) {
-		runList.add(newRun);
-	}
-
 	@Override
 	public View getView(int pos, View convertView, ViewGroup parent) {
 		View oneRun;
