@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-
 import android.content.Context;
 import android.os.Environment;
 import android.widget.Toast;
@@ -50,6 +49,15 @@ public class RunDB {
 		//runList...
 	}
 	
+		
+	public void addNewRun(Context context, Run newRun) {
+		runList.add(newRun);
+		// for statistics:
+		sumDistDec += newRun.getDistDec();
+		sumTimeSec += newRun.getTimeSec();
+		// TODO: remove elements if size is over 100...
+	}
+	
 	public ArrayList<Run> getRunList() {
 		return runList;
 	}
@@ -67,28 +75,8 @@ public class RunDB {
 			e.printStackTrace();
 		}
 	}
-
-	public void addNewRun(Context context, String line) {
-		runList.add(new Run(line));
-	}
-	
-	public void addNewRun(Context context, Run newRun) {
-		runList.add(newRun);
-	}
 	
 	// for STATISTICS:
-	public long getSumDistDec() {
-		return sumDistDec;
-	}
-	
-	public long getSumTimeSec() {
-		return sumTimeSec;
-	}
-	
-	public int getNumOfRuns() {
-		return runList.size();
-	}
-	
 	public int getAvgDistDec() {
 		if (runList.size() == 0) return 0;
 		else return sumDistDec / runList.size();
