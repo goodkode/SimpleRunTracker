@@ -6,8 +6,9 @@ import java.util.Locale;
 import android.util.Log;
 
 public class Run {
-	int dd, _dd, h, mm, ss;
-	String unit;
+	int dd, _dd;   // distance in units and in decimals
+	int h, mm, ss;   // time in hour, min, and sec
+	String unit;   // miles or kilometers
 	Calendar date;
 	boolean expanded;
 	
@@ -100,20 +101,25 @@ public class Run {
 	}
 	
 	public String getPerfAvg() {
-		return "";
+		return ""; //TODO
 	}
 	
-	public String getPerfDist(long sumDist, int numRuns) {
-		int prct = (int) ((100 * dd + _dd) / ((double)sumDist / numRuns)  * 100); 
+	public String getPerfDist(int avgDistDec) {
+		int prct = 100 * getDistDec() / avgDistDec;
 		return prct + "%";
 	}
 	
-	public String getPerfPace(double averageTime) {
-		return "";
+	public String getPerfPace(int avgPaceSec) {
+		int totalSec = h * 60*60 + mm * 60 + ss;
+		if (totalSec < 30 || (dd + _dd == 0))
+			return "N/A";
+		int paceInSec = totalSec * 100 / (dd * 100 + _dd);
+		int prct = 100 * paceInSec / avgPaceSec;
+		return prct + "%";
 	}
 	
 	public String getPerfScore() {
-		return "";
+		return "";  //TODO: subjective score based on avg distance and avg pace
 	}
 	
 	public String toString() {
