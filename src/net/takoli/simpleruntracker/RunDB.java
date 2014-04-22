@@ -79,12 +79,12 @@ public class RunDB {
 	// for STATISTICS:
 	public int getAvgDistDec() {
 		if (runList.size() == 0) return 0;
-		else return sumDistDec / runList.size();
+		else return (int) (sumDistDec / runList.size());
 	}
 	
 	public int getAvgPaceSec() {
 		if (sumDistDec == 0) return 0;
-		else return sumTimeSec / sumDistDec;
+		else return (int) (sumTimeSec / sumDistDec);
 	}
 
 	// NOT USED - will implement Share Intent instead. Also considering Google Docs sync in the future

@@ -54,8 +54,8 @@ public final class R {
         public static final int min1=0x7f060011;
         public static final int min10=0x7f060010;
         public static final int my_runs=0x7f060003;
-        public static final int perf_avg=0x7f060020;
         public static final int perf_dist=0x7f060021;
+        public static final int perf_for_similar=0x7f060020;
         public static final int perf_pace=0x7f060022;
         public static final int placeholder=0x7f060002;
         public static final int right=0x7f060015;

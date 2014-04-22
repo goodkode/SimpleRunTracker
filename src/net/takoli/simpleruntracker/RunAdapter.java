@@ -15,7 +15,7 @@ public class RunAdapter extends BaseAdapter {
 	private ArrayList<Run> runList;
 	private RunDB runListDB;
 	private TextView rDate, rDist, rTime, rPace;
-	private TextView rPerfAvg, rPerfDist, rPerfPace, rPerfScore;
+	private TextView rPerfForSimilar, rPerfDist, rPerfPace, rPerfScore;
 	private Run run;
 	
 	public RunAdapter(Context context, int layoutResourceId, RunDB runListDB) {
@@ -50,7 +50,7 @@ public class RunAdapter extends BaseAdapter {
 			rDist = (TextView) oneRun.findViewById(R.id.run_dist);
 			rTime = (TextView) oneRun.findViewById(R.id.run_time);
 			rPace = (TextView) oneRun.findViewById(R.id.run_pace);
-			rPerfAvg = (TextView) oneRun.findViewById(R.id.perf_avg);
+			rPerfForSimilar = (TextView) oneRun.findViewById(R.id.perf_for_similar);
 			rPerfDist = (TextView) oneRun.findViewById(R.id.perf_dist);
 			rPerfPace = (TextView) oneRun.findViewById(R.id.perf_pace);
 			//rPerfScore = (TextView) oneRun.findViewById(R.id.run_pace);
@@ -58,7 +58,7 @@ public class RunAdapter extends BaseAdapter {
 			rDist.setText(run.getDistance());
 			rTime.setText(run.getTime() + "s ");
 			rPace.setText(run.getPace());
-			//rPerfAvg.setText(run.getPerfAvg());
+			//rPerfForSimilar.setText(run.getPerfAvg());
 			rPerfDist.setText(run.getPerfDist(runListDB.getAvgDistDec()));
 			rPerfPace.setText(run.getPerfPace(runListDB.getAvgPaceSec()));
 			//rPerfScore.setText(run.getPerfScore());

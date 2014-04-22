@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:layout_width="0dp"
         android:layout_weight="25"
+        android:paddingRight="25dp"
         android:gravity="right"
         android:textSize="13sp" />
     <TextView android:id="@+id/run_time"

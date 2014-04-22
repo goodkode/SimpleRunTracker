@@ -105,7 +105,7 @@ public class Run {
 	}
 	
 	public String getPerfDist(int avgDistDec) {
-		int prct = 100 * getDistDec() / avgDistDec;
+		long prct = 100 * getDistDec() / avgDistDec;
 		return prct + "%";
 	}
 	
