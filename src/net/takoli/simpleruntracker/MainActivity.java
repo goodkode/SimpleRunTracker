@@ -33,13 +33,15 @@ public class MainActivity extends Activity {
 	
 	private DisplayMetrics dm;
 	private int screenHeight, screenWidth;
+	private VerticalTextView distance, time;
+	private RadioGroup dateRadioGroup
 	private GestureDetector gestDect;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		// Set up variables
+		// Set up variables and fields
 		setContentView(R.layout.activity_main);
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		dm = getResources().getDisplayMetrics();
@@ -48,6 +50,9 @@ public class MainActivity extends Activity {
 		mainLayout = (RelativeLayout) findViewById(R.id.main);
 		runFragLayout = new FrameLayout(this);
 		enterRun = new EnterRun();
+		distance = (VerticalTextView) findViewById(R.id.distance);
+		time = (VerticalTextView) findViewById(R.id.time);
+		dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
 		
 		// "Enter Run" top fragment setup
 		runFragLayout.setLayoutParams(new FrameLayout.LayoutParams(screenWidth, screenHeight / 2));
@@ -132,19 +137,23 @@ public class MainActivity extends Activity {
 	}
 	
 	public void slideUp() {
-		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
-		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);
+		// move Distance anf Time texts out
 		distance.animate().translationX(0).setDuration(1000);
 		time.animate().translationX(0).setDuration(1000);
+		// make the date radio buttons disappear
+		dateRadioGroup.animate().setDuration(700).setAlpha(0);
+		// slide the fragment up
 		runFragLayout.animate().setDuration(700).translationY(screenHeight * -3/10);
 		runFragOpen = false;
 	}
 	public void slideDown() {
-		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
-		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);
+		// move Distance anf Time texts in
 		float moveTextBy = dm.widthPixels / 5.5f - ((MyNumberPicker) findViewById(R.id.dist10)).getTextSize()*dm.density*2;
 		distance.animate().translationXBy(moveTextBy).setDuration(1000);
 		time.animate().translationXBy(- moveTextBy).setDuration(1000);
+		// make the date radio buttons reappear
+		dateRadioGroup.animate().setDuration(700).setAlpha(1);
+		// slide the fragment down
 		runFragLayout.animate().setDuration(700).translationY(0);
 		runFragOpen = true;
 	}
