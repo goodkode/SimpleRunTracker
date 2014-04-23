@@ -11,21 +11,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class EnterRun extends Fragment {
 
 	MyNumberPicker dist10, dist1, dist_1, dist_01;
 	MyNumberPicker hour, min10, min1, sec10, sec1;
-	RadioButton today, yesterday, date;
 	RadioGroup dateGroup;
 	Calendar runDate;
 	TextView div_d, div_th, div_tm;
 	TextView distance, time;
 	Button enterRunButton;
+	RelativeLayout dividerLine;
 	DisplayMetrics dm;
 	RunDB runListDB;
 	RunAdapter runAdapter;
@@ -70,13 +70,15 @@ public class EnterRun extends Fragment {
 			sec10.setMaxValue(5);
 		sec1 = (MyNumberPicker) getView().findViewById(R.id.sec1);
 		
-		// "Distance" and "Time" 
+		// "Distance" and "Time"; divider line width
 		distance = (VerticalTextView) getActivity().findViewById(R.id.distance);
 		distance.setTextColor(0xaaFF0000);
 		distance.setTextSize(dist1.getTextSize());
 		time = (VerticalTextView) getActivity().findViewById(R.id.time);
 		time.setTextColor(0xaaFF0000);
 		time.setTextSize(dist1.getTextSize());
+		dividerLine = (RelativeLayout) getActivity().findViewById(R.id.divider_line);
+		dividerLine.setPadding(dm.widthPixels / 6, 0, dm.widthPixels / 6, 0);
 		
 		// Datepicker 
 		runDate = Calendar.getInstance(Locale.US);
@@ -101,6 +103,7 @@ public class EnterRun extends Fragment {
 		// Send run details to the RunDB database
 		enterRunButton = (Button) getActivity().findViewById(R.id.enter_run_button);
 		enterRunButton.setTextSize(dist1.getTextSize()*2/3);
+		enterRunButton.setWidth(dm.widthPixels / 3);
 		enterRunButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 public class MainActivity extends Activity {
@@ -33,8 +34,6 @@ public class MainActivity extends Activity {
 	
 	private DisplayMetrics dm;
 	private int screenHeight, screenWidth;
-	private VerticalTextView distance, time;
-	private RadioGroup dateRadioGroup
 	private GestureDetector gestDect;
 	
 	@Override
@@ -50,9 +49,6 @@ public class MainActivity extends Activity {
 		mainLayout = (RelativeLayout) findViewById(R.id.main);
 		runFragLayout = new FrameLayout(this);
 		enterRun = new EnterRun();
-		distance = (VerticalTextView) findViewById(R.id.distance);
-		time = (VerticalTextView) findViewById(R.id.time);
-		dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
 		
 		// "Enter Run" top fragment setup
 		runFragLayout.setLayoutParams(new FrameLayout.LayoutParams(screenWidth, screenHeight / 2));
@@ -77,7 +73,7 @@ public class MainActivity extends Activity {
 		// CursorLoader for async load... change later??
 		ListView myRuns = (ListView) findViewById(R.id.my_runs);
 		runListDB = new RunDB(this);
-		runListDB.deleteDB(this);      /// DELETE!!!!!
+		//runListDB.deleteDB(this);      /// DELETE!!!!!
 		myAdapter = new RunAdapter(this, R.layout.one_run, runListDB); 
 		myRuns.setAdapter(myAdapter);
 		myRuns.setOnItemClickListener(new OnItemClickListener() {  // open items in two lines with details
@@ -137,22 +133,27 @@ public class MainActivity extends Activity {
 	}
 	
 	public void slideUp() {
-		// move Distance anf Time texts out
+		// move Distance and Time texts out
+		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
+		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);
 		distance.animate().translationX(0).setDuration(1000);
 		time.animate().translationX(0).setDuration(1000);
 		// make the date radio buttons disappear
-		dateRadioGroup.animate().setDuration(700).setAlpha(0);
+		RadioGroup dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
+		dateRadioGroup.animate().setDuration(700).alpha(0);
 		// slide the fragment up
-		runFragLayout.animate().setDuration(700).translationY(screenHeight * -3/10);
+		runFragLayout.animate().setDuration(700).translationY(screenHeight * -35/100);
 		runFragOpen = false;
 	}
 	public void slideDown() {
-		// move Distance anf Time texts in
-		float moveTextBy = dm.widthPixels / 5.5f - ((MyNumberPicker) findViewById(R.id.dist10)).getTextSize()*dm.density*2;
+		// move Distance and Time texts in
+		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
+		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);		float moveTextBy = dm.widthPixels / 5.5f - ((MyNumberPicker) findViewById(R.id.dist10)).getTextSize()*dm.density*2;
 		distance.animate().translationXBy(moveTextBy).setDuration(1000);
 		time.animate().translationXBy(- moveTextBy).setDuration(1000);
 		// make the date radio buttons reappear
-		dateRadioGroup.animate().setDuration(700).setAlpha(1);
+		RadioGroup dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
+		dateRadioGroup.animate().setDuration(700).alpha(1);
 		// slide the fragment down
 		runFragLayout.animate().setDuration(700).translationY(0);
 		runFragOpen = true;

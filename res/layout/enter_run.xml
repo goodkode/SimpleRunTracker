@@ -157,8 +157,16 @@
 		        android:background="@drawable/enter_run_button" />	    
 	</RelativeLayout>
 	
-    <!-- SPACE ON BOTTOM -->
-    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="7" 
-    		android:gravity="bottom|horizontal_center"  android:background="@drawable/divider_line"/>
+    <!-- SPACE ON BOTTOM with a line-->
+    <RelativeLayout android:id="@+id/divider_line" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="7" >
+	   <View  
+	       android:layout_width="wrap_content"
+	       android:layout_height="6dp"
+	       android:layout_alignParentBottom="true"
+	       android:layout_centerHorizontal="true"
+	       android:layout_marginBottom="4dp"
+	       android:background="@drawable/divider_line" />
+
+	</RelativeLayout>
 
 </LinearLayout>

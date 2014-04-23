@@ -23,6 +23,7 @@ public class MyNumberPicker extends NumberPicker {
 		dm = getResources().getDisplayMetrics();
 		setMinValue(0);
 		setMaxValue(9);
+		setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 		Field[] pickerFields = NumberPicker.class.getDeclaredFields();
 		for (Field pf : pickerFields) {
 			if (pf.getName().equals("mSelectionDividersDistance")) {
