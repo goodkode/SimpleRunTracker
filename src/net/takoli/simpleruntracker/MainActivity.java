@@ -141,6 +141,9 @@ public class MainActivity extends Activity {
 		// make the date radio buttons disappear
 		RadioGroup dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
 		dateRadioGroup.animate().setDuration(700).alpha(0);
+		// change the button text
+		Button enterRunButton = (Button) findViewById(R.id.enter_run_button);
+		enterRunButton.setText("New Run");
 		// slide the fragment up
 		runFragLayout.animate().setDuration(700).translationY(screenHeight * -35/100);
 		runFragOpen = false;
@@ -154,6 +157,9 @@ public class MainActivity extends Activity {
 		// make the date radio buttons reappear
 		RadioGroup dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
 		dateRadioGroup.animate().setDuration(700).alpha(1);
+		// change the button text
+		Button enterRunButton = (Button) findViewById(R.id.enter_run_button);
+		enterRunButton.setText("Enter Run");
 		// slide the fragment down
 		runFragLayout.animate().setDuration(700).translationY(0);
 		runFragOpen = true;
@@ -195,7 +201,6 @@ public class MainActivity extends Activity {
 		}
 		@Override
 		public boolean onDown(MotionEvent e) {
-			Log.i("run", "onDown pos: "+e.getX()+", "+e.getY());
 			if (!runFragOpen)
 				slideDown();
 			return true; }
