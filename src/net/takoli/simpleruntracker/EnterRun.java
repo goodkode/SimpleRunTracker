@@ -3,6 +3,9 @@ package net.takoli.simpleruntracker;
 import java.util.Calendar;
 import java.util.Locale;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
@@ -78,7 +82,7 @@ public class EnterRun extends Fragment {
 		time.setTextColor(0xaaFF0000);
 		time.setTextSize(dist1.getTextSize());
 		dividerLine = (RelativeLayout) getActivity().findViewById(R.id.divider_line);
-		dividerLine.setPadding(dm.widthPixels / 6, 0, dm.widthPixels / 6, 0);
+		dividerLine.setPadding(dm.widthPixels / 5, 0, dm.widthPixels / 5, 0);
 		
 		// Datepicker 
 		runDate = Calendar.getInstance(Locale.US);
@@ -94,8 +98,11 @@ public class EnterRun extends Fragment {
 					runDate = Calendar.getInstance();
 					runDate.roll(Calendar.DAY_OF_YEAR, -1);
 					break;
+				case R.id.date_picker:
+					EnterRun.this.pickDate();
+					break;
 				default:
-					runDate = EnterRun.this.pickDate();
+					runDate = Calendar.getInstance();
 					break;
 				}
 			}});
@@ -125,7 +132,33 @@ public class EnterRun extends Fragment {
 		super.onResume();
 	}
 	
-	public Calendar pickDate() {
-		return Calendar.getInstance();
+	// this and the DatePickerFragment support picking a date
+	public void pickDate() {
+		DialogFragment newFragment = new DatePickerFragment();
+	    newFragment.show(getFragmentManager(), "datePicker");
+	}
+	
+	public static class DatePickerFragment extends DialogFragment implements
+			DatePickerDialog.OnDateSetListener {
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			// Use the current date as the default date in the picker
+			final Calendar c = Calendar.getInstance();
+			int year = c.get(Calendar.YEAR);
+			int month = c.get(Calendar.MONTH);
+			int day = c.get(Calendar.DAY_OF_MONTH);
+
+			// Create a new instance of DatePickerDialog and return it
+			return new DatePickerDialog(getActivity(), this, year, month, day);
+		}
+
+		public void onDateSet(DatePicker view, int year, int month, int day) {
+			MainActivity mainActivity = (MainActivity) getActivity();
+			EnterRun enterRun = (EnterRun) mainActivity.enterRun;
+			enterRun.runDate.set(year, month, day);
+		}
 	}
 }
+
+

@@ -6,7 +6,6 @@ import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
@@ -16,6 +15,7 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -23,7 +23,7 @@ import android.widget.RelativeLayout;
 
 public class MainActivity extends Activity {
 	
-	private Fragment enterRun;
+	public Fragment enterRun;
 	private FragmentTransaction fragTrans;
 	private FrameLayout runFragLayout;
 	private boolean runFragOpen;
