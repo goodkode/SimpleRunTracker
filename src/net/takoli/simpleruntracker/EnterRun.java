@@ -25,6 +25,7 @@ public class EnterRun extends Fragment {
 	MyNumberPicker dist10, dist1, dist_1, dist_01;
 	MyNumberPicker hour, min10, min1, sec10, sec1;
 	RadioGroup dateGroup;
+	RadioButton dateRadioButton;
 	Calendar runDate;
 	TextView div_d, div_th, div_tm;
 	TextView distance, time;
@@ -106,6 +107,13 @@ public class EnterRun extends Fragment {
 					break;
 				}
 			}});
+		dateRadioButton = (RadioButton) getActivity().findViewById(R.id.date...);
+		dateRadioButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClicked() {
+				EnterRun.this.pickDate();	
+			}
+		});
 		
 		// Send run details to the RunDB database
 		enterRunButton = (Button) getActivity().findViewById(R.id.enter_run_button);
@@ -157,6 +165,7 @@ public class EnterRun extends Fragment {
 			MainActivity mainActivity = (MainActivity) getActivity();
 			EnterRun enterRun = (EnterRun) mainActivity.enterRun;
 			enterRun.runDate.set(year, month, day);
+			enterRun.dateRadioButton.setText(month+"/"+day+"/"+year+"...");
 		}
 	}
 }
