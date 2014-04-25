@@ -1,5 +1,6 @@
 package net.takoli.simpleruntracker;
 
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -9,12 +10,15 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.NumberPicker;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
@@ -99,20 +103,16 @@ public class EnterRun extends Fragment {
 					runDate = Calendar.getInstance();
 					runDate.roll(Calendar.DAY_OF_YEAR, -1);
 					break;
-				case R.id.date_picker:
-					EnterRun.this.pickDate();
-					break;
 				default:
 					runDate = Calendar.getInstance();
 					break;
 				}
 			}});
-		dateRadioButton = (RadioButton) getActivity().findViewById(R.id.date...);
+		dateRadioButton = (RadioButton) getActivity().findViewById(R.id.date_picker);
 		dateRadioButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClicked() {
-				EnterRun.this.pickDate();	
-			}
+			public void onClick(View v) {
+				EnterRun.this.pickDate(); }
 		});
 		
 		// Send run details to the RunDB database
@@ -142,8 +142,8 @@ public class EnterRun extends Fragment {
 	
 	// this and the DatePickerFragment support picking a date
 	public void pickDate() {
-		DialogFragment newFragment = new DatePickerFragment();
-	    newFragment.show(getFragmentManager(), "datePicker");
+		DialogFragment datePickerFragment = new DatePickerFragment();
+		datePickerFragment.show(getFragmentManager(), "datePicker");
 	}
 	
 	public static class DatePickerFragment extends DialogFragment implements
@@ -158,7 +158,41 @@ public class EnterRun extends Fragment {
 			int day = c.get(Calendar.DAY_OF_MONTH);
 
 			// Create a new instance of DatePickerDialog and return it
-			return new DatePickerDialog(getActivity(), this, year, month, day);
+			DatePickerDialog datePickerDialog =  new DatePickerDialog(getActivity(), this, year, month, day);
+			datePickerDialog.setTitle("");
+			// Change all dividers to red
+			DatePicker datePicker = datePickerDialog.getDatePicker();
+			try {
+				Field datePickerField = DatePicker.class.getDeclaredField("mDaySpinner");
+				datePickerField.setAccessible(true);
+				NumberPicker np = (NumberPicker) datePickerField.get(datePicker);
+				try {
+					Field numberPickerField = NumberPicker.class.getDeclaredField("mSelectionDivider");
+					numberPickerField.setAccessible(true);
+					numberPickerField.set(np, getResources().getDrawable(R.drawable.div));
+				} catch (Exception e) { e.printStackTrace(); }
+			} catch (Exception e) { e.printStackTrace(); }
+			try {
+				Field datePickerField = DatePicker.class.getDeclaredField("mMonthSpinner");
+				datePickerField.setAccessible(true);
+				NumberPicker np = (NumberPicker) datePickerField.get(datePicker);
+				try {
+					Field numberPickerField = NumberPicker.class.getDeclaredField("mSelectionDivider");
+					numberPickerField.setAccessible(true);
+					numberPickerField.set(np, getResources().getDrawable(R.drawable.div));
+				} catch (Exception e) { e.printStackTrace(); }
+			} catch (Exception e) { e.printStackTrace(); }
+			try {
+				Field datePickerField = DatePicker.class.getDeclaredField("mYearSpinner");
+				datePickerField.setAccessible(true);
+				NumberPicker np = (NumberPicker) datePickerField.get(datePicker);
+				try {
+					Field numberPickerField = NumberPicker.class.getDeclaredField("mSelectionDivider");
+					numberPickerField.setAccessible(true);
+					numberPickerField.set(np, getResources().getDrawable(R.drawable.div));
+				} catch (Exception e) { e.printStackTrace(); }
+			} catch (Exception e) { e.printStackTrace(); }
+			return datePickerDialog;
 		}
 
 		public void onDateSet(DatePicker view, int year, int month, int day) {
