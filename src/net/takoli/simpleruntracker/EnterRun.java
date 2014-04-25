@@ -162,6 +162,7 @@ public class EnterRun extends Fragment {
 			datePickerDialog.setTitle("");
 			// Change all dividers to red
 			DatePicker datePicker = datePickerDialog.getDatePicker();
+			datePicker.setMaxDate(c.currentTimeMilis());
 			try {
 				Field datePickerField = DatePicker.class.getDeclaredField("mDaySpinner");
 				datePickerField.setAccessible(true);
