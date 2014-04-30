@@ -7,5 +7,8 @@
         <item name="android:textColor">#FF444444</item>
         <item name="android:textStyle">italic</item>
     </style>
+    
+    <color name="one_run_color">#AACCE5FF</color>
+    <color name="one_run_details_color">#FFCCE5FF</color>
 
 </resources>

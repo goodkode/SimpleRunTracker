@@ -8,8 +8,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class RunDB {
@@ -45,50 +51,76 @@ public class RunDB {
 			Toast.makeText(context,"Can't read SimpleRunTrackerDB.csv", Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
-		// order runList according to date:    - TODO: implement priority queue? with max items:100? (ie,addrun changes)
-		//runList...
 	}
-	
 		
 	public void addNewRun(Context context, Run newRun) {
 		runList.add(newRun);
 		// for statistics:
 		sumDistDec += newRun.getDistDec();
 		sumTimeSec += newRun.getTimeSec();
-		// TODO: remove elements if size is over 100...
+		//Log.i("run", "sumDist: " + sumDistDec);
+	}
+	
+	public int[] getLastValues() {
+		int lastIndex = runList.size() - 1;
+		if (lastIndex == -1)
+			return new int[] {0, 0, 0, 0, 0};
+		Run lastRun = runList.get(lastIndex);
+		return new int[] {lastRun.dd, lastRun._dd, lastRun.h, lastRun.mm, lastRun.ss};
 	}
 	
 	public ArrayList<Run> getRunList() {
 		return runList;
 	}
 	
+	// for STATISTICS:
+	public int getAvgDistDec() {
+		if (runList.size() == 0) return 0;
+		else return (int) (1.0 * sumDistDec / runList.size());
+	}
+	public int getAvgPaceSec() {
+		if (sumDistDec == 0) return 0;
+		else return (int) (sumTimeSec * 100 / sumDistDec);
+	}
+	
+	// save all changes
 	public void updateAndSaveRunDB(Context context) {  // might consider serialization instead of CSV in the future
 		int size = runList.size();
-		int start = size > MAX ? runList.size()-MAX : 0;
+		Collections.sort(runList, new Comparator<Run>() {
+			public int compare(Run a, Run b) {
+		        return a.date.compareTo(b.date);
+		    }
+		});
 		try {
 			FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+			int start = size > MAX ? runList.size()-MAX : 0;
 			for (int i = start; i < size; i++)
 				outputStream.write((runList.get(i).toString()+"\n").getBytes());
 			outputStream.close();
 		} catch (Exception e) {
-			Toast.makeText(context,"SimpleRunTracker_runList.csv is not reachable to append",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, FILE_NAME +" is not reachable to append",Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
 	}
 	
-	// for STATISTICS:
-	public int getAvgDistDec() {
-		if (runList.size() == 0) return 0;
-		else return (int) (sumDistDec / runList.size());
+	// delete ALL records
+	public void deleteDB(Context context) {
+		sumDistDec = 0;
+		sumTimeSec = 0;
+		try {
+			context.deleteFile(FILE_NAME);
+			runList.clear();
+			sumTimeSec = sumDistDec = 0;
+		} catch (Exception e) {
+			Toast.makeText(context,"Can't delete " + FILE_NAME, Toast.LENGTH_LONG).show();
+			e.printStackTrace();
+		}
 	}
 	
-	public int getAvgPaceSec() {
-		if (sumDistDec == 0) return 0;
-		else return (int) (sumTimeSec / sumDistDec);
-	}
 
 	// NOT USED - will implement Share Intent instead. Also considering Google Docs sync in the future
 	public void saveToExternal(Context context) {
+		updateAndSaveRunDB(context);
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			Toast.makeText(context, "SD Card is not available",Toast.LENGTH_LONG).show();
 			return;
@@ -110,16 +142,6 @@ public class RunDB {
 		} catch (Exception e) {
 			Toast.makeText(context, "File write error", Toast.LENGTH_LONG)
 					.show();
-		}
-	}
-	
-	public void deleteDB(Context context) {
-		try {
-			context.deleteFile(FILE_NAME);
-			runList.clear();
-		} catch (Exception e) {
-			Toast.makeText(context,"Can't delete SimpleRunTrackerDB.csv", Toast.LENGTH_LONG).show();
-			e.printStackTrace();
 		}
 	}
 }

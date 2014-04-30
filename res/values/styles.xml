@@ -10,12 +10,13 @@
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:titleTextStyle">@style/TitleTextStyle</item>
         <item name="android:background">#FFFFFF</item>
-        <item name="android:actionMenuTextColor">#24598a</item>
+        <item name="android:icon">@drawable/runtracker_wide</item>
+        <item name="android:actionMenuTextColor">#24598A</item>
     </style>
 
     <!-- action bar title text -->
     <style name="TitleTextStyle" >
-        <item name="android:textColor">#FF0000</item>
+        <item name="android:textColor">#00FFFFFF</item>
     </style>
 
 </resources>

@@ -2,32 +2,39 @@ package net.takoli.simpleruntracker;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
-	public Fragment enterRun;
-	private FragmentTransaction fragTrans;
-	private FrameLayout runFragLayout;
-	private boolean runFragOpen;
 	private RelativeLayout mainLayout;
+	private ListView runListLayout;
+	private FrameLayout runFragLayout;
+	protected Fragment enterRun;
+	private FragmentTransaction fragTrans;
+	private FragmentManager fragMngr;
+	private boolean runFragOpen;
 
 	private RunDB runListDB;       // ArrayList<Run> abstraction and file IO functions
 	private RunAdapter myAdapter;  // Activity's ListView adapter - uses ArrayList<Run> received from runListDB
@@ -39,6 +46,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getActionBar().setDisplayShowTitleEnabled(false);
 		
 		// Set up variables and fields
 		setContentView(R.layout.activity_main);
@@ -54,6 +62,7 @@ public class MainActivity extends Activity {
 		runFragLayout.setLayoutParams(new FrameLayout.LayoutParams(screenWidth, screenHeight / 2));
 		runFragLayout.setId(R.id.enter_run_frame);
 		runFragLayout.setBackgroundColor(Color.WHITE);
+		fragMngr = getFragmentManager();
 		fragTrans = getFragmentManager().beginTransaction();
 		fragTrans.replace(R.id.enter_run_frame, enterRun);
 		fragTrans.commit();
@@ -68,33 +77,21 @@ public class MainActivity extends Activity {
 			    }
 			});
 		
-		// "My Runs" mid-section setup
-		findViewById(R.id.my_runs).setBackgroundColor(Color.LTGRAY); //for testing
-		// CursorLoader for async load... change later??
-		ListView myRuns = (ListView) findViewById(R.id.my_runs);
+		runListLayout = (ListView) findViewById(R.id.my_runs);
 		runListDB = new RunDB(this);
-		//runListDB.deleteDB(this);      /// DELETE!!!!!
-		myAdapter = new RunAdapter(this, R.layout.one_run, runListDB); 
-		myRuns.setAdapter(myAdapter);
-		myRuns.setOnItemClickListener(new OnItemClickListener() {  // open items in two lines with details
+		myAdapter = new RunAdapter(this, R.layout.one_run, runListDB, fragMngr);
+		myAdapter.addHeader(mainLayout);
+		runListLayout.setAdapter(myAdapter);
+		runListLayout.setOnItemClickListener(new OnItemClickListener() {  // open items in two lines with details
 			@Override
 			public void onItemClick(AdapterView<?> parent, View runView, int pos, long id) {
+				pos--;  // to compensate for header
+				Log.i("run","onclick pos: " +pos);
 				myAdapter.getRunItem(pos).switchDetails();
-				myAdapter.notifyDataSetChanged();
-//				runView.animate().setDuration(2000).alpha(0)
-//	            .withEndAction(new Runnable() {
-//	              @Override
-//	              public void run() {
-//	                list.remove(item);
-//	                myAdapter.notifyDataSetChanged();
-//	                runView.setAlpha(1);
-//	              }
-//	            });
-			}
-			
+				myAdapter.notifyDataSetChanged(); }
 		});
 		
-		myRuns.setOnTouchListener(new OnTouchListener() {
+		runListLayout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View arg0, MotionEvent event) {
 				if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
@@ -131,6 +128,18 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case R.id.action_settings:
+	        	runListDB.deleteDB(this);
+	        	myAdapter.notifyDataSetChanged();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
 	
 	public void slideUp() {
 		// move Distance and Time texts out
@@ -143,7 +152,10 @@ public class MainActivity extends Activity {
 		dateRadioGroup.animate().setDuration(700).alpha(0);
 		// change the button text
 		Button enterRunButton = (Button) findViewById(R.id.enter_run_button);
-		enterRunButton.setText("New Run");
+		enterRunButton.setText("Open");
+		enterRunButton.setTextColor(0xFFFFFFFF);
+		enterRunButton.animate().setDuration(700).alpha(0.5f);
+		enterRunButton.setClickable(false);
 		// slide the fragment up
 		runFragLayout.animate().setDuration(700).translationY(screenHeight * -35/100);
 		runFragOpen = false;
@@ -160,6 +172,9 @@ public class MainActivity extends Activity {
 		// change the button text
 		Button enterRunButton = (Button) findViewById(R.id.enter_run_button);
 		enterRunButton.setText("Enter Run");
+		enterRunButton.setTextColor(0xFF000000);
+		enterRunButton.animate().setDuration(700).alpha(1);
+		enterRunButton.setClickable(true);
 		// slide the fragment down
 		runFragLayout.animate().setDuration(700).translationY(0);
 		runFragOpen = true;

@@ -10,13 +10,13 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -79,6 +79,18 @@ public class EnterRun extends Fragment {
 			sec10.setMaxValue(5);
 		sec1 = (MyNumberPicker) getView().findViewById(R.id.sec1);
 		
+		// Show last run values at start
+		int[] lastValues = runListDB.getLastValues();
+		dist10.setValue(lastValues[0] / 10);
+		dist1.setValue(lastValues[0] % 10);
+		dist_1.setValue(lastValues[1] / 10);
+		dist_01.setValue(lastValues[1] % 10);
+		hour.setValue(lastValues[2]);
+		min10.setValue(lastValues[3] / 10);
+		min1.setValue(lastValues[3] % 10);
+		sec10.setValue(lastValues[4] / 10);
+		sec1.setValue(lastValues[4] % 10);
+		
 		// "Distance" and "Time"; divider line width
 		distance = (VerticalTextView) getActivity().findViewById(R.id.distance);
 		distance.setTextColor(0xaaFF0000);
@@ -129,8 +141,13 @@ public class EnterRun extends Fragment {
 				int mm = min10.getValue() * 10 + min1.getValue();
 				int ss = sec10.getValue() * 10 + sec1.getValue();
 				// save it to runDB and update the ListView
+				if ((dd + _dd) == 0 || (h + mm + ss) == 0)
+					return; // not valid run
 				runListDB.addNewRun(getActivity(), new Run(runDate, dd, _dd, unit, h, mm, ss));
+				runListDB.updateAndSaveRunDB(getActivity());
 				runAdapter.notifyDataSetChanged();
+				ListView myListView = (ListView) getActivity().findViewById(R.id.my_runs);
+				myListView.setSelection(runAdapter.getCount() - 1);
 			}
 		});
 	}
@@ -159,10 +176,10 @@ public class EnterRun extends Fragment {
 
 			// Create a new instance of DatePickerDialog and return it
 			DatePickerDialog datePickerDialog =  new DatePickerDialog(getActivity(), this, year, month, day);
-			datePickerDialog.setTitle("");
 			// Change all dividers to red
 			DatePicker datePicker = datePickerDialog.getDatePicker();
-			datePicker.setMaxDate(c.currentTimeMilis());
+			datePicker.setMaxDate(c.getTimeInMillis());
+			datePickerDialog.setTitle("");
 			try {
 				Field datePickerField = DatePicker.class.getDeclaredField("mDaySpinner");
 				datePickerField.setAccessible(true);
@@ -200,7 +217,23 @@ public class EnterRun extends Fragment {
 			MainActivity mainActivity = (MainActivity) getActivity();
 			EnterRun enterRun = (EnterRun) mainActivity.enterRun;
 			enterRun.runDate.set(year, month, day);
-			enterRun.dateRadioButton.setText(month+"/"+day+"/"+year+"...");
+			String m;
+			switch (month) {
+				case 0: m = "Jan"; break;
+				case 1: m = "Feb"; break;
+				case 2: m = "Mar"; break;
+				case 3: m = "Apr"; break;
+				case 4: m = "May"; break;
+				case 5: m = "Jun"; break;
+				case 6: m = "Jul"; break;
+				case 7: m = "Aug"; break;
+				case 8: m = "Sep"; break;
+				case 9: m = "Oct"; break;
+				case 10: m = "Nov"; break;
+				case 11: m = "Dec"; break;
+				default: m = ""; break; }
+			String y = year%100 < 10 ? ("'0"+year%100) : ("'"+year%100);
+			enterRun.dateRadioButton.setText(m+" "+day+", "+y);
 		}
 	}
 }

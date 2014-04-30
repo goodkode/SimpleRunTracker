@@ -65,13 +65,15 @@ public class Run {
 			case 9: month = "Oct"; break;
 			case 10: month = "Nov"; break;
 			case 11: month = "Dec"; break;
-			default: month = ""; break; 
-		}
-		return month + " " + date.get(Calendar.DAY_OF_MONTH) + ", "+date.get(Calendar.YEAR);
+			default: month = ""; break; }
+		int y = date.get(Calendar.YEAR) % 100;
+		String year = y < 10 ? "'0"+y : "'"+y;
+		return month + " " + date.get(Calendar.DAY_OF_MONTH) + ", "+year;
 	}
 	
 	public String getDistance() {
-		return (dd + "." + (_dd < 10 ? ("0" + _dd) : _dd) + " " + unit);
+		return ((dd < 10 ? " " + dd : dd) + "." + 
+					(_dd < 10 ? ("0" + _dd) : _dd) + " " + unit);
 	}
 	
 	public String getTime() {
@@ -85,41 +87,58 @@ public class Run {
 	
 	public String getPace() {
 		int totalSec = h * 60*60 + mm * 60 + ss;
-		if (totalSec < 30 || (dd + _dd == 0))
-			return "N/A";
+		if (dd + _dd == 0)	return "-";
 		int paceInSec = totalSec * 100 / (dd * 100 + _dd);
 		return  (paceInSec / 60) + ":" + ((paceInSec % 60) < 10 ? 
 				"0"+paceInSec % 60 : paceInSec % 60) + " min/" + unit;
 	}
 	
-	public long getDistDec() {
-		return (100 * dd + _dd);
-	}
-	
-	public long getTimeSec() {
-		return (60 * 60 * h + 60 * mm + ss);
-	}
-	
-	public String getPerfAvg() {
-		return ""; //TODO
-	}
-	
-	public String getPerfDist(int avgDistDec) {
-		long prct = 100 * getDistDec() / avgDistDec;
-		return prct + "%";
-	}
-	
-	public String getPerfPace(int avgPaceSec) {
+	public String getSpeed() {
 		int totalSec = h * 60*60 + mm * 60 + ss;
-		if (totalSec < 30 || (dd + _dd == 0))
-			return "N/A";
-		int paceInSec = totalSec * 100 / (dd * 100 + _dd);
-		int prct = 100 * paceInSec / avgPaceSec;
-		return prct + "%";
+		if (totalSec == 0) return "-";
+		int speedPerSec = (int) ((dd * 100 + _dd) / (totalSec / 60.0 / 60.0));
+		return (speedPerSec / 100) + "." + ((speedPerSec % 100) < 10 ? 
+				"0" + speedPerSec % 100 : speedPerSec % 100) + 
+				(unit.compareTo("m")==0 ? " mph" : " km/h");
 	}
 	
-	public String getPerfScore() {
-		return "";  //TODO: subjective score based on avg distance and avg pace
+	// For STATISTICS:
+	
+	// utility:
+	public long getDistDec() {
+		return (100 * dd + _dd); }
+	public long getTimeSec() {
+		return (60 * 60 * h + 60 * mm + ss); }
+	
+	// Performance Score - subjective score '3' - '10'
+	public String getPerfScore(int avgDist, int avgPace) {
+		if (avgDist == 0 || avgPace == 0)	return "";
+		long dScore = Math.round((((100.0 * dd + _dd) / avgDist) - 1.0) / 0.2);
+		double thisPace = (60.0 * 60 * h + 60 * mm + ss) / (dd * 100 + _dd);
+		//Log.i("run", "pScore RAW: " + (avgPace / thisPace - 100) / 10);
+		long pScore = Math.round((avgPace / thisPace - 100) / 10);
+		Log.i("run", "dScore: " + dScore + ", pScore: " + pScore);
+		long perfScore = 7 + dScore + pScore;
+		if (perfScore < 3)	return "3";
+		if (perfScore > 10) return "10";
+		return "" + perfScore;
+	}
+	
+	// Distance performance - % or average
+	public String getPerfDist(int avgDistDec) {
+		if (avgDistDec == 0)
+			return "-";
+		return 100 * getDistDec() / avgDistDec + "%";
+	}
+	
+	// Pace (speed) performance - % of average
+	public String getPerfPace(int avgPaceSec) {
+		int totalSec = (60 * 60 * h + 60 * mm + ss);
+		if (dd + _dd == 0)  return "-";
+		int paceInSec = totalSec * 100 / (dd * 100 + _dd);
+		if (paceInSec == 0)  return "-";		
+		int prct = 100 *  avgPaceSec / paceInSec;
+		return prct + "%";
 	}
 	
 	public String toString() {
