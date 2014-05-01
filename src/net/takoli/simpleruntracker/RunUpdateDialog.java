@@ -15,16 +15,18 @@ public class RunUpdateDialog extends DialogFragment {
 	
 	public RunUpdateDialog() { }
 	
-	public void setRun(Run run) {
-		this.run = run;
+	@Override
+	public void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
+		date = getArguments().getString("date");
+		distance = getArguments().getString("distance");
+		time = getArguments().getString("time");
+		Log.i("run", "oncreate");
 	}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle bundle) {
-        date = run.getDate();
-        distance = run.getDistance();
-        time = run.getTime();
         View view = inflater.inflate(R.layout.update_run_dialog, container);        
         getDialog().setTitle("Update " + date  + "'s run's details");
         EditText updateDistance = (EditText) view.findViewById(R.id.update_distance);

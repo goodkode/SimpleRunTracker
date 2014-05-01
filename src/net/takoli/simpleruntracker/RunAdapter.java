@@ -2,11 +2,9 @@ package net.takoli.simpleruntracker;
 
 import java.util.ArrayList;
 
-import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -101,7 +99,11 @@ public class RunAdapter extends BaseAdapter {
 				public void onClick(View v) {
 					//Toast.makeText(context, "run edit",Toast.LENGTH_LONG).show();
 					RunUpdateDialog updateRun = new RunUpdateDialog();
-					updateRun.setRun(run);
+					Bundle bundle = new Bundle();
+					bundle.putString("date", run.getDate());
+					bundle.putString("distance", run.getDistance());
+					bundle.putString("time", run.getTime());
+					updateRun.setArguments(bundle);
 					updateRun.show(fragMngr, "editRun");
 				}
 			});
