@@ -101,14 +101,15 @@ public class RunAdapter extends BaseAdapter {
 					RunUpdateDialog updateRun = new RunUpdateDialog();
 					Bundle bundle = new Bundle();
 					bundle.putString("date", run.getDate());
-					bundle.putString("distance", run.getDistance());
-					bundle.putString("time", run.getTime());
+					bundle.putString("dd", (run.getDistance()).split(".")[0]);
+					bundle.putString("_dd", (run.getDistance()).split(".")[1]);
+					bundle.putString("h", (run.getTime()).split(".")[0]);
+					bundle.putString("mm", (run.getTime()).split(".")[1]);
+					bundle.putString("ss", (run.getTime()).split(".")[2]);
 					updateRun.setArguments(bundle);
 					updateRun.show(fragMngr, "editRun");
 				}
 			});
-
-			
 			return oneRun;
 		}
 	}
