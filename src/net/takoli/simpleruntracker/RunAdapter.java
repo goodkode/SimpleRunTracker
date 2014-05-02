@@ -98,7 +98,7 @@ public class RunAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					//Toast.makeText(context, "run edit",Toast.LENGTH_LONG).show();
-					RunUpdateDialog updateRun = new RunUpdateDialog();
+					RunUpdateDialog updateRunDialog = new RunUpdateDialog();
 					Bundle bundle = new Bundle();
 					bundle.putString("date", run.getDate());
 					bundle.putString("dd", (run.getDistance()).split(".")[0]);
@@ -106,8 +106,8 @@ public class RunAdapter extends BaseAdapter {
 					bundle.putString("h", (run.getTime()).split(".")[0]);
 					bundle.putString("mm", (run.getTime()).split(".")[1]);
 					bundle.putString("ss", (run.getTime()).split(".")[2]);
-					updateRun.setArguments(bundle);
-					updateRun.show(fragMngr, "editRun");
+					updateRunDialog.setArguments(bundle);
+					updateRunDialog.show(fragMngr, "editRun");
 				}
 			});
 			return oneRun;
