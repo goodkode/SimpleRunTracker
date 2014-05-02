@@ -146,8 +146,9 @@ public class MainActivity extends Activity {
 	        	// TODO
 	            return true;
 	        case R.id.delete_db:
-	        	runListDB.deleteDB(this);
-	        	myAdapter.notifyDataSetChanged();
+	        	//runListDB.deleteDB(this);
+	        	//myAdapter.notifyDataSetChanged();
+	        	(new ConfirmDeleteDialog()).show(fragMngr, "confirmDeleteDB");
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -232,5 +233,28 @@ public class MainActivity extends Activity {
 			if (!runFragOpen)
 				slideDown();
 			return true; }
+	}
+	
+	// Delete all runs confirmation dialog
+	public static class ConfirmDeleteDialog extends DialogFragment {
+	
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        return new AlertDialog.Builder(getActivity())
+	                .setTitle("title")
+	                .setNegativeButton("Cancel",
+	                    new DialogInterface.OnClickListener() {
+	                        public void onClick(DialogInterface dialog, int whichButton) {
+	                            MainActivity.this.runListDB.deleteDB(this);
+	        		    MainActivity.this.myAdapter.notifyDataSetChanged(); }
+	                    }
+	                )
+	                .setPostitiveButton("Delete",
+	                    new DialogInterface.OnClickListener() {
+	                        public void onClick(DialogInterface dialog, int whichButton) {
+	                            return; }
+	                    }
+	                ).create();
+	    }
 	}
 }
