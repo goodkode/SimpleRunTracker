@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
+	private SharedPreferences settings;
+	
 	private RelativeLayout mainLayout;
 	private ListView runListLayout;
 	private FrameLayout runFragLayout;
@@ -47,6 +49,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayShowTitleEnabled(false);
+		settings = getPreferences(MODE_PRIVATE);
 		
 		// Set up variables and fields
 		setContentView(R.layout.activity_main);
@@ -98,6 +101,10 @@ public class MainActivity extends Activity {
 					slideUp(); return true; }
 				return false; }
 		});
+		
+		// check for first run
+		if (settings.getBoolean("firstRun", true))
+			break;
 	}
 	
 	@Override
@@ -132,7 +139,13 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
-	        case R.id.action_settings:
+	    	case R.id.settings:
+	        	// TODO
+	            return true;
+	        case R.id.export_list_of_runs:
+	        	// TODO
+	            return true;
+	        case R.id.delete_db:
 	        	runListDB.deleteDB(this);
 	        	myAdapter.notifyDataSetChanged();
 	            return true;
