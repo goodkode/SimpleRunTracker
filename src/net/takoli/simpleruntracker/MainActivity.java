@@ -1,9 +1,14 @@
 package net.takoli.simpleruntracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -18,19 +23,17 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
 	private SharedPreferences settings;
 	
-	private RelativeLayout mainLayout;
+	RelativeLayout mainLayout;
 	private ListView runListLayout;
 	private FrameLayout runFragLayout;
 	protected Fragment enterRun;
@@ -103,8 +106,10 @@ public class MainActivity extends Activity {
 		});
 		
 		// check for first run
-		if (settings.getBoolean("firstRun", true))
-			break;
+		if (getUnit().compareTo("") == 0) {
+			Log.i("run", getUnit());
+			(new SettingsDialog()).show(fragMngr, "SettingsDialog");
+		}
 	}
 	
 	@Override
@@ -140,15 +145,14 @@ public class MainActivity extends Activity {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	    	case R.id.settings:
-	        	// TODO
+	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
 	            return true;
 	        case R.id.export_list_of_runs:
-	        	// TODO
+	        	runListDB.saveToExternal(this);
 	            return true;
 	        case R.id.delete_db:
-	        	//runListDB.deleteDB(this);
-	        	//myAdapter.notifyDataSetChanged();
 	        	(new ConfirmDeleteDialog()).show(fragMngr, "confirmDeleteDB");
+	        	runListDB.saveToExternal(this);
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -200,6 +204,15 @@ public class MainActivity extends Activity {
 	public RunAdapter getRunAdapter() {
 		return myAdapter; }
 	
+	public void setUnit(String unit) {
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("unit", unit);
+		editor.commit();
+	}
+	public String getUnit() {
+		return settings.getString("unit", "");
+	}
+	
 	
 	
 	// TO OPEN AND CLOSE TOP PANEL GestureListener
@@ -233,28 +246,5 @@ public class MainActivity extends Activity {
 			if (!runFragOpen)
 				slideDown();
 			return true; }
-	}
-	
-	// Delete all runs confirmation dialog
-	public static class ConfirmDeleteDialog extends DialogFragment {
-	
-	    @Override
-	    public Dialog onCreateDialog(Bundle savedInstanceState) {
-	        return new AlertDialog.Builder(getActivity())
-	                .setTitle("title")
-	                .setNegativeButton("Cancel",
-	                    new DialogInterface.OnClickListener() {
-	                        public void onClick(DialogInterface dialog, int whichButton) {
-	                            MainActivity.this.runListDB.deleteDB(this);
-	        		    MainActivity.this.myAdapter.notifyDataSetChanged(); }
-	                    }
-	                )
-	                .setPostitiveButton("Delete",
-	                    new DialogInterface.OnClickListener() {
-	                        public void onClick(DialogInterface dialog, int whichButton) {
-	                            return; }
-	                    }
-	                ).create();
-	    }
 	}
 }

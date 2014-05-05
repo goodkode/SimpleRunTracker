@@ -106,14 +106,16 @@ public class Run {
 	
 	// utility:
 	public long getDistDec() {
-		return (100 * dd + _dd); }
+		long distDec =  (100 * dd + _dd);
+		if (unit.compareTo("km") == 0)	return (long) (distDec / 1.61);
+		else return distDec; }
 	public long getTimeSec() {
 		return (60 * 60 * h + 60 * mm + ss); }
 	
 	// Performance Score - subjective score '3' - '10'
 	public String getPerfScore(int avgDist, int avgPace) {
 		if (avgDist == 0 || avgPace == 0)	return "";
-		long dScore = Math.round((((100.0 * dd + _dd) / avgDist) - 1.0) / 0.2);
+		long dScore = Math.round(((getDistDec() / avgDist) - 1.0) / 0.2);
 		double thisPace = (60.0 * 60 * h + 60 * mm + ss) / (dd * 100 + _dd);
 		//Log.i("run", "pScore RAW: " + (avgPace / thisPace - 100) / 10);
 		long pScore = Math.round((avgPace / thisPace - 100) / 10);
@@ -135,7 +137,7 @@ public class Run {
 	public String getPerfPace(int avgPaceSec) {
 		int totalSec = (60 * 60 * h + 60 * mm + ss);
 		if (dd + _dd == 0)  return "-";
-		int paceInSec = totalSec * 100 / (dd * 100 + _dd);
+		int paceInSec = totalSec * 100 / (int) getDistDec();
 		if (paceInSec == 0)  return "-";		
 		int prct = 100 *  avgPaceSec / paceInSec;
 		return prct + "%";

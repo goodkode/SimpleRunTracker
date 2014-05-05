@@ -134,7 +134,7 @@ public class EnterRun extends Fragment {
 		enterRunButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String unit = "m";  // later get it from SharedPreferences
+				String unit = ((MainActivity) getActivity()).getUnit();
 				int dd = dist10.getValue() * 10 + dist1.getValue();
 				int _dd = dist_1.getValue() * 10 + dist_01.getValue();
 				int h = hour.getValue();
@@ -148,6 +148,7 @@ public class EnterRun extends Fragment {
 				runAdapter.notifyDataSetChanged();
 				ListView myListView = (ListView) getActivity().findViewById(R.id.my_runs);
 				myListView.setSelection(runAdapter.getCount() - 1);
+				(new AfterRunPopUp()).show(getFragmentManager(), "AfterRunPopup");
 			}
 		});
 	}

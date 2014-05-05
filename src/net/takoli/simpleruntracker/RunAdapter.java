@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -73,6 +74,7 @@ public class RunAdapter extends BaseAdapter {
 		else {
 			oneRun = inflater.inflate(R.layout.one_run_details, parent, false);
 			run = runList.get(pos);
+			final int index = pos;
 			
 			rDate = (TextView) oneRun.findViewById(R.id.run_date);
 			rDist = (TextView) oneRun.findViewById(R.id.run_dist);
@@ -95,17 +97,19 @@ public class RunAdapter extends BaseAdapter {
 			
 			ImageView edit = (ImageView) oneRun.findViewById(R.id.run_edit);
 			edit.setOnClickListener(new OnClickListener() {
+				int position = index;
+				Run editRun = run;
 				@Override
 				public void onClick(View v) {
-					//Toast.makeText(context, "run edit",Toast.LENGTH_LONG).show();
 					RunUpdateDialog updateRunDialog = new RunUpdateDialog();
 					Bundle bundle = new Bundle();
-					bundle.putString("date", run.getDate());
-					bundle.putString("dd", (run.getDistance()).split(".")[0]);
-					bundle.putString("_dd", (run.getDistance()).split(".")[1]);
-					bundle.putString("h", (run.getTime()).split(".")[0]);
-					bundle.putString("mm", (run.getTime()).split(".")[1]);
-					bundle.putString("ss", (run.getTime()).split(".")[2]);
+					bundle.putInt("pos", position);
+					bundle.putString("date", editRun.getDate());
+					bundle.putString("dd", "0" + editRun.dd);
+					bundle.putString("_dd", "0" + editRun._dd);
+					bundle.putString("h", "" + editRun.h);
+					bundle.putString("mm", "0" + editRun.mm);
+					bundle.putString("ss", "0" + editRun.ss);
 					updateRunDialog.setArguments(bundle);
 					updateRunDialog.show(fragMngr, "editRun");
 				}

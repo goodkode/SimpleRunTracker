@@ -61,6 +61,27 @@ public class RunDB {
 		//Log.i("run", "sumDist: " + sumDistDec);
 	}
 	
+	public void updateRun(int pos, int[] updates) {
+		Run toUpdate = runList.get(pos);
+		sumDistDec -= toUpdate.getDistDec();
+		sumTimeSec -= toUpdate.getTimeSec();
+		
+		toUpdate.dd = updates[0];
+		toUpdate._dd = updates[1];
+		toUpdate.h = updates[2];
+		toUpdate.mm = updates[3];
+		toUpdate.ss = updates[4];
+		sumDistDec += toUpdate.getDistDec();
+		sumTimeSec += toUpdate.getTimeSec();
+	}
+	
+	public void removeRun(int pos) {
+		Run toUpdate = runList.get(pos);
+		sumDistDec -= toUpdate.getDistDec();
+		sumTimeSec -= toUpdate.getTimeSec();
+		runList.remove(pos);
+	}
+	
 	public int[] getLastValues() {
 		int lastIndex = runList.size() - 1;
 		if (lastIndex == -1)
@@ -118,7 +139,7 @@ public class RunDB {
 	}
 	
 
-	// NOT USED - will implement Share Intent instead. Also considering Google Docs sync in the future
+	// Save DB to SD Card. Also considering Google Docs sync in the future
 	public void saveToExternal(Context context) {
 		updateAndSaveRunDB(context);
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
@@ -138,7 +159,7 @@ public class RunDB {
         	is.close();
         	os.close();
         		
-			Toast.makeText(context, "Saved on SD Card",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Saved on SD Card's Donwloads folder",Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			Toast.makeText(context, "File write error", Toast.LENGTH_LONG)
 					.show();
