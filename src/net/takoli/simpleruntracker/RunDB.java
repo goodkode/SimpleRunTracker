@@ -82,6 +82,13 @@ public class RunDB {
 		runList.remove(pos);
 	}
 	
+	public Run getLastRun() {
+		int lastIndex = runList.size() - 1;
+		if (lastIndex == -1)
+			return null;
+		return runList.get(lastIndex);
+	}
+	
 	public int[] getLastValues() {
 		int lastIndex = runList.size() - 1;
 		if (lastIndex == -1)

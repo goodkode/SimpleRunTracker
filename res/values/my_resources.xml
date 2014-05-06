@@ -10,6 +10,6 @@
     
     <color name="one_run_color">#AACCE5FF</color>
     <color name="one_run_details_color">#FFCCE5FF</color>
-    <color name="after_run_dialog_color">#99CCE5FF</color>
+    <color name="after_run_dialog_color">#EDF6FF</color>
 
 </resources>
