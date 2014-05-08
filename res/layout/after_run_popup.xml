@@ -35,13 +35,4 @@
         android:textSize="13sp"
         android:text="after run stats" />
     
-    <!-- Some stats -->
-    <TextView android:id="@+id/after_run_stats"
-      	android:layout_width="match_parent"
-   		android:layout_height="wrap_content"
-        android:padding="6dp"
-        android:gravity="center"
-        android:textSize="13sp"
-        android:text="after run stats" />
-    
 </LinearLayout>

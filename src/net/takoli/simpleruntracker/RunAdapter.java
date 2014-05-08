@@ -48,7 +48,9 @@ public class RunAdapter extends BaseAdapter {
 	public void notifyDataSetChanged() {
 		super.notifyDataSetChanged();
 		TextView headerText = (TextView) parent.findViewById(R.id.header_info);
-		String header = "Showing " + runList.size();
+		String header;
+		if (runList.size() == 0) header = "Empty list";
+ 		else header = "Showing " + runList.size();
  		headerText.setText(header);
 	}
 

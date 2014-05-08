@@ -12,13 +12,14 @@
         android:textStyle="bold"
         android:text="info" />
 
-	<ImageView
+	<!-- TODO: add a menu button with options to change list size or add start date
+	<ImageView 
         android:id="@+id/header_edit"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="6dp"
-        android:background="@drawable/run_menu" />
+        android:background="@drawable/run_menu" /> -->
     
 </RelativeLayout>

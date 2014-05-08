@@ -30,11 +30,9 @@ public class AfterRunPopUp extends DialogFragment {
     	super.onStart();
     	TextView snapshot = (TextView) view.findViewById(R.id.after_run_snapshot);
     	TextView pace = (TextView) view.findViewById(R.id.after_run_pace);
-    	TextView someStats = (TextView) view.findViewById(R.id.after_run_stats);
     	Run last = ((MainActivity) getActivity()).getRunDB().getLastRun();
     	snapshot.setText("You ran " + last.getDistance() + " in " + last.getTime() + "s"); 
-    	pace.setText("Your pace was " + last.getPace() + "(" + last.getSpeed() + ")");
-    	someStats.setText("somestats");
+    	pace.setText("Your pace was " + last.getPace() + " (" + last.getSpeed() + ")");
     	
     	// dismiss after some time
     	Thread thread = new Thread() {

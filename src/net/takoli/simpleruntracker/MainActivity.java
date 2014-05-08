@@ -44,6 +44,8 @@ public class MainActivity extends Activity {
 	private RunDB runListDB;       // ArrayList<Run> abstraction and file IO functions
 	private RunAdapter myAdapter;  // Activity's ListView adapter - uses ArrayList<Run> received from runListDB
 	
+	private Graph graph;
+	
 	private DisplayMetrics dm;
 	private int screenHeight, screenWidth;
 	private GestureDetector gestDect;
@@ -110,6 +112,9 @@ public class MainActivity extends Activity {
 			Log.i("run", getUnit());
 			(new SettingsDialog()).show(fragMngr, "SettingsDialog");
 		}
+		
+		graph = new Graph();
+		graph.update();
 	}
 	
 	@Override
