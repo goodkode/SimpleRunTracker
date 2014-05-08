@@ -114,7 +114,7 @@ public class MainActivity extends Activity {
 		}
 		
 		graph = new Graph();
-		graph.update();
+		graph.update(runListDB);
 	}
 	
 	@Override
