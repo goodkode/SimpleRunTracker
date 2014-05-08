@@ -114,7 +114,6 @@ public class MainActivity extends Activity {
 		}
 		
 		graph = new Graph();
-		graph.update(runListDB);
 	}
 	
 	@Override
@@ -127,6 +126,7 @@ public class MainActivity extends Activity {
 		super.onResume();
 		runFragLayout.setY(screenHeight * -3/10);
 		slideDown();
+		graph.update(runListDB);
 	}
 	@Override
 	protected void onPause() {
