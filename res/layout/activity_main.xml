@@ -33,7 +33,7 @@
 	        android:divider="#00FFFFFF"
     		android:dividerHeight="3dp" />
 	    
-	    <View
+	    <net.takoli.simpleruntracker.GraphView
 	    	android:id="@+id/graph"
 	        android:layout_width="match_parent"
 	        android:layout_height="0dp"
