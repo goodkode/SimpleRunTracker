@@ -11,6 +11,7 @@ public class Run {
 	String unit;   // miles or kilometers
 	Calendar date;
 	boolean expanded;
+	private final KM_TO_M = 1.60934;
 	
 	public Run(Calendar date, int dd, int _dd, String unit, int h, int mm, int ss) {
 		this.date = date;
@@ -107,7 +108,7 @@ public class Run {
 	// utility:
 	public long getDistDec() {
 		long distDec =  (100 * dd + _dd);
-		if (unit.compareTo("km") == 0)	return (long) (distDec / 1.61);
+		if (unit.compareTo("km") == 0)	return (long) (distDec / KM_TO_M);
 		else return distDec; }
 	public long getTimeSec() {
 		return (60 * 60 * h + 60 * mm + ss); }
