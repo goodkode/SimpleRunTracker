@@ -149,6 +149,7 @@ public class EnterRun extends Fragment {
 				ListView myListView = (ListView) getActivity().findViewById(R.id.my_runs);
 				myListView.setSelection(runAdapter.getCount() - 1);
 				(new AfterRunPopUp()).show(getFragmentManager(), "AfterRunPopup");
+				((MainActivity) getActivity()).updateGraph();
 			}
 		});
 	}

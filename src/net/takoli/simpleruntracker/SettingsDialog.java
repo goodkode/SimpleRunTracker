@@ -15,13 +15,15 @@ public class SettingsDialog extends DialogFragment {
                 .setNegativeButton("Kilometers",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                        	((MainActivity) getActivity()).setUnit("km"); }
+                        	((MainActivity) getActivity()).setUnit("km");
+                        	((MainActivity) getActivity()).updateGraph(); }
                     }
                 )
                 .setPositiveButton("Miles",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                        	((MainActivity) getActivity()).setUnit("m"); }
+                        	((MainActivity) getActivity()).setUnit("m");
+                        	((MainActivity) getActivity()).updateGraph(); }
                     }
                 ).create();
     }

@@ -43,8 +43,8 @@ public class RunDB {
 				nRun = new Run(line);
 				runList.add(nRun);
 				// for statistics:
-				sumDistDec += nRun.getDistDec();
-				sumTimeSec += nRun.getTimeSec();
+				sumDistDec += nRun.getDistDecInM();
+				sumTimeSec += nRun.getTimeInSec();
 			}
 			inputStream.close();
 		} catch (Exception e) {
@@ -56,29 +56,29 @@ public class RunDB {
 	public void addNewRun(Context context, Run newRun) {
 		runList.add(newRun);
 		// for statistics:
-		sumDistDec += newRun.getDistDec();
-		sumTimeSec += newRun.getTimeSec();
+		sumDistDec += newRun.getDistDecInM();
+		sumTimeSec += newRun.getTimeInSec();
 		//Log.i("run", "sumDist: " + sumDistDec);
 	}
 	
 	public void updateRun(int pos, int[] updates) {
 		Run toUpdate = runList.get(pos);
-		sumDistDec -= toUpdate.getDistDec();
-		sumTimeSec -= toUpdate.getTimeSec();
+		sumDistDec -= toUpdate.getDistDecInM();
+		sumTimeSec -= toUpdate.getTimeInSec();
 		
 		toUpdate.dd = updates[0];
 		toUpdate._dd = updates[1];
 		toUpdate.h = updates[2];
 		toUpdate.mm = updates[3];
 		toUpdate.ss = updates[4];
-		sumDistDec += toUpdate.getDistDec();
-		sumTimeSec += toUpdate.getTimeSec();
+		sumDistDec += toUpdate.getDistDecInM();
+		sumTimeSec += toUpdate.getTimeInSec();
 	}
 	
 	public void removeRun(int pos) {
 		Run toUpdate = runList.get(pos);
-		sumDistDec -= toUpdate.getDistDec();
-		sumTimeSec -= toUpdate.getTimeSec();
+		sumDistDec -= toUpdate.getDistDecInM();
+		sumTimeSec -= toUpdate.getTimeInSec();
 		runList.remove(pos);
 	}
 	

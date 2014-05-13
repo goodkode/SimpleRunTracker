@@ -11,7 +11,7 @@ public class Run {
 	String unit;   // miles or kilometers
 	Calendar date;
 	boolean expanded;
-	private final KM_TO_M = 1.60934;
+	private final double KM_TO_M = 1.60934;
 	
 	public Run(Calendar date, int dd, int _dd, String unit, int h, int mm, int ss) {
 		this.date = date;
@@ -106,21 +106,24 @@ public class Run {
 	// For STATISTICS:
 	
 	// utility:
-	public long getDistDec() {
+	public long getDistDecInM() {
 		long distDec =  (100 * dd + _dd);
 		if (unit.compareTo("km") == 0)	return (long) (distDec / KM_TO_M);
 		else return distDec; }
-	public long getTimeSec() {
+	public long getTimeInSec() {
 		return (60 * 60 * h + 60 * mm + ss); }
+	public long getSpeedDecInMPH(long distDecInM) {
+		return Math.round(distDecInM / (h + (mm / 60.0) + (ss / 60.0 / 60.0))); }
+
 	
 	// Performance Score - subjective score '3' - '10'
 	public String getPerfScore(int avgDist, int avgPace) {
 		if (avgDist == 0 || avgPace == 0)	return "";
-		long dScore = Math.round(((getDistDec() / avgDist) - 1.0) / 0.2);
+		long dScore = Math.round(((getDistDecInM() / avgDist) - 1.0) / 0.2);
 		double thisPace = (60.0 * 60 * h + 60 * mm + ss) / (dd * 100 + _dd);
 		//Log.i("run", "pScore RAW: " + (avgPace / thisPace - 100) / 10);
 		long pScore = Math.round((avgPace / thisPace - 100) / 10);
-		Log.i("run", "dScore: " + dScore + ", pScore: " + pScore);
+		//Log.i("run", "dScore: " + dScore + ", pScore: " + pScore);
 		long perfScore = 7 + dScore + pScore;
 		if (perfScore < 3)	return "3";
 		if (perfScore > 10) return "10";
@@ -131,14 +134,14 @@ public class Run {
 	public String getPerfDist(int avgDistDec) {
 		if (avgDistDec == 0)
 			return "-";
-		return 100 * getDistDec() / avgDistDec + "%";
+		return 100 * getDistDecInM() / avgDistDec + "%";
 	}
 	
 	// Pace (speed) performance - % of average
 	public String getPerfPace(int avgPaceSec) {
 		int totalSec = (60 * 60 * h + 60 * mm + ss);
 		if (dd + _dd == 0)  return "-";
-		int paceInSec = totalSec * 100 / (int) getDistDec();
+		int paceInSec = totalSec * 100 / (int) getDistDecInM();
 		if (paceInSec == 0)  return "-";		
 		int prct = 100 *  avgPaceSec / paceInSec;
 		return prct + "%";

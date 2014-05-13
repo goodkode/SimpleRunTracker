@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class ConfirmDeleteDialog extends DialogFragment {
 
@@ -22,7 +23,10 @@ public class ConfirmDeleteDialog extends DialogFragment {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                         	((MainActivity) getActivity()).getRunDB().deleteDB(getActivity());
-                            ((MainActivity) getActivity()).getRunAdapter().notifyDataSetChanged(); }
+                            ((MainActivity) getActivity()).getRunAdapter().notifyDataSetChanged();
+                            Toast.makeText(getActivity(), "Backup will be saved", Toast.LENGTH_SHORT).show();
+                            ((MainActivity) getActivity()).getRunDB().saveToExternal(getActivity());
+                            ((MainActivity) getActivity()).updateGraph(); }
                     }
                 ).create();
     }

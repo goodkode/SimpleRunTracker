@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
 	private RunDB runListDB;       // ArrayList<Run> abstraction and file IO functions
 	private RunAdapter myAdapter;  // Activity's ListView adapter - uses ArrayList<Run> received from runListDB
 	
-	private Graph graph;
+	private GraphView graph;
 	
 	private DisplayMetrics dm;
 	private int screenHeight, screenWidth;
@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
 		runFragLayout = new FrameLayout(this);
 		enterRun = new EnterRun();
 		
-		// "Enter Run" top fragment setup
+		// "Enter Run" top fragment setup:
 		runFragLayout.setLayoutParams(new FrameLayout.LayoutParams(screenWidth, screenHeight / 2));
 		runFragLayout.setId(R.id.enter_run_frame);
 		runFragLayout.setBackgroundColor(Color.WHITE);
@@ -75,7 +75,6 @@ public class MainActivity extends Activity {
 		fragTrans.replace(R.id.enter_run_frame, enterRun);
 		fragTrans.commit();
 		mainLayout.addView(runFragLayout);
-		
 			// enable fling up and down to open/close the top panel
 			gestDect = new GestureDetector(this, new MyGestureListener());
 			runFragLayout.setOnTouchListener(new OnTouchListener() {
@@ -84,7 +83,8 @@ public class MainActivity extends Activity {
 			        return gestDect.onTouchEvent(event);
 			    }
 			});
-		
+			
+		// List of Runs setup:
 		runListLayout = (ListView) findViewById(R.id.my_runs);
 		runListDB = new RunDB(this);
 		myAdapter = new RunAdapter(this, R.layout.one_run, runListDB, fragMngr);
@@ -94,11 +94,10 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View runView, int pos, long id) {
 				pos--;  // to compensate for header
-				Log.i("run","onclick pos: " +pos);
+				//Log.i("run","onclick pos: " +pos);
 				myAdapter.getRunItem(pos).switchDetails();
 				myAdapter.notifyDataSetChanged(); }
 		});
-		
 		runListLayout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View arg0, MotionEvent event) {
@@ -109,11 +108,13 @@ public class MainActivity extends Activity {
 		
 		// check for first run
 		if (getUnit().compareTo("") == 0) {
-			Log.i("run", getUnit());
+			//Log.i("run", getUnit());
 			(new SettingsDialog()).show(fragMngr, "SettingsDialog");
 		}
 		
-		graph = new Graph();
+		// Graph initial setup
+		graph = (GraphView) findViewById(R.id.graph);
+		graph.setRunList(runListDB.getRunList(), getUnit());	
 	}
 	
 	@Override
@@ -126,7 +127,6 @@ public class MainActivity extends Activity {
 		super.onResume();
 		runFragLayout.setY(screenHeight * -3/10);
 		slideDown();
-		graph.update(runListDB);
 	}
 	@Override
 	protected void onPause() {
@@ -151,13 +151,14 @@ public class MainActivity extends Activity {
 	    switch (item.getItemId()) {
 	    	case R.id.settings:
 	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
+	    		graph.setRunList(runListDB.getRunList(), getUnit());
+	    		updateGraph();
 	            return true;
 	        case R.id.export_list_of_runs:
 	        	runListDB.saveToExternal(this);
 	            return true;
 	        case R.id.delete_db:
 	        	(new ConfirmDeleteDialog()).show(fragMngr, "confirmDeleteDB");
-	        	runListDB.saveToExternal(this);
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -217,6 +218,12 @@ public class MainActivity extends Activity {
 	public String getUnit() {
 		return settings.getString("unit", "");
 	}
+	public void updateGraph() {
+		if (graph != null) {
+			graph.updateData();
+			graph.invalidate(); }
+	}
+	
 	
 	
 	
