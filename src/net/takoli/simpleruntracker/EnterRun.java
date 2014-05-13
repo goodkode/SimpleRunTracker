@@ -32,7 +32,7 @@ public class EnterRun extends Fragment {
 	RadioButton dateRadioButton;
 	Calendar runDate;
 	TextView div_d, div_th, div_tm;
-	TextView distance, time;
+	TextView distance, time, distUnit;
 	Button enterRunButton;
 	RelativeLayout dividerLine;
 	DisplayMetrics dm;
@@ -65,7 +65,10 @@ public class EnterRun extends Fragment {
 			div_d.setTextSize(dist1.getTextSize());
 		dist_1 = (MyNumberPicker) getView().findViewById(R.id.dist_1);
 		dist_01 = (MyNumberPicker) getView().findViewById(R.id.dist_01);
-		
+		distUnit = (TextView) getView().findViewById(R.id.dist_unit);
+			distUnit.setText(((MainActivity) getActivity()).getUnit());
+			distUnit.setTextSize(dist1.getTextSize());
+			
 		// Set up TIME fields
 		hour = (MyNumberPicker) getView().findViewById(R.id.hour);
 		div_th = ((TextView) getView().findViewById(R.id.div_th));
