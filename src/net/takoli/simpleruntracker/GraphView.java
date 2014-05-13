@@ -24,6 +24,7 @@ public class GraphView extends View {
 	
 	private final int MAX_PLOTS = 15;
 	private float[] dX, dY, sX, sY;
+	private float dYmax, sYmax;
 	private int width, height;
 	private int sPad, tPad, bPad;
 	private Paint coordPaint, dPaint, sPaint, labelUnitPaint, dTextPaint, sTextPaint;
@@ -42,24 +43,17 @@ public class GraphView extends View {
         dUnit = "m";
         dUnit = "mph";
         coordPaint = new Paint();
-        dPaint = new Paint();
-        sPaint = new Paint();
+        dsPaint = new Paint();
         labelUnitPaint = new Paint();
         dTextPaint = new Paint();
         sTextPaint = new Paint();
         coordPaint.setStyle(Style.STROKE);
         coordPaint.setColor(Color.BLACK);
         coordPaint.setStrokeWidth(2);
-        dPaint.setStyle(Style.STROKE);
-        dPaint.setStrokeWidth(4);
-        dPaint.setColor(0xFFFFA4A4);  //red for distance
-        dPaint.setAntiAlias(true);
-        dPaint.setShadowLayer(5, 3, 3, 0x88000000);
-        sPaint.setStyle(Style.STROKE);
-        sPaint.setStrokeWidth(4);
-        sPaint.setColor(0xFFCCE5FF);   //blue for speed
-        sPaint.setAntiAlias(true);
-        sPaint.setShadowLayer(5, 3, 3, 0x88000000);
+        dsPaint.setStyle(Style.STROKE);
+        dsPaint.setStrokeWidth(4);
+        dsPaint.setAntiAlias(true);
+        dsPaint.setShadowLayer(5, 3, 3, 0x88000000);
         dTextPaint.setColor(0xFFCC8383);
         sTextPaint.setColor(0xFF93A5B8);}
 	
@@ -102,14 +96,21 @@ public class GraphView extends View {
 	}
 	
 	@Override
-    protected void onDraw(Canvas canvas) {
+    	protected void onDraw(Canvas canvas) {
 		sPad = this.getPaddingLeft();
 		bPad = this.getPaddingBottom();
 		tPad = this.getPaddingTop();
 		width = this.getWidth() - sPad * 2;
 		height = this.getHeight() - tPad - bPad;
 		drawCoordSystem(canvas, distMin, distMax, speedMin, speedMax);
-	    drawChart(canvas);
+		if (plotSize == 0)
+			return;
+		setPlotCoordinates();
+		dsPaint.setColor(0xFFFFA4A4);  //red for distance
+		drawPath(canvas, dsPaint, dX, dY, dYmax);
+		dsPaint.setColor(0xFFCCE5FF);   //blue for speed
+		drawPath(canvas, dsPaint, sX, sY, sYmax);
+	    	//drawChart(canvas);
 	}
 
 	private void drawCoordSystem(Canvas canvas, long distMin, long distMax,
@@ -134,20 +135,37 @@ public class GraphView extends View {
 		canvas.drawText(form(speedMin), 			width + sPad * 1.15f, tPad + height*0.8f, sTextPaint);
 	}
 	
-	private void drawChart(Canvas canvas) {
-		if (plotSize == 0)
-			return;
-		setPlotCoordinates();
-		Path dPath = new Path();
-		Path sPath = new Path();
-		dPath.moveTo(dX[0], dY[0]);
-		sPath.moveTo(sX[0], sY[0]);
-        for (int i = 1; i < plotSize; i++) {
-        	dPath.lineTo(dX[i], dY[i]); }
-        for (int i = 1; i < plotSize; i++) {
-        	sPath.lineTo(sX[i], sY[i]); }
-        canvas.drawPath(sPath, sPaint);
-        canvas.drawPath(dPath, dPaint);
+	// private void drawChart(Canvas canvas) {
+	// 	setPlotCoordinates();
+	// 	Path dPath = new Path();
+	// 	Path sPath = new Path();
+	// 	dPath.moveTo(dX[0], dY[0]);
+	// 	sPath.moveTo(sX[0], sY[0]);
+	//       for (int i = 1; i < plotSize; i++) {
+	//       	dPath.lineTo(dX[i], dY[i]); }
+	//       for (int i = 1; i < plotSize; i++) {
+	//       	sPath.lineTo(sX[i], sY[i]); }
+	//       canvas.drawPath(sPath, sPaint);
+	//       canvas.drawPath(dPath, dPaint);
+	// }
+	
+	private void drawPath(Canvas canvas, Paint paint, float[] X, float[] Y, float Ymax) {
+		float SMOOTH = 0.15f;
+		Path path = new Path();
+	        path.moveTo(dX[0], dY[0]);
+	        for (int i = 0; i < plotSize; i++) {
+	            float startdiffX = (dX[i(i + 1)] - dX[i(i - 1)]));
+	            float startdiffY = (dY[i(i + 1)] - dY[i(i - 1)]);
+	            float endDiffX = (dX[i(i + 2)] - dX[i(i)]);
+	            float endDiffY = (dY[i(i + 2)] - dY[i(i)]);
+	            float firstControlX = dX[i] + (SMOOTH * startdiffX);
+	            float firstControlY = dY[i] + (SMOOTH * startdiffY);
+	            float secondControlX = dX[i(i + 1)] - (SMOOTH * endDiffX);
+	            float secondControlY = dY[i(i + 1)] - (SMOOTH * endDiffY);
+	
+	            path.cubicTo(firstControlX, firstControlY, secondControlX, secondControlY, dX[i(i + 1)], dY[i(i + 1)]);
+	        }
+	        canvas.drawPath(path, paint);
 	}
 	
 	private void setPlotCoordinates() {
@@ -164,7 +182,19 @@ public class GraphView extends View {
 			sX[i] = sPad + wUnit * i + 2;
 			sY[i] = sTop + sHeight * (speedMax - speeds[i]) / sRange;
 		}
+		dYmax = dY[0];
+		sYmax = sY[0];
+		for (int j = 1; j < plotSize; j++) {
+			if (dY[j] > dYmax)	dYmax = dY[j];
+			if (sY[j] > sYmax)	sYmax = sY[j];
+		}
 	}
+	
+	private int i(int i) {
+		if (i >= plotSize)	return plotSize - 1;
+	        else if (i < 0)		return 0;
+	        return i;
+	    }
 	
 	private String form(long XXxx) {
 		String formatted = "" + XXxx / 100;
