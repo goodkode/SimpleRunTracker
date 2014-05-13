@@ -70,6 +70,8 @@ public class RunAdapter extends BaseAdapter {
 			rDist.setText(run.getDistance());
 			rTime.setText(run.getTime() + "s ");
 			rPace.setText(run.getPace());
+			//Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_top_to_bottom);
+    			//oneRun.startAnimation(animation);}
 			return oneRun;
 		}
 		// show details - if it is clicked
