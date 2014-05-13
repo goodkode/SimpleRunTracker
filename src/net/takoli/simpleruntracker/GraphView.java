@@ -15,48 +15,54 @@ import android.view.View;
 public class GraphView extends View {
 	
 	private ArrayList<Run> runList;
+	private final int MAX_PLOTS = 15; 
 	private int plotSize;
 	private long[] dists, speeds;
 	private long distMin, distMax, speedMin, speedMax;
+	private float[] dX, dY, sX, sY;
+	private float dYmax, sYmax;
 	private boolean inMiles;
 	private String dUnit, sUnit;
 	private final double KM_TO_M = 1.60934;
-	
-	private final int MAX_PLOTS = 15;
-	private float[] dX, dY, sX, sY;
-	private float dYmax, sYmax;
+	private final int MY_BLUE = 0xFFFFA4A4;
+	private final int MY_RED = 0xFFCCE5FF;
+	private final int MY_SHADOW = 0x88000000;
+
 	private int width, height;
 	private int sPad, tPad, bPad;
-	private Paint coordPaint, dPaint, sPaint, labelUnitPaint, dTextPaint, sTextPaint;
+	private Paint coordPaint, distPaint, speedPaint;
 	
 	// set up the view
 	public GraphView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        // initialize fields
-        dists = new long[MAX_PLOTS];
-        speeds = new long[MAX_PLOTS];
-        dX = new float[MAX_PLOTS];
-        dY = new float[MAX_PLOTS];
-        sX = new float[MAX_PLOTS];
-        sY = new float[MAX_PLOTS];
-        inMiles = true;
-        dUnit = "m";
-        dUnit = "mph";
-        coordPaint = new Paint();
-        dsPaint = new Paint();
-        labelUnitPaint = new Paint();
-        dTextPaint = new Paint();
-        sTextPaint = new Paint();
-        coordPaint.setStyle(Style.STROKE);
-        coordPaint.setColor(Color.BLACK);
-        coordPaint.setStrokeWidth(2);
-        dsPaint.setStyle(Style.STROKE);
-        dsPaint.setStrokeWidth(4);
-        dsPaint.setAntiAlias(true);
-        dsPaint.setShadowLayer(5, 3, 3, 0x88000000);
-        dTextPaint.setColor(0xFFCC8383);
-        sTextPaint.setColor(0xFF93A5B8);}
-	
+	        super(context, attrs);
+	        // initialize fields
+	        dists = new long[MAX_PLOTS];
+	        speeds = new long[MAX_PLOTS];
+	        dX = new float[MAX_PLOTS];
+	        dY = new float[MAX_PLOTS];
+	        sX = new float[MAX_PLOTS];
+	        sY = new float[MAX_PLOTS];
+	        inMiles = true;
+	        dUnit = "m";
+	        dUnit = "mph";
+	        coordPaint = new Paint();
+	        distPaint = new Paint();
+	        speedPaint = new Paint();
+	        coordPaint.setStyle(Style.STROKE);
+	        coordPaint.setColor(Color.BLACK);
+	        coordPaint.setStrokeWidth(2);
+	        distPaint.setStyle(Style.STROKE);
+	        distPaint.setStrokeWidth(4);
+	        distPaint.setAntiAlias(true);
+	        distPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
+	        distPaint.setColor(MY_RED);
+	        speedPaint.setStyle(Style.STROKE);
+	        speedPaint.setStrokeWidth(4);
+	        speedPaint.setAntiAlias(true);
+	        speedPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
+	        speedPaint.setColor(MY_BLUE); 
+
+		
 	public void setRunList(ArrayList<Run> runList, String unit) {
 		this.runList = runList; 
 		inMiles = (unit.compareTo("m") == 0);
@@ -106,10 +112,8 @@ public class GraphView extends View {
 		if (plotSize == 0)
 			return;
 		setPlotCoordinates();
-		dsPaint.setColor(0xFFFFA4A4);  //red for distance
-		drawPath(canvas, dsPaint, dX, dY, dYmax);
-		dsPaint.setColor(0xFFCCE5FF);   //blue for speed
-		drawPath(canvas, dsPaint, sX, sY, sYmax);
+		drawPath(canvas, distPaint, dX, dY);
+		drawPath(canvas, speedPaint, sX, sY);
 	    	//drawChart(canvas);
 	}
 
@@ -120,19 +124,20 @@ public class GraphView extends View {
 		canvas.drawLine((float)sPad, (float)(tPad+height), (float)(sPad+width), (float)(tPad+height), coordPaint);
 		canvas.drawLine((float)(sPad+width), (float)(tPad+height), (float)(sPad+width), (float)tPad, coordPaint);
 		// miles or km and mph or km/h
-		labelUnitPaint.setTextSize(sPad * 0.5f);
-		canvas.drawText(dUnit, sPad * 1.2f, 			tPad * 2.5f, 	labelUnitPaint);
-		canvas.drawText(sUnit, width - sPad * 0.25f, 	tPad * 2.5f, 	labelUnitPaint);
+		distPaint.setTextSize(sPad * 0.5f);
+		speedPaint.setTextSize(sPad * 0.5f);
+		canvas.drawText(dUnit, sPad * 1.2f, 			tPad * 2.5f, 	distPaint);
+		canvas.drawText(sUnit, width - sPad * 0.275f, 	tPad * 2.5f, 	speedPaint);
 		// distance indicators
-		dTextPaint.setTextSize(sPad * 0.3f);
-		canvas.drawText(form(distMax), 				sPad * 0.2f, tPad + height*0.1f, dTextPaint);
-		canvas.drawText(form((distMin+distMax)/2), 	sPad * 0.2f, tPad + height*0.5f, dTextPaint);
-		canvas.drawText(form(distMin), 				sPad * 0.2f, tPad + height*0.9f, dTextPaint);
+		distPaint.setTextSize(sPad * 0.3f);
+		canvas.drawText(form(distMax), 				sPad * 0.2f, tPad + height*0.1f, distPaint);
+		canvas.drawText(form((distMin+distMax)/2), 	sPad * 0.2f, tPad + height*0.5f, distPaint);
+		canvas.drawText(form(distMin), 				sPad * 0.2f, tPad + height*0.9f, distPaint);
 		// speed indicators
-		sTextPaint.setTextSize(sPad * 0.3f);
-		canvas.drawText(form(speedMax), 			width + sPad * 1.15f, tPad + height*0.2f, sTextPaint);
-		canvas.drawText(form((speedMin+speedMax)/2),width + sPad * 1.15f, tPad + height*0.5f, sTextPaint);
-		canvas.drawText(form(speedMin), 			width + sPad * 1.15f, tPad + height*0.8f, sTextPaint);
+		speedPaint.setTextSize(sPad * 0.3f);
+		canvas.drawText(form(speedMax), 			width + sPad * 1.15f, tPad + height*0.2f, speedPaint);
+		canvas.drawText(form((speedMin+speedMax)/2),width + sPad * 1.15f, tPad + height*0.5f, speedPaint);
+		canvas.drawText(form(speedMin), 			width + sPad * 1.15f, tPad + height*0.8f, speedPaint);
 	}
 	
 	// private void drawChart(Canvas canvas) {
@@ -149,7 +154,7 @@ public class GraphView extends View {
 	//       canvas.drawPath(dPath, dPaint);
 	// }
 	
-	private void drawPath(Canvas canvas, Paint paint, float[] X, float[] Y, float Ymax) {
+	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {
 		float SMOOTH = 0.15f;
 		Path path = new Path();
 	        path.moveTo(dX[0], dY[0]);
@@ -165,7 +170,7 @@ public class GraphView extends View {
 	
 	            path.cubicTo(firstControlX, firstControlY, secondControlX, secondControlY, dX[i(i + 1)], dY[i(i + 1)]);
 	        }
-	        canvas.drawPath(path, paint);
+	        canvas.drawPath(path, pathPaint);
 	}
 	
 	private void setPlotCoordinates() {
