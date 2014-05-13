@@ -151,9 +151,11 @@ public class MainActivity extends Activity {
 	    switch (item.getItemId()) {
 	    	case R.id.settings:
 	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
+	    		((LinearLayout) findViewById(R.id.middle)).invalidate();
 	    		graph.setRunList(runListDB.getRunList(), getUnit());
 	    		updateGraph();
-	            return true;
+	    		Toast.makeToast(this, "New runs will use " + getUnitInFull(), Toast.LENGTH_LONG).show();
+	            return true; 
 	        case R.id.export_list_of_runs:
 	        	runListDB.saveToExternal(this);
 	            return true;
@@ -217,6 +219,14 @@ public class MainActivity extends Activity {
 	}
 	public String getUnit() {
 		return settings.getString("unit", "");
+	}
+	public String getUnitInFull() {
+		String u = settings.getString("unit", "");
+		if (u.compareTo("m") == 0)
+			return "miles";
+		else if (u.compareTo("km") == 0)
+			return "kilometers";
+		else return "";
 	}
 	public void updateGraph() {
 		if (graph != null) {
