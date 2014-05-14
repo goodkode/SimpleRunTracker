@@ -26,6 +26,7 @@ public class GraphView extends View {
 	private final int MY_RED = 0xFFFFA4A4;
 	private final int MY_BLUE = 0xFF9FC6FF;
 	private final int MY_SHADOW = 0x88000000;
+	private final int NO_DATA = 999;
 
 	private int width, height;
 	private int sPad, tPad, bPad;
@@ -107,14 +108,16 @@ public class GraphView extends View {
 	
 	@Override
     	protected void onDraw(Canvas canvas) {
+    		this.removeView(NO_DATA);
 		sPad = this.getPaddingLeft();
 		bPad = this.getPaddingBottom();
 		tPad = this.getPaddingTop();
 		width = this.getWidth() - sPad * 2;
 		height = this.getHeight() - tPad - bPad;
 		drawCoordSystem(canvas, distMin, distMax, speedMin, speedMax);
-		if (plotSize == 0)
-			return;
+		if (plotSize == 0) {
+			noDataMsg();
+			return; }
 		setPlotCoordinates();
 		drawPath(canvas, distPaint, dX, dY);
 		drawPath(canvas, speedPaint, sX, sY);
@@ -176,6 +179,16 @@ public class GraphView extends View {
 			sX[i] = sPad + wUnit * i + 2;
 			sY[i] = sTop + sHeight * (speedMax - speeds[i]) / sRange;
 		}
+	}
+	
+	
+	private void noDataMsg() {
+		TextView noData = new TextView(this);
+		noData.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		noData.setId(NO_DATA);
+		noData.setText("No data to chart");
+		noData.setTextSize(height / 30);
+		this.addView(noData, lp);
 	}
 	
 	private int i(int i) {
