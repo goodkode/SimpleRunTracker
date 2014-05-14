@@ -67,7 +67,8 @@ public class EnterRun extends Fragment {
 		dist_01 = (MyNumberPicker) getView().findViewById(R.id.dist_01);
 		distUnit = (TextView) getView().findViewById(R.id.dist_unit);
 			distUnit.setText(((MainActivity) getActivity()).getUnit());
-			distUnit.setTextSize(dist1.getTextSize());
+			distUnit.setTextSize(dist1.getTextSize() * 0.8f);
+			distUnit.animate().translationYBy(4);
 			
 		// Set up TIME fields
 		hour = (MyNumberPicker) getView().findViewById(R.id.hour);

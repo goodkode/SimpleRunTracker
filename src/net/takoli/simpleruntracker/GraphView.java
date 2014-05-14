@@ -20,17 +20,16 @@ public class GraphView extends View {
 	private long[] dists, speeds;
 	private long distMin, distMax, speedMin, speedMax;
 	private float[] dX, dY, sX, sY;
-	private float dYmax, sYmax;
 	private boolean inMiles;
 	private String dUnit, sUnit;
 	private final double KM_TO_M = 1.60934;
-	private final int MY_BLUE = 0xFFFFA4A4;
-	private final int MY_RED = 0xFFCCE5FF;
+	private final int MY_RED = 0xFFFFA4A4;
+	private final int MY_BLUE = 0xFF9FC6FF;
 	private final int MY_SHADOW = 0x88000000;
 
 	private int width, height;
 	private int sPad, tPad, bPad;
-	private Paint coordPaint, distPaint, speedPaint;
+	private Paint coordPaint, distPaint, speedPaint, distLabelPaint, speedLabelPaint;
 	
 	// set up the view
 	public GraphView(Context context, AttributeSet attrs) {
@@ -48,6 +47,8 @@ public class GraphView extends View {
 	        coordPaint = new Paint();
 	        distPaint = new Paint();
 	        speedPaint = new Paint();
+	        distLabelPaint = new Paint();
+	        speedLabelPaint = new Paint();
 	        coordPaint.setStyle(Style.STROKE);
 	        coordPaint.setColor(Color.BLACK);
 	        coordPaint.setStrokeWidth(2);
@@ -60,7 +61,10 @@ public class GraphView extends View {
 	        speedPaint.setStrokeWidth(4);
 	        speedPaint.setAntiAlias(true);
 	        speedPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
-	        speedPaint.setColor(MY_BLUE); 
+	        speedPaint.setColor(MY_BLUE);
+	        distLabelPaint.setColor(MY_RED);
+	        speedLabelPaint.setColor(MY_BLUE);
+	}
 
 		
 	public void setRunList(ArrayList<Run> runList, String unit) {
@@ -124,51 +128,36 @@ public class GraphView extends View {
 		canvas.drawLine((float)sPad, (float)(tPad+height), (float)(sPad+width), (float)(tPad+height), coordPaint);
 		canvas.drawLine((float)(sPad+width), (float)(tPad+height), (float)(sPad+width), (float)tPad, coordPaint);
 		// miles or km and mph or km/h
-		distPaint.setTextSize(sPad * 0.5f);
-		speedPaint.setTextSize(sPad * 0.5f);
-		canvas.drawText(dUnit, sPad * 1.2f, 			tPad * 2.5f, 	distPaint);
-		canvas.drawText(sUnit, width - sPad * 0.275f, 	tPad * 2.5f, 	speedPaint);
+		distLabelPaint.setTextSize(sPad * 0.45f);
+		speedLabelPaint.setTextSize(sPad * 0.45f);
+		canvas.drawText(dUnit, sPad * 1.2f, 			tPad * 2.75f, 	distLabelPaint);
+		canvas.drawText(sUnit, width - sPad * 0.278f, 	tPad * 2.75f, 	speedLabelPaint);
 		// distance indicators
-		distPaint.setTextSize(sPad * 0.3f);
-		canvas.drawText(form(distMax), 				sPad * 0.2f, tPad + height*0.1f, distPaint);
-		canvas.drawText(form((distMin+distMax)/2), 	sPad * 0.2f, tPad + height*0.5f, distPaint);
-		canvas.drawText(form(distMin), 				sPad * 0.2f, tPad + height*0.9f, distPaint);
+		distLabelPaint.setTextSize(sPad * 0.35f);
+		canvas.drawText(form(distMax), 				sPad * 0.22f, tPad + height*0.1f, distLabelPaint);
+		canvas.drawText(form((distMin+distMax)/2), 	sPad * 0.22f, tPad + height*0.5f, distLabelPaint);
+		canvas.drawText(form(distMin), 				sPad * 0.22f, tPad + height*0.9f, distLabelPaint);
 		// speed indicators
-		speedPaint.setTextSize(sPad * 0.3f);
-		canvas.drawText(form(speedMax), 			width + sPad * 1.15f, tPad + height*0.2f, speedPaint);
-		canvas.drawText(form((speedMin+speedMax)/2),width + sPad * 1.15f, tPad + height*0.5f, speedPaint);
-		canvas.drawText(form(speedMin), 			width + sPad * 1.15f, tPad + height*0.8f, speedPaint);
+		speedLabelPaint.setTextSize(sPad * 0.35f);
+		canvas.drawText(form(speedMax), 			width + sPad * 1.15f, tPad + height*0.2f, speedLabelPaint);
+		canvas.drawText(form((speedMin+speedMax)/2),width + sPad * 1.15f, tPad + height*0.5f, speedLabelPaint);
+		canvas.drawText(form(speedMin), 			width + sPad * 1.15f, tPad + height*0.8f, speedLabelPaint);
 	}
-	
-	// private void drawChart(Canvas canvas) {
-	// 	setPlotCoordinates();
-	// 	Path dPath = new Path();
-	// 	Path sPath = new Path();
-	// 	dPath.moveTo(dX[0], dY[0]);
-	// 	sPath.moveTo(sX[0], sY[0]);
-	//       for (int i = 1; i < plotSize; i++) {
-	//       	dPath.lineTo(dX[i], dY[i]); }
-	//       for (int i = 1; i < plotSize; i++) {
-	//       	sPath.lineTo(sX[i], sY[i]); }
-	//       canvas.drawPath(sPath, sPaint);
-	//       canvas.drawPath(dPath, dPaint);
-	// }
 	
 	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {
 		float SMOOTH = 0.15f;
 		Path path = new Path();
-	        path.moveTo(dX[0], dY[0]);
+	        path.moveTo(X[0], Y[0]);
 	        for (int i = 0; i < plotSize; i++) {
-	            float startdiffX = (dX[i(i + 1)] - dX[i(i - 1)]));
-	            float startdiffY = (dY[i(i + 1)] - dY[i(i - 1)]);
-	            float endDiffX = (dX[i(i + 2)] - dX[i(i)]);
-	            float endDiffY = (dY[i(i + 2)] - dY[i(i)]);
-	            float firstControlX = dX[i] + (SMOOTH * startdiffX);
-	            float firstControlY = dY[i] + (SMOOTH * startdiffY);
-	            float secondControlX = dX[i(i + 1)] - (SMOOTH * endDiffX);
-	            float secondControlY = dY[i(i + 1)] - (SMOOTH * endDiffY);
-	
-	            path.cubicTo(firstControlX, firstControlY, secondControlX, secondControlY, dX[i(i + 1)], dY[i(i + 1)]);
+	            float startdiffX = (X[i(i + 1)] - X[i(i - 1)]);
+	            float startdiffY = (Y[i(i + 1)] - Y[i(i - 1)]);
+	            float endDiffX = (X[i(i + 2)] - X[i(i)]);
+	            float endDiffY = (Y[i(i + 2)] - Y[i(i)]);
+	            float firstControlX = X[i] + (SMOOTH * startdiffX);
+	            float firstControlY = Y[i] + (SMOOTH * startdiffY);
+	            float secondControlX = X[i(i + 1)] - (SMOOTH * endDiffX);
+	            float secondControlY = Y[i(i + 1)] - (SMOOTH * endDiffY);
+	            path.cubicTo(firstControlX, firstControlY, secondControlX, secondControlY, X[i(i + 1)], Y[i(i + 1)]);
 	        }
 	        canvas.drawPath(path, pathPaint);
 	}
@@ -187,12 +176,6 @@ public class GraphView extends View {
 			sX[i] = sPad + wUnit * i + 2;
 			sY[i] = sTop + sHeight * (speedMax - speeds[i]) / sRange;
 		}
-		dYmax = dY[0];
-		sYmax = sY[0];
-		for (int j = 1; j < plotSize; j++) {
-			if (dY[j] > dYmax)	dYmax = dY[j];
-			if (sY[j] > sYmax)	sYmax = sY[j];
-		}
 	}
 	
 	private int i(int i) {
@@ -202,7 +185,7 @@ public class GraphView extends View {
 	    }
 	
 	private String form(long XXxx) {
-		String formatted = "" + XXxx / 100;
+		String formatted = "" + ++XXxx / 100;
 		formatted += "." + (XXxx % 100) / 10;
 		return formatted;
 	}

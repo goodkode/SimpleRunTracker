@@ -1,18 +1,13 @@
 package net.takoli.simpleruntracker;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
@@ -25,9 +20,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
@@ -151,10 +148,6 @@ public class MainActivity extends Activity {
 	    switch (item.getItemId()) {
 	    	case R.id.settings:
 	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
-	    		((LinearLayout) findViewById(R.id.middle)).invalidate();
-	    		graph.setRunList(runListDB.getRunList(), getUnit());
-	    		updateGraph();
-	    		Toast.makeToast(this, "New runs will use " + getUnitInFull(), Toast.LENGTH_LONG).show();
 	            return true; 
 	        case R.id.export_list_of_runs:
 	        	runListDB.saveToExternal(this);
@@ -204,6 +197,10 @@ public class MainActivity extends Activity {
 		// slide the fragment down
 		runFragLayout.animate().setDuration(700).translationY(0);
 		runFragOpen = true;
+	}
+	
+	public GraphView getGraphView() {
+		return graph;
 	}
 	
 	public RunDB getRunDB() {

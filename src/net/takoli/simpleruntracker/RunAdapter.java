@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -71,7 +72,7 @@ public class RunAdapter extends BaseAdapter {
 			rTime.setText(run.getTime() + "s ");
 			rPace.setText(run.getPace());
 			//Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_top_to_bottom);
-    			//oneRun.startAnimation(animation);}
+			//oneRun.startAnimation(animation);}
 			return oneRun;
 		}
 		// show details - if it is clicked
