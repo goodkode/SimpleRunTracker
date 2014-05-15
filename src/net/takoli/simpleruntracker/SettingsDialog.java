@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +39,7 @@ public class SettingsDialog extends DialogFragment {
     	main.setUnit(unit);
     	Toast.makeText(main, "New runs will use " + main.getUnitInFull(), Toast.LENGTH_LONG).show();
     	((TextView) main.findViewById(R.id.dist_unit)).setText(unit);
-    	main.getGraphView().setRunList(main.getRunDB().getRunList(), main.getUnit());
+    	main.getGraphView().setRunList(main.getRunDB(), main.getUnit());
     	main.updateGraph();
     }
 }

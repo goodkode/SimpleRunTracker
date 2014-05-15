@@ -110,6 +110,10 @@ public class RunDB {
 		if (sumDistDec == 0) return 0;
 		else return (int) (sumTimeSec * 100 / sumDistDec);
 	}
+	public int getAvgSpeedDecInMPH() {
+		if (sumDistDec == 0) return 0;
+		else return (int) ((sumDistDec) / (sumTimeSec / 60.0 / 60.0));
+	}
 	
 	// save all changes
 	public void updateAndSaveRunDB(Context context) {  // might consider serialization instead of CSV in the future
@@ -166,7 +170,7 @@ public class RunDB {
         	is.close();
         	os.close();
         		
-			Toast.makeText(context, "Saved on SD Card's Donwloads folder",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Backed up on SD Card's Donwloads folder",Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			Toast.makeText(context, "File write error", Toast.LENGTH_LONG)
 					.show();

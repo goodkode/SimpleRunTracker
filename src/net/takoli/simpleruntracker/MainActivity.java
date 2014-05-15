@@ -20,11 +20,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
@@ -111,7 +109,7 @@ public class MainActivity extends Activity {
 		
 		// Graph initial setup
 		graph = (GraphView) findViewById(R.id.graph);
-		graph.setRunList(runListDB.getRunList(), getUnit());	
+		graph.setRunList(runListDB, getUnit());	
 	}
 	
 	@Override

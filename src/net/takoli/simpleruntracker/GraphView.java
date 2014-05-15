@@ -14,9 +14,10 @@ import android.view.View;
 
 public class GraphView extends View {
 	
+	private RunDB runListDB;
 	private ArrayList<Run> runList;
 	private final int MAX_PLOTS = 15; 
-	private int plotSize;
+	private int fullPlotSize, dataPlotSize;
 	private long[] dists, speeds;
 	private long distMin, distMax, speedMin, speedMax;
 	private float[] dX, dY, sX, sY;
@@ -26,7 +27,6 @@ public class GraphView extends View {
 	private final int MY_RED = 0xFFFFA4A4;
 	private final int MY_BLUE = 0xFF9FC6FF;
 	private final int MY_SHADOW = 0x88000000;
-	private final int NO_DATA = 999;
 
 	private int width, height;
 	private int sPad, tPad, bPad;
@@ -68,8 +68,9 @@ public class GraphView extends View {
 	}
 
 		
-	public void setRunList(ArrayList<Run> runList, String unit) {
-		this.runList = runList; 
+	public void setRunList(RunDB runListDB, String unit) {
+		this.runListDB = runListDB;
+		this.runList = runListDB.getRunList();
 		inMiles = (unit.compareTo("m") == 0);
 		if (inMiles)	{ dUnit = "m"; sUnit = "mph";}
 		else			{ dUnit = "km"; sUnit = "km/h"; }
@@ -78,27 +79,30 @@ public class GraphView extends View {
 	
 	public void updateData() {
 		int fullSize = runList.size();
-		plotSize = fullSize > MAX_PLOTS ? MAX_PLOTS : fullSize;
-		Log.i("run", "updateData "+plotSize + " / " + fullSize);
-		if (plotSize == 0) {
+		dataPlotSize = fullSize > (MAX_PLOTS - 1) ? (MAX_PLOTS - 1) : fullSize;
+		if (dataPlotSize == 0) {
 			Log.i("run", "nothing to chart");
 			return; }
-		int j = 0;
-		for (int i = fullSize - plotSize; i < fullSize; i++) {
+		fullPlotSize = dataPlotSize + 1;  // plot '0' is the average
+		dists[0] = runListDB.getAvgDistDec();
+		speeds[0] = runListDB.getAvgSpeedDecInMPH();
+		Log.i("run", "avgspeed: " + speeds[0]);
+		int j = 1;
+		for (int i = fullSize - dataPlotSize; i < fullSize; i++) {
 			dists[j] = runList.get(i).getDistDecInM();
-			Log.i("run", i + ": " + runList.get(i).getDistDecInM());
 			speeds[j] = runList.get(i).getSpeedDecInMPH(dists[j]);
+			Log.i("run", "speed " + j + ": " + speeds[j]);
 			j++;
 		}
 		// in case we want to see the graph in KM:
-		if (!inMiles) for (int i = 0; i < plotSize; i++) {
+		if (!inMiles) for (int i = 0; i < fullPlotSize; i++) {
 			dists[i] = Math.round(dists[i] * KM_TO_M);
 			speeds[i] = Math.round(speeds[i] * KM_TO_M);
 		}
 		// check for min and max values:
 		distMax = distMin = dists[0];
 		speedMax = speedMin = speeds[0];
-		for (int i = 0; i < plotSize; i++) {
+		for (int i = 0; i < fullPlotSize; i++) {
 			if (dists[i] < distMin)	distMin = dists[i];
 			if (dists[i] > distMax)	distMax = dists[i];
 			if (speeds[i] < speedMin)	speedMin = speeds[i];
@@ -108,20 +112,20 @@ public class GraphView extends View {
 	
 	@Override
     	protected void onDraw(Canvas canvas) {
-    		this.removeView(NO_DATA);
+    		this.
 		sPad = this.getPaddingLeft();
 		bPad = this.getPaddingBottom();
 		tPad = this.getPaddingTop();
 		width = this.getWidth() - sPad * 2;
 		height = this.getHeight() - tPad - bPad;
-		drawCoordSystem(canvas, distMin, distMax, speedMin, speedMax);
-		if (plotSize == 0) {
-			noDataMsg();
+		if (dataPlotSize == 0) {
+			coordPaint.setTextSize(height / 5f);
+			canvas.drawText("No runs to chart yet", width/2.9f, height/1.9f, coordPaint);
 			return; }
+		drawCoordSystem(canvas, distMin, distMax, speedMin, speedMax);
 		setPlotCoordinates();
 		drawPath(canvas, distPaint, dX, dY);
 		drawPath(canvas, speedPaint, sX, sY);
-	    	//drawChart(canvas);
 	}
 
 	private void drawCoordSystem(Canvas canvas, long distMin, long distMax,
@@ -151,7 +155,7 @@ public class GraphView extends View {
 		float SMOOTH = 0.15f;
 		Path path = new Path();
 	        path.moveTo(X[0], Y[0]);
-	        for (int i = 0; i < plotSize; i++) {
+	        for (int i = 0; i < fullPlotSize; i++) {
 	            float startdiffX = (X[i(i + 1)] - X[i(i - 1)]);
 	            float startdiffY = (Y[i(i + 1)] - Y[i(i - 1)]);
 	            float endDiffX = (X[i(i + 2)] - X[i(i)]);
@@ -173,7 +177,7 @@ public class GraphView extends View {
 		float sTop = tPad + height * 0.25f;
 		float dRange = distMax - distMin;
 		float sRange = speedMax - speedMin;
-		for (int i = 0; i < plotSize; i++) {
+		for (int i = 0; i < fullPlotSize; i++) {
 			dX[i] = sPad + wUnit * i + 2;
 			dY[i] = dTop + dHeight * (distMax - dists[i]) / dRange; 
 			sX[i] = sPad + wUnit * i + 2;
@@ -181,18 +185,8 @@ public class GraphView extends View {
 		}
 	}
 	
-	
-	private void noDataMsg() {
-		TextView noData = new TextView(this);
-		noData.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		noData.setId(NO_DATA);
-		noData.setText("No data to chart");
-		noData.setTextSize(height / 30);
-		this.addView(noData, lp);
-	}
-	
 	private int i(int i) {
-		if (i >= plotSize)	return plotSize - 1;
+		if (i >= fullPlotSize)	return fullPlotSize - 1;
 	        else if (i < 0)		return 0;
 	        return i;
 	    }
