@@ -22,7 +22,7 @@ public class SettingsDialog extends DialogFragment {
                 .setNegativeButton("Miles",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                        	unit = "m"; }
+                        	unit = "mi"; }
                     }
                 )
                 .setPositiveButton("Kilometers",

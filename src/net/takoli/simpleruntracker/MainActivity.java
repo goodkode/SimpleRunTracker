@@ -217,7 +217,7 @@ public class MainActivity extends Activity {
 	}
 	public String getUnitInFull() {
 		String u = settings.getString("unit", "");
-		if (u.compareTo("m") == 0)
+		if (u.compareTo("mi") == 0)
 			return "miles";
 		else if (u.compareTo("km") == 0)
 			return "kilometers";

@@ -43,7 +43,7 @@ public class GraphView extends View {
 	        sX = new float[MAX_PLOTS];
 	        sY = new float[MAX_PLOTS];
 	        inMiles = true;
-	        dUnit = "m";
+	        dUnit = "mi";
 	        dUnit = "mph";
 	        coordPaint = new Paint();
 	        distPaint = new Paint();
@@ -71,8 +71,8 @@ public class GraphView extends View {
 	public void setRunList(RunDB runListDB, String unit) {
 		this.runListDB = runListDB;
 		this.runList = runListDB.getRunList();
-		inMiles = (unit.compareTo("m") == 0);
-		if (inMiles)	{ dUnit = "m"; sUnit = "mph";}
+		inMiles = (unit.compareTo("mi") == 0);
+		if (inMiles)	{ dUnit = "mi"; sUnit = "mph";}
 		else			{ dUnit = "km"; sUnit = "km/h"; }
 		updateData();
 	}
@@ -154,19 +154,26 @@ public class GraphView extends View {
 	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {
 		float SMOOTH = 0.15f;
 		Path path = new Path();
-	        path.moveTo(X[0], Y[0]);
-	        for (int i = 0; i < fullPlotSize; i++) {
-	            float startdiffX = (X[i(i + 1)] - X[i(i - 1)]);
-	            float startdiffY = (Y[i(i + 1)] - Y[i(i - 1)]);
-	            float endDiffX = (X[i(i + 2)] - X[i(i)]);
-	            float endDiffY = (Y[i(i + 2)] - Y[i(i)]);
-	            float firstControlX = X[i] + (SMOOTH * startdiffX);
-	            float firstControlY = Y[i] + (SMOOTH * startdiffY);
-	            float secondControlX = X[i(i + 1)] - (SMOOTH * endDiffX);
-	            float secondControlY = Y[i(i + 1)] - (SMOOTH * endDiffY);
-	            path.cubicTo(firstControlX, firstControlY, secondControlX, secondControlY, X[i(i + 1)], Y[i(i + 1)]);
-	        }
-	        canvas.drawPath(path, pathPaint);
+        path.moveTo(X[0], Y[0]);
+        if (dataPlotSize == 1) {
+        	Log.i("run", "graph single");
+        	Log.i("run", "X: " + X[0] + ", " + X[1]);
+        	Log.i("run", "Y: " + Y[0] + ", " + Y[1]);
+        	path.lineTo(X[1], Y[1]);
+        } else {
+        for (int i = 0; i < fullPlotSize; i++) {
+            float startdiffX = (X[i(i + 1)] - X[i(i - 1)]);
+            float startdiffY = (Y[i(i + 1)] - Y[i(i - 1)]);
+            float endDiffX = (X[i(i + 2)] - X[i(i)]);
+            float endDiffY = (Y[i(i + 2)] - Y[i(i)]);
+            float firstControlX = X[i] + (SMOOTH * startdiffX);
+            float firstControlY = Y[i] + (SMOOTH * startdiffY);
+            float secondControlX = X[i(i + 1)] - (SMOOTH * endDiffX);
+            float secondControlY = Y[i(i + 1)] - (SMOOTH * endDiffY);
+            Log.i("run", "graph: " + i);
+            path.cubicTo(firstControlX, firstControlY, secondControlX, secondControlY, X[i(i + 1)], Y[i(i + 1)]);
+        } }
+        canvas.drawPath(path, pathPaint);
 	}
 	
 	private void setPlotCoordinates() {
@@ -179,9 +186,11 @@ public class GraphView extends View {
 		float sRange = speedMax - speedMin;
 		for (int i = 0; i < fullPlotSize; i++) {
 			dX[i] = sPad + wUnit * i + 2;
-			dY[i] = dTop + dHeight * (distMax - dists[i]) / dRange; 
+			dY[i] = dTop + dHeight * (distMax - dists[i]) / dRange;
+			if (dRange == 0)	dY[i] = dTop + dHeight / 2;
 			sX[i] = sPad + wUnit * i + 2;
 			sY[i] = sTop + sHeight * (speedMax - speeds[i]) / sRange;
+			if (sRange == 0)	sY[i] = sTop + sHeight / 2;
 		}
 	}
 	

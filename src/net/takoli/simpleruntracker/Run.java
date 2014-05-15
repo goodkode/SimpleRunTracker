@@ -100,7 +100,7 @@ public class Run {
 		int speedPerSec = (int) ((dd * 100 + _dd) / (totalSec / 60.0 / 60.0));
 		return (speedPerSec / 100) + "." + ((speedPerSec % 100) < 10 ? 
 				"0" + speedPerSec % 100 : speedPerSec % 100) + 
-				(unit.compareTo("m")==0 ? " mph" : " km/h");
+				(unit.compareTo("mi")==0 ? " mph" : " km/h");
 	}
 	
 	// For STATISTICS:

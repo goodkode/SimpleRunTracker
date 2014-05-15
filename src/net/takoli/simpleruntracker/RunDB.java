@@ -8,14 +8,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class RunDB {
@@ -170,7 +166,7 @@ public class RunDB {
         	is.close();
         	os.close();
         		
-			Toast.makeText(context, "Backed up on SD Card's Donwloads folder",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Backed up in the Donwloads folder",Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			Toast.makeText(context, "File write error", Toast.LENGTH_LONG)
 					.show();
