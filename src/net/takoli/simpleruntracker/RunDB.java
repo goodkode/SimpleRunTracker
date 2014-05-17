@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -19,7 +21,7 @@ public class RunDB {
 	private ArrayList<Run> runList;
 	private long sumDistDec, sumTimeSec;
 	
-	private final String FILE_NAME = "SimpleRunTrackerDB.csv";
+	private final String FILE_NAME = "RunTracker-runlist.csv";
 	private final int MAX = 100;
 	private File intDir, extDownloadsDir;
 
@@ -165,11 +167,24 @@ public class RunDB {
         	os.write(data);
         	is.close();
         	os.close();
-        		
-			Toast.makeText(context, "Backed up in the Donwloads folder",Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			Toast.makeText(context, "File write error", Toast.LENGTH_LONG)
 					.show();
 		}
+	}
+	
+	public Intent emailIntent(Context context) {
+		try {
+	    	Uri fileUri = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), FILE_NAME));
+	    	Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND); 
+	    	emailIntent.setType("text/plain"); 
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Test Subject"); 
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "go on read the emails"); 
+	    	emailIntent.putExtra(Intent.EXTRA_STREAM, fileUri); 
+	    	return emailIntent;
+		} catch(Exception e) {
+			Toast.makeText(context, "Email is not sent", Toast.LENGTH_LONG).show();
+		}
+		return null;
 	}
 }
