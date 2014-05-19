@@ -76,11 +76,13 @@ public class EnterRun extends Fragment {
 			div_th.setTextSize(hour.getTextSize());
 		min10 = (MyNumberPicker) getView().findViewById(R.id.min10);
 			min10.setMaxValue(5);
+			min10.setWrapSelectorWheel(true);
 		min1 = (MyNumberPicker) getView().findViewById(R.id.min1);
 		div_tm = ((TextView) getView().findViewById(R.id.div_tm));
 			div_tm.setTextSize(hour.getTextSize());
 		sec10 = (MyNumberPicker) getView().findViewById(R.id.sec10);
 			sec10.setMaxValue(5);
+			sec10.setWrapSelectorWheel(true);
 		sec1 = (MyNumberPicker) getView().findViewById(R.id.sec1);
 		
 		// Show last run values at start
@@ -106,6 +108,9 @@ public class EnterRun extends Fragment {
 		dividerLine.setPadding(dm.widthPixels / 5, 0, dm.widthPixels / 5, 0);
 		
 		// Datepicker 
+		((RadioButton) getActivity().findViewById(R.id.date_today)).setTextSize(hour.getTextSize() / 1.6f);
+		((RadioButton) getActivity().findViewById(R.id.date_yesterday)).setTextSize(hour.getTextSize() / 1.6f);
+		((RadioButton) getActivity().findViewById(R.id.date_picker)).setTextSize(hour.getTextSize() / 1.6f);
 		runDate = Calendar.getInstance(Locale.US);
 		dateGroup = (RadioGroup) getActivity().findViewById(R.id.date_radiobuttons);
 		dateGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {

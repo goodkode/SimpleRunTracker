@@ -26,8 +26,8 @@ public class Run {
 	
 	public Run(String line) {
 		String[] fields = line.split(",");
-		Log.i("run", "date:"+ fields[0] + ", dist: " + fields[1] + 
-				fields[2] + ", time: " + fields[3]);
+		//Log.i("run", "date:"+ fields[0] + ", dist: " + fields[1] + 
+		//		fields[2] + ", time: " + fields[3]);
 		String[] dateSt = fields[0].split("/");
 		String[] distSt = fields[1].split("\\.");
 		String[] timeSt = fields[3].split("\\:");
@@ -117,13 +117,15 @@ public class Run {
 
 	
 	// Performance Score - subjective score '3' - '10'
-	public String getPerfScore(int avgDist, int avgPace) {
-		if (avgDist == 0 || avgPace == 0)	return "";
-		long dScore = Math.round(((getDistDecInM() / avgDist) - 1.0) / 0.2);
-		double thisPace = (60.0 * 60 * h + 60 * mm + ss) / (dd * 100 + _dd);
-		//Log.i("run", "pScore RAW: " + (avgPace / thisPace - 100) / 10);
-		long pScore = Math.round((avgPace / thisPace - 100) / 10);
-		//Log.i("run", "dScore: " + dScore + ", pScore: " + pScore);
+	public String getPerfScore(int avgDistDec, int avgPaceSec) {
+		if (avgDistDec == 0 || avgPaceSec == 0)	return "";
+		// each 20% over average distance is a point extra
+		double dPrcnt = (100.0 * getDistDecInM() / avgDistDec) - 100;
+		long dScore = Math.round(dPrcnt / 20);
+		// each 2% over average speed is a point extra
+		double sPrcnt = avgPaceSec / ((60.0 * 60 * h + 60 * mm + ss) / (dd * 100 + _dd)) - 100;
+		long pScore = Math.round(sPrcnt / 2);
+		// factor this score to be between 3 and 10 (7 as average)
 		long perfScore = 7 + dScore + pScore;
 		if (perfScore < 3)	return "3";
 		if (perfScore > 10) return "10";

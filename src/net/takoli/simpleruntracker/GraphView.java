@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 public class GraphView extends View {
@@ -50,9 +49,8 @@ public class GraphView extends View {
 	        speedPaint = new Paint();
 	        distLabelPaint = new Paint();
 	        speedLabelPaint = new Paint();
-	        coordPaint.setStyle(Style.STROKE);
+	        coordPaint.setStyle(Style.FILL);
 	        coordPaint.setColor(Color.BLACK);
-	        coordPaint.setStrokeWidth(2);
 	        distPaint.setStyle(Style.STROKE);
 	        distPaint.setStrokeWidth(4);
 	        distPaint.setAntiAlias(true);
@@ -81,17 +79,17 @@ public class GraphView extends View {
 		int fullSize = runList.size();
 		dataPlotSize = fullSize > (MAX_PLOTS - 1) ? (MAX_PLOTS - 1) : fullSize;
 		if (dataPlotSize == 0) {
-			Log.i("run", "nothing to chart");
+			//Log.i("run", "nothing to chart");
 			return; }
 		fullPlotSize = dataPlotSize + 1;  // plot '0' is the average
 		dists[0] = runListDB.getAvgDistDec();
 		speeds[0] = runListDB.getAvgSpeedDecInMPH();
-		Log.i("run", "avgspeed: " + speeds[0]);
+		//Log.i("run", "avgspeed: " + speeds[0]);
 		int j = 1;
 		for (int i = fullSize - dataPlotSize; i < fullSize; i++) {
 			dists[j] = runList.get(i).getDistDecInM();
 			speeds[j] = runList.get(i).getSpeedDecInMPH(dists[j]);
-			Log.i("run", "speed " + j + ": " + speeds[j]);
+			//Log.i("run", "speed " + j + ": " + speeds[j]);
 			j++;
 		}
 		// in case we want to see the graph in KM:
@@ -124,13 +122,14 @@ public class GraphView extends View {
 			return; }
 		drawCoordSystem(canvas, distMin, distMax, speedMin, speedMax);
 		setPlotCoordinates();
-		drawPath(canvas, distPaint, dX, dY);
 		drawPath(canvas, speedPaint, sX, sY);
+		drawPath(canvas, distPaint, dX, dY);
 	}
 
 	private void drawCoordSystem(Canvas canvas, long distMin, long distMax,
 			long speedMin, long speedMax) {
 		// left, bottom, right lines
+        coordPaint.setStrokeWidth(2);
 		canvas.drawLine((float)sPad, (float)tPad, (float)sPad, (float)(tPad+height), coordPaint);
 		canvas.drawLine((float)sPad, (float)(tPad+height), (float)(sPad+width), (float)(tPad+height), coordPaint);
 		canvas.drawLine((float)(sPad+width), (float)(tPad+height), (float)(sPad+width), (float)tPad, coordPaint);
@@ -149,6 +148,10 @@ public class GraphView extends View {
 		canvas.drawText(form(speedMax), 			width + sPad * 1.15f, tPad + height*0.2f, speedLabelPaint);
 		canvas.drawText(form((speedMin+speedMax)/2),width + sPad * 1.15f, tPad + height*0.5f, speedLabelPaint);
 		canvas.drawText(form(speedMin), 			width + sPad * 1.15f, tPad + height*0.8f, speedLabelPaint);
+		// how many runs are shown
+		coordPaint.setTextSize(bPad * 0.5f);
+        coordPaint.setStrokeWidth(1);
+		canvas.drawText("Last " + dataPlotSize + " runs shown", width / 2.15f, tPad + height + bPad * 0.6f, coordPaint);
 	}
 	
 	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {
@@ -156,9 +159,9 @@ public class GraphView extends View {
 		Path path = new Path();
         path.moveTo(X[0], Y[0]);
         if (dataPlotSize == 1) {
-        	Log.i("run", "graph single");
-        	Log.i("run", "X: " + X[0] + ", " + X[1]);
-        	Log.i("run", "Y: " + Y[0] + ", " + Y[1]);
+        	//Log.i("run", "graph single");
+        	//Log.i("run", "X: " + X[0] + ", " + X[1]);
+        	//Log.i("run", "Y: " + Y[0] + ", " + Y[1]);
         	path.lineTo(X[1], Y[1]);
         } else {
         for (int i = 0; i < fullPlotSize; i++) {
@@ -170,7 +173,7 @@ public class GraphView extends View {
             float firstControlY = Y[i] + (SMOOTH * startdiffY);
             float secondControlX = X[i(i + 1)] - (SMOOTH * endDiffX);
             float secondControlY = Y[i(i + 1)] - (SMOOTH * endDiffY);
-            Log.i("run", "graph: " + i);
+            //Log.i("run", "graph: " + i);
             path.cubicTo(firstControlX, firstControlY, secondControlX, secondControlY, X[i(i + 1)], Y[i(i + 1)]);
         } }
         canvas.drawPath(path, pathPaint);
