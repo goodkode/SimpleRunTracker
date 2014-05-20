@@ -15,7 +15,7 @@ public class GraphView extends View {
 	
 	private RunDB runListDB;
 	private ArrayList<Run> runList;
-	private final int MAX_PLOTS = 15; 
+	private final int MAX_PLOTS = 16; 
 	private int fullPlotSize, dataPlotSize;
 	private long[] dists, speeds;
 	private long distMin, distMax, speedMin, speedMax;
@@ -118,7 +118,8 @@ public class GraphView extends View {
 		height = this.getHeight() - tPad - bPad;
 		if (dataPlotSize == 0) {
 			coordPaint.setTextSize(height / 5f);
-			canvas.drawText("No runs to chart yet", width/2.9f, height/1.9f, coordPaint);
+			coordPaint.setTextAlign(Paint.Align.CENTER);
+			canvas.drawText("No runs to chart yet", canvas.getWidth() / 2, canvas.getHeight() / 2, coordPaint);
 			return; }
 		drawCoordSystem(canvas, distMin, distMax, speedMin, speedMax);
 		setPlotCoordinates();
@@ -151,7 +152,8 @@ public class GraphView extends View {
 		// how many runs are shown
 		coordPaint.setTextSize(bPad * 0.5f);
         coordPaint.setStrokeWidth(1);
-		canvas.drawText("Last " + dataPlotSize + " runs shown", width / 2.15f, tPad + height + bPad * 0.6f, coordPaint);
+        coordPaint.setTextAlign(Paint.Align.CENTER);
+		canvas.drawText("Last " + dataPlotSize + " runs shown", canvas.getWidth() / 2, tPad + height + bPad * 0.6f, coordPaint);
 	}
 	
 	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {
@@ -188,10 +190,10 @@ public class GraphView extends View {
 		float dRange = distMax - distMin;
 		float sRange = speedMax - speedMin;
 		for (int i = 0; i < fullPlotSize; i++) {
-			dX[i] = sPad + wUnit * i + 2;
+			dX[i] = sPad + wUnit * i;
 			dY[i] = dTop + dHeight * (distMax - dists[i]) / dRange;
 			if (dRange == 0)	dY[i] = dTop + dHeight / 2;
-			sX[i] = sPad + wUnit * i + 2;
+			sX[i] = sPad + wUnit * i;
 			sY[i] = sTop + sHeight * (speedMax - speeds[i]) / sRange;
 			if (sRange == 0)	sY[i] = sTop + sHeight / 2;
 		}

@@ -154,10 +154,10 @@ public class EnterRun extends Fragment {
 					return; // not valid run
 				runListDB.addNewRun(getActivity(), new Run(runDate, dd, _dd, unit, h, mm, ss));
 				runListDB.updateAndSaveRunDB(getActivity());
-				runAdapter.notifyDataSetChanged();
+				runAdapter.aninmateNewRun();
 				ListView myListView = (ListView) getActivity().findViewById(R.id.my_runs);
 				myListView.setSelection(runAdapter.getCount() - 1);
-				(new AfterRunPopUp()).show(getFragmentManager(), "AfterRunPopup");
+				//(new AfterRunPopUp()).show(getFragmentManager(), "AfterRunPopup");
 				((MainActivity) getActivity()).updateGraph();
 			}
 		});

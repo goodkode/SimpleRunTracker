@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,12 +29,14 @@ public class RunAdapter extends BaseAdapter {
 	private TextView rDate, rDist, rTime, rPace, rSpeed;
 	private TextView rPerformScore, rPerfDist, rPerfPace;
 	private Run run;
+	private boolean toAnimate;
 	
 	public RunAdapter(Context context, int layoutResourceId, RunDB runListDB, FragmentManager fragMngr) {
 		this.context = context;
 		this.runList = runListDB.getRunList();
 		this.runListDB = runListDB;
 		this.fragMngr = fragMngr;
+		this.toAnimate = false;
 	}
 	
 	public void addHeader(ViewGroup parent) {
@@ -71,8 +74,10 @@ public class RunAdapter extends BaseAdapter {
 			rDist.setText(run.getDistance());
 			rTime.setText(run.getTime() + "s ");
 			rPace.setText(run.getPace());
-			//Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_top_to_bottom);
-			//oneRun.startAnimation(animation);}
+			if (runList.size() == pos + 1 && toAnimate) {
+				Animation animation = AnimationUtils.loadAnimation(context, R.anim.new_list_entry);
+				oneRun.startAnimation(animation); 
+				toAnimate = false; }
 			return oneRun;
 		}
 		// show details - if it is clicked
@@ -121,6 +126,12 @@ public class RunAdapter extends BaseAdapter {
 			});
 			return oneRun;
 		}
+	}
+	
+	public void aninmateNewRun() {
+		toAnimate = true;
+		notifyDataSetChanged();
+		
 	}
 	
 

@@ -25,7 +25,7 @@ public class RunDB {
 	private final int MAX = 100;
 	private File intDir, extDownloadsDir;
 
-	// This wil run every time the app starts up (or OnCreate is called...)
+	// This will run every time the app starts up (or OnCreate is called...)
 	public RunDB(Context context) {
 		runList = new ArrayList<Run>();
 		sumDistDec = sumTimeSec = 0;
