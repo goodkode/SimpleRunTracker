@@ -3,8 +3,6 @@ package net.takoli.simpleruntracker;
 import java.util.Calendar;
 import java.util.Locale;
 
-import android.util.Log;
-
 public class Run {
 	int dd, _dd;   // distance in units and in decimals
 	int h, mm, ss;   // time in hour, min, and sec
