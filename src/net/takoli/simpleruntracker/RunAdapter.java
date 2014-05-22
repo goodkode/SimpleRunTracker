@@ -2,9 +2,13 @@ package net.takoli.simpleruntracker;
 
 import java.util.ArrayList;
 
+import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.graphics.Interpolator;
 import android.os.Bundle;
+import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -74,15 +81,23 @@ public class RunAdapter extends BaseAdapter {
 			rDist.setText(run.getDistance());
 			rTime.setText(run.getTime() + "s ");
 			rPace.setText(run.getPace());
-			if (runList.size() == pos + 1 && toAnimate) {
-				Animation animation = AnimationUtils.loadAnimation(context, R.anim.new_list_entry);
-				oneRun.startAnimation(animation); 
-				toAnimate = false; }
+			if (pos == runList.size() - 1) {
+				oneRun.setBackgroundColor(0xFF88C1FC);
+				if (toAnimate) {
+					//Animation animation = AnimationUtils.loadAnimation(context, R.anim.new_list_entry);
+					//oneRun.startAnimation(animation);
+					ObjectAnimator colorAnim = ObjectAnimator.ofFloat(oneRun, "alpha", 0f, 1f);
+					colorAnim.setInterpolator(new DecelerateInterpolator());
+					colorAnim.setDuration(2500);
+					colorAnim.start();
+					toAnimate = false; } }
 			return oneRun;
 		}
 		// show details - if it is clicked
 		else {
 			oneRun = inflater.inflate(R.layout.one_run_details, parent, false);
+			if (pos == runList.size() - 1)
+				oneRun.setBackgroundColor(0xFF88C1FC);
 			run = runList.get(pos);
 			final int index = pos;
 			
@@ -124,6 +139,9 @@ public class RunAdapter extends BaseAdapter {
 					updateRunDialog.show(fragMngr, "editRun");
 				}
 			});
+			if (pos >= runList.size() - 2) {
+				listView = (ListView) parent.findViewById(R.id.my_runs);
+				listView.smoothScrollToPosition(pos + 1); }
 			return oneRun;
 		}
 	}

@@ -72,6 +72,11 @@ public class RunUpdateDialog extends DialogFragment {
     	h.setText(this.h);
     	mm.setText(twoDigits(this.mm));
     	ss.setText(twoDigits(this.ss));
+    	dd.setSelection(2);
+    	_dd.setSelection(2);
+    	h.setSelection(1);
+    	mm.setSelection(2);
+    	ss.setSelection(2);
     	dd.addTextChangedListener(new TextWatcher() {
 			@Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
 			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }

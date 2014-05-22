@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -143,6 +144,14 @@ public class EnterRun extends Fragment {
 		enterRunButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				enterRunButton = (Button) getActivity().findViewById(R.id.enter_run_button);
+				enterRunButton.setEnabled(false);
+				Handler buttonDelay = new Handler(); 
+				buttonDelay.postDelayed(new Runnable() { 
+			         public void run() { 
+			        	 enterRunButton.setEnabled(true); 
+			         } 
+			    }, 2000); 
 				String unit = ((MainActivity) getActivity()).getUnit();
 				int dd = dist10.getValue() * 10 + dist1.getValue();
 				int _dd = dist_1.getValue() * 10 + dist_01.getValue();
