@@ -3,19 +3,22 @@ package net.takoli.simpleruntracker;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 
 public class GraphView extends View {
 	
 	private RunDB runListDB;
 	private ArrayList<Run> runList;
-	private final int MAX_PLOTS = 16; 
+	private final int MAX_PLOTS; 
 	private int fullPlotSize, dataPlotSize;
 	private long[] dists, speeds;
 	private long distMin, distMax, speedMin, speedMax;
@@ -35,6 +38,10 @@ public class GraphView extends View {
 	public GraphView(Context context, AttributeSet attrs) {
 	        super(context, attrs);
 	        // initialize fields
+	        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+	        if (display.getRotation() == Configuration.ORIENTATION_PORTRAIT)
+	        	MAX_PLOTS = 31;
+	        else MAX_PLOTS = 16;
 	        dists = new long[MAX_PLOTS];
 	        speeds = new long[MAX_PLOTS];
 	        dX = new float[MAX_PLOTS];

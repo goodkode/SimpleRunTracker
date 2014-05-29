@@ -148,7 +148,12 @@ public class MainActivity extends Activity {
 	    	case R.id.settings:
 	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
 	            return true; 
-	        case R.id.export_list_of_runs:
+	    	case R.id.statistics:
+	        	Intent statsIntent = new Intent(this, Statistics.class);
+	        	startActivityForResult(statsIntent, RESULT_OK);
+	    		overridePendingTransition(R.anim.stats_enter, R.anim.main_exit);
+	            return true;
+	    	case R.id.export_list_of_runs:
 	        	runListDB.saveToExternal(this);
 	        	Intent emailIntent = runListDB.emailIntent(this);
 	        	if (emailIntent != null)

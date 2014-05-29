@@ -9,7 +9,10 @@ package net.takoli.simpleruntracker;
 
 public final class R {
     public static final class anim {
-        public static final int new_list_entry=0x7f040000;
+        public static final int main_exit=0x7f040000;
+        public static final int main_return=0x7f040001;
+        public static final int stats_enter=0x7f040002;
+        public static final int stats_exit=0x7f040003;
     }
     public static final class animator {
         public static final int frag_enter=0x7f050000;
@@ -52,7 +55,7 @@ public final class R {
         public static final int date_radiobuttons=0x7f07001b;
         public static final int date_today=0x7f07001c;
         public static final int date_yesterday=0x7f07001d;
-        public static final int delete_db=0x7f070039;
+        public static final int delete_db=0x7f07003a;
         public static final int dist1=0x7f07000c;
         public static final int dist10=0x7f07000b;
         public static final int dist_01=0x7f07000f;
@@ -66,7 +69,7 @@ public final class R {
         public static final int edit_name=0x7f07002c;
         public static final int enter_run_button=0x7f07001f;
         public static final int enter_run_frame=0x7f070000;
-        public static final int export_list_of_runs=0x7f070038;
+        public static final int export_list_of_runs=0x7f070039;
         public static final int graph=0x7f070004;
         public static final int header_info=0x7f07002b;
         public static final int hour=0x7f070012;
@@ -91,6 +94,7 @@ public final class R {
         public static final int sec1=0x7f070018;
         public static final int sec10=0x7f070017;
         public static final int settings=0x7f070037;
+        public static final int statistics=0x7f070038;
         public static final int time=0x7f07001a;
         public static final int top=0x7f07000a;
         public static final int update_dist_comma=0x7f070030;
@@ -111,7 +115,8 @@ public final class R {
         public static final int one_run=0x7f030003;
         public static final int one_run_details=0x7f030004;
         public static final int run_header=0x7f030005;
-        public static final int update_run_dialog=0x7f030006;
+        public static final int statistics=0x7f030006;
+        public static final int update_run_dialog=0x7f030007;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;
@@ -121,8 +126,10 @@ public final class R {
         public static final int delete_db=0x7f0a0003;
         public static final int export_list_of_runs=0x7f0a0002;
         public static final int settings=0x7f0a0001;
+        public static final int statistics=0x7f0a0004;
     }
     public static final class style {
+        public static final int AlertDialogCustom=0x7f080004;
         public static final int AppTheme=0x7f080001;
         /**  general styles for the action bar 
          */
