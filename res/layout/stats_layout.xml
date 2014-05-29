@@ -5,6 +5,7 @@
 
     <!-- 1/4 of the screen will be transparent with some opacity to show the Main under -->
     <View
+        android:id="@+id/stats_left"
         android:layout_weight="1"
         android:layout_width="0"
         android:layout_height="match_parent"
