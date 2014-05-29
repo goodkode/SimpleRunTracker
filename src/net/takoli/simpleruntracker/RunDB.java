@@ -23,6 +23,7 @@ public class RunDB {
 	
 	private final String FILE_NAME = "RunTracker-runlist.csv";
 	private final int MAX = 100;
+	private final Calendar FROMDATE;
 	private File intDir, extDownloadsDir;
 
 	// This will run every time the app starts up (or OnCreate is called...)
@@ -114,7 +115,7 @@ public class RunDB {
 	}
 	
 	// save all changes
-	public void updateAndSaveRunDB(Context context) {  // might consider serialization instead of CSV in the future
+	public void updateAndSaveRunDB(Context context) {  
 		int size = runList.size();
 		Collections.sort(runList, new Comparator<Run>() {
 			public int compare(Run a, Run b) {
