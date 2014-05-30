@@ -55,7 +55,7 @@ public final class R {
         public static final int date_radiobuttons=0x7f07001b;
         public static final int date_today=0x7f07001c;
         public static final int date_yesterday=0x7f07001d;
-        public static final int delete_db=0x7f07003a;
+        public static final int delete_db=0x7f07003c;
         public static final int dist1=0x7f07000c;
         public static final int dist10=0x7f07000b;
         public static final int dist_01=0x7f07000f;
@@ -66,10 +66,10 @@ public final class R {
         public static final int div_th=0x7f070013;
         public static final int div_tm=0x7f070016;
         public static final int divider_line=0x7f070020;
-        public static final int edit_name=0x7f07002c;
+        public static final int edit_name=0x7f07002e;
         public static final int enter_run_button=0x7f07001f;
         public static final int enter_run_frame=0x7f070000;
-        public static final int export_list_of_runs=0x7f070039;
+        public static final int export_list_of_runs=0x7f07003b;
         public static final int graph=0x7f070004;
         public static final int header_info=0x7f07002b;
         public static final int hour=0x7f070012;
@@ -93,20 +93,22 @@ public final class R {
         public static final int run_time=0x7f070023;
         public static final int sec1=0x7f070018;
         public static final int sec10=0x7f070017;
-        public static final int settings=0x7f070037;
-        public static final int statistics=0x7f070038;
+        public static final int settings=0x7f070039;
+        public static final int statistics=0x7f07003a;
+        public static final int stats_layout=0x7f07002c;
+        public static final int stats_left=0x7f07002d;
         public static final int time=0x7f07001a;
         public static final int top=0x7f07000a;
-        public static final int update_dist_comma=0x7f070030;
-        public static final int update_dist_label=0x7f07002d;
-        public static final int update_distance=0x7f07002e;
-        public static final int update_distance_dec=0x7f07002f;
-        public static final int update_time_colon1=0x7f070034;
-        public static final int update_time_colon2=0x7f070036;
-        public static final int update_time_h=0x7f070031;
-        public static final int update_time_label=0x7f070032;
-        public static final int update_time_mm=0x7f070033;
-        public static final int update_time_ss=0x7f070035;
+        public static final int update_dist_comma=0x7f070032;
+        public static final int update_dist_label=0x7f07002f;
+        public static final int update_distance=0x7f070030;
+        public static final int update_distance_dec=0x7f070031;
+        public static final int update_time_colon1=0x7f070036;
+        public static final int update_time_colon2=0x7f070038;
+        public static final int update_time_h=0x7f070033;
+        public static final int update_time_label=0x7f070034;
+        public static final int update_time_mm=0x7f070035;
+        public static final int update_time_ss=0x7f070037;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -116,7 +118,8 @@ public final class R {
         public static final int one_run_details=0x7f030004;
         public static final int run_header=0x7f030005;
         public static final int statistics=0x7f030006;
-        public static final int update_run_dialog=0x7f030007;
+        public static final int stats_layout=0x7f030007;
+        public static final int update_run_dialog=0x7f030008;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;

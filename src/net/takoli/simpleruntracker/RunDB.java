@@ -8,8 +8,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -23,7 +25,7 @@ public class RunDB {
 	
 	private final String FILE_NAME = "RunTracker-runlist.csv";
 	private final int MAX = 100;
-	private final Calendar FROMDATE;
+	//private final Calendar FROMDATE;
 	private File intDir, extDownloadsDir;
 
 	// This will run every time the app starts up (or OnCreate is called...)

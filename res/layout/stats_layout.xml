@@ -7,22 +7,23 @@
     <View
         android:id="@+id/stats_left"
         android:layout_weight="1"
-        android:layout_width="0"
-        android:layout_height="match_parent"
-        android:color="33FFFFFF" />  <!-- later make this 100% transparetn and use a timer to change that as it moved in -->
+        android:layout_width="0dp"
+        android:layout_height="match_parent" 
+    	android:background="#FFCCE5FF" /> 
         
     
     <!-- 3/4 of the screen will be for STATISTICS -->
     <LinearLayout
         android:layout_weight="3"
-        android:layout_width="0"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:orintentation="vertical" >
+        android:orientation="vertical"
+        android:background="#FFFFFFFF" >
         
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Test stats" >
+            android:text="Test stats" />
  
     </LinearLayout>
 

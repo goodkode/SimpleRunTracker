@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
@@ -33,6 +34,7 @@ public class MainActivity extends Activity {
 	private ListView runListLayout;
 	private FrameLayout runFragLayout;
 	protected Fragment enterRun;
+	private Fragment statsFragment, toolsFragment;
 	private FragmentTransaction fragTrans;
 	private FragmentManager fragMngr;
 	private boolean runFragOpen;
@@ -111,6 +113,7 @@ public class MainActivity extends Activity {
 		// Graph initial setup
 		graph = (GraphView) findViewById(R.id.graph);
 		graph.setRunList(runListDB, getUnit());	
+		
 	}
 	
 	@Override
@@ -149,9 +152,14 @@ public class MainActivity extends Activity {
 	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
 	            return true; 
 	    	case R.id.statistics:
-	        	Intent statsIntent = new Intent(this, Statistics.class);
-	        	startActivityForResult(statsIntent, RESULT_OK);
-	    		overridePendingTransition(R.anim.stats_enter, R.anim.main_exit);
+	    		if (StatsFragment.getActive())
+	    			return true;
+	    		StatsFragment.setActive(true);
+	    		statsFragment = new StatsFragment();
+	    		fragTrans = getFragmentManager().beginTransaction();
+	    		fragTrans.add(R.id.main, statsFragment, "statsFragment");
+	    		fragTrans.addToBackStack("statsFragment");
+	    		fragTrans.commit();
 	            return true;
 	    	case R.id.export_list_of_runs:
 	        	runListDB.saveToExternal(this);
@@ -165,6 +173,16 @@ public class MainActivity extends Activity {
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
+	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		if (StatsFragment.getActive()) {
+			StatsFragment.setActive(false);
+			statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFrgament");
+			//statsFragment.animateOut();
+		}
 	}
 	
 	public void slideUp() {
