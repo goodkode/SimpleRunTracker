@@ -13,18 +13,90 @@
         
     
     <!-- 3/4 of the screen will be for STATISTICS -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_weight="3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="#FFFFFFFF" >
         
+        <View
+            android:id="@+id/stats_divider"
+	        android:layout_width="6dp"
+	        android:layout_height="20dp"
+	        android:layout_alignParentLeft="true"
+	        android:layout_centerVertical="true"
+	        android:layout_marginLeft="4dp"
+	        android:background="@drawable/divider_line" />
+        
         <TextView
+            android:id="@+id/stats_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Test stats" />
- 
-    </LinearLayout>
+            android:text_size="20sp"
+            android:text="Stats" />
+        <TextView
+            android:id="@+id/stats_for_period"
+            android:layout_below="@id/stats_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text_size="18sp" />
+        
+        <TextView
+            android:id="@+id/stats_distance_label"
+            android:layout_below="@id/stats_for_period"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text_size="20sp"
+            android:text="Distance" />
+        <TextView
+            android:id="@+id/stats_distance"
+            android:layout_below="@id/stats_distance_label"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text_size="15sp" />
+        <TextView
+            android:id="@+id/stats_distance_when"
+            android:layout_below="@id/stats_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text_size="13sp" />
+            
+        <TextView
+            android:id="@+id/stats_pace_label"
+            android:layout_below="@id/stats_distance_when"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text_size="20sp"
+            android:text="Pace and Speed" />
+        <TextView
+            android:id="@+id/stats_pace_speed"
+            android:layout_below="@id/stats_pace_label"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text_size="15sp" />
+        <TextView
+            android:id="@+id/stats_pace_speed_when"
+            android:layout_below="@id/stats_pace_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text_size="13sp" />
+            
+        <ToggleButton 
+            android:id="@+id/stats_mi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="Vibrate on"
+            android:textOff="Vibrate off"
+            android:onClick="onStatsInMi"/>
+    
+        <ToggleButton 
+            android:id="@+id/stats_km"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="Vibrate on"
+            android:textOff="Vibrate off"
+            android:onClick="onStatsInKm"/>
+            
+    </RelativeLayout>
 
 </LinearLayout>
