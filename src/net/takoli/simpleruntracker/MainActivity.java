@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
 	private ListView runListLayout;
 	private FrameLayout runFragLayout;
 	protected Fragment enterRun;
-	private Fragment statsFragment, toolsFragment;
+	private StatsFragment statsFragment;
 	private FragmentTransaction fragTrans;
 	private FragmentManager fragMngr;
 	private boolean runFragOpen;
@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 		runFragLayout.setId(R.id.enter_run_frame);
 		runFragLayout.setBackgroundColor(Color.WHITE);
 		fragMngr = getFragmentManager();
-		fragTrans = getFragmentManager().beginTransaction();
+		fragTrans = fragMngr.beginTransaction();
 		fragTrans.replace(R.id.enter_run_frame, enterRun);
 		fragTrans.commit();
 		mainLayout.addView(runFragLayout);
@@ -112,7 +112,8 @@ public class MainActivity extends Activity {
 		
 		// Graph initial setup
 		graph = (GraphView) findViewById(R.id.graph);
-		graph.setRunList(runListDB, getUnit());	
+		graph.setRunList(runListDB, getUnit());
+		
 		
 	}
 	
@@ -152,14 +153,14 @@ public class MainActivity extends Activity {
 	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
 	            return true; 
 	    	case R.id.statistics:
-	    		if (StatsFragment.getActive())
-	    			return true;
-	    		StatsFragment.setActive(true);
-	    		statsFragment = new StatsFragment();
-	    		fragTrans = getFragmentManager().beginTransaction();
-	    		fragTrans.add(R.id.main, statsFragment, "statsFragment");
-	    		fragTrans.addToBackStack("statsFragment");
-	    		fragTrans.commit();
+	    		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
+	    		if (statsFragment == null) {
+	    			statsFragment = new StatsFragment();
+		    		fragTrans = fragMngr.beginTransaction();
+		    		fragTrans.add(R.id.main, statsFragment, "statsFragment");
+		    		fragTrans.addToBackStack("statsFragment");
+		    		fragTrans.commit();
+		    	}
 	            return true;
 	    	case R.id.export_list_of_runs:
 	        	runListDB.saveToExternal(this);
@@ -178,11 +179,6 @@ public class MainActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		if (StatsFragment.getActive()) {
-			StatsFragment.setActive(false);
-			statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFrgament");
-			//statsFragment.animateOut();
-		}
 	}
 	
 	public void slideUp() {
