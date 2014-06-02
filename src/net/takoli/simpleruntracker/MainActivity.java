@@ -158,9 +158,9 @@ public class MainActivity extends Activity {
 	    			statsFragment = new StatsFragment();
 		    		fragTrans = fragMngr.beginTransaction();
 		    		fragTrans.add(R.id.main, statsFragment, "statsFragment");
-		    		fragTrans.addToBackStack("statsFragment");
 		    		fragTrans.commit();
 		    	}
+	    		statsFragment.setActive(true);
 	            return true;
 	    	case R.id.export_list_of_runs:
 	        	runListDB.saveToExternal(this);
@@ -178,7 +178,13 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
+		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
+		if (statsFragment != null) {
+			statsFragment.animateOut();
+			statsFragment.setActive(false);
+		}
+		else
+			super.onBackPressed();
 	}
 	
 	public void slideUp() {

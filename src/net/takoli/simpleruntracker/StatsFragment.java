@@ -41,18 +41,21 @@ public class StatsFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		if (active) {
 		thisView.animate().translationX(0).setDuration(700);
 		mainActivity.findViewById(R.id.stats_left).animate().alpha(0.5f)
-				.setDuration(2000)
-				.setInterpolator(new AccelerateInterpolator());
+				.setDuration(2000).setInterpolator(new AccelerateInterpolator());
+		}
 
 	}
 	
-	@Override
-	public void onPause() {
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	public void animateOut() {
 		int width = getResources().getDisplayMetrics().widthPixels;
 		thisView.animate().translationX(width).setDuration(700);
 		mainActivity.findViewById(R.id.stats_left).setAlpha(0);		
-		super.onPause();
 	}
 }
