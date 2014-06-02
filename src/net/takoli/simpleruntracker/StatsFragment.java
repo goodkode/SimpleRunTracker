@@ -16,11 +16,15 @@ public class StatsFragment extends Fragment {
 	private static View thisView;
 	private static RunDB runDB;
 	private static boolean active = false;
+	private String unit;
+	private CheckBox mileChB, kmChB, bothChB;
+	private TextView statPeriod, distAvg, distMax, distTotal, paceSpeedAvg, paceSpeedMax;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mainActivity = (MainActivity) getActivity();
+		unit = mainActivity.getUnit();
 	}
 
 	@Override
@@ -43,9 +47,19 @@ public class StatsFragment extends Fragment {
 		super.onResume();
 		thisView.animate().translationX(0).setDuration(700);
 		mainActivity.findViewById(R.id.stats_left).animate().alpha(0.5f)
-				.setDuration(2000)
-				.setInterpolator(new AccelerateInterpolator());
-
+				.setDuration(2000).setInterpolator(new AccelerateInterpolator());
+		statPeriod = (TextView) findViewById(R.id.stats_for_period);
+		distAvg = (TextView) findViewById(R.id.stats_distance_avg);
+		distMax = (TextView) findViewById(R.id.stats_distance_max);
+		distTotal = (TextView) findViewById(R.id.stats_distance_total);
+		paceSpeedAvg = (TextView) findViewById(R.id.stats_pace_speed_avg);
+		paceSpeedMax = (TextView) findViewById(R.id.stats_pace_speed_max);
+		if (unit.compareTo("km") == 0) {
+			kmChB.setChecked(true);
+			onStatsInKm(); }
+		else {
+			milesChB.setChecked(true);
+			onStatsInMi(); }
 	}
 	
 	@Override
@@ -54,5 +68,18 @@ public class StatsFragment extends Fragment {
 		thisView.animate().translationX(width).setDuration(700);
 		mainActivity.findViewById(R.id.stats_left).setAlpha(0);		
 		super.onPause();
+	}
+	
+	public void onStatsInMi() {
+		kmChB.setChecked(false);
+		bothChB.setChecked(false);
+	}
+	public void onStatsInKm() {
+		milesChB.setChecked(false);
+		bothChB.setChecked(false);
+	}
+	public void onStatsInMiAndKm() {
+		kmChB.setChecked(false);
+		milesChB.setChecked(false);
 	}
 }
