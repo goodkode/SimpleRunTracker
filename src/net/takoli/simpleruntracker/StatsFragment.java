@@ -14,7 +14,7 @@ public class StatsFragment extends Fragment {
 	private MainActivity mainActivity;
 	private static View thisView;
 	private static RunDB runDB;
-	private static boolean active = false;
+	private static boolean active;
 	private String unit;
 	private CheckBox mileChB, kmChB, bothChB;
 	private TextView statPeriod, distAvg, distMax, distTotal, paceSpeedAvg, paceSpeedMax;
@@ -22,8 +22,9 @@ public class StatsFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mainActivity = (MainActivity) getActivity();
-		unit = mainActivity.getUnit();
+		this.mainActivity = (MainActivity) getActivity();
+		this.unit = mainActivity.getUnit();
+		active = true;
 	}
 
 	@Override
@@ -36,19 +37,16 @@ public class StatsFragment extends Fragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		int width = mainActivity.getResources().getDisplayMetrics().widthPixels;
-		thisView.setX(width);
+		int width = getResources().getDisplayMetrics().widthPixels;
+		thisView.setX(width); 
 		mainActivity.findViewById(R.id.stats_left).setAlpha(0);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (active) {
-		thisView.animate().translationX(0).setDuration(700);
-		mainActivity.findViewById(R.id.stats_left).animate().alpha(0.5f)
-				.setDuration(2000).setInterpolator(new AccelerateInterpolator());
-		}
+		if (!active)
+			return;
 		statPeriod = (TextView) mainActivity.findViewById(R.id.stats_for_period);
 		distAvg = (TextView) mainActivity.findViewById(R.id.stats_distance_avg);
 		distMax = (TextView) mainActivity.findViewById(R.id.stats_distance_max);
@@ -61,16 +59,21 @@ public class StatsFragment extends Fragment {
 		else {
 			mileChB.setChecked(true);
 			onStatsInMi(); }
-	}
-	
-	public void setActive(boolean active) {
-		this.active = active;
+		animateIn();
 	}
 	
 	public void animateOut() {
+		active = false;
 		int width = getResources().getDisplayMetrics().widthPixels;
 		thisView.animate().translationX(width).setDuration(700);
 		mainActivity.findViewById(R.id.stats_left).setAlpha(0);		
+	}
+	
+	public void animateIn() {
+		active ? (return : active) = true;
+		thisView.animate().translationX(0).setDuration(700);
+		mainActivity.findViewById(R.id.stats_left).animate().alpha(0.5f)
+				.setDuration(2000).setInterpolator(new AccelerateInterpolator());
 	}
 	
 	public void onStatsInMi() {
