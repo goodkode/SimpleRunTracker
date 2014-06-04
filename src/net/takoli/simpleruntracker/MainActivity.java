@@ -160,7 +160,7 @@ public class MainActivity extends Activity {
 		    		fragTrans.add(R.id.main, statsFragment, "statsFragment");
 		    		fragTrans.commit();
 		    	}
-	    		statsFragment.setActive(true);
+	    		statsFragment.animateIn();
 	            return true;
 	    	case R.id.export_list_of_runs:
 	        	runListDB.saveToExternal(this);
@@ -179,10 +179,8 @@ public class MainActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
-		if (statsFragment != null) {
+		if (statsFragment != null)
 			statsFragment.animateOut();
-			statsFragment.setActive(false);
-		}
 		else
 			super.onBackPressed();
 	}
