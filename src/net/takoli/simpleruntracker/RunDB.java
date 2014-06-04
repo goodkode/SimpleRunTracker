@@ -181,8 +181,9 @@ public class RunDB {
 	    	Uri fileUri = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), FILE_NAME));
 	    	Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND); 
 	    	emailIntent.setType("text/plain"); 
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Test Subject"); 
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "go on read the emails"); 
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "RunTracker runlist for Excel"); 
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "RunTracker-runlist.csv is attached.\n\n" +
+	    		"The file can be opened with any spreadsheet application, like Excel, or with any text editior"); 
 	    	emailIntent.putExtra(Intent.EXTRA_STREAM, fileUri); 
 	    	return emailIntent;
 		} catch(Exception e) {
