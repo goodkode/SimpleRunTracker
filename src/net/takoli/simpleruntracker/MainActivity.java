@@ -155,12 +155,19 @@ public class MainActivity extends Activity {
 	    	case R.id.statistics:
 	    		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
 	    		if (statsFragment == null) {
+	    			Log.i("run", "new fragment");
 	    			statsFragment = new StatsFragment();
 		    		fragTrans = fragMngr.beginTransaction();
 		    		fragTrans.add(R.id.main, statsFragment, "statsFragment");
 		    		fragTrans.commit();
 		    	}
-	    		statsFragment.animateIn();
+	    		else {
+	    			Log.i("run", "fragment reused");
+	    			if (StatsFragment.active)
+	    				statsFragment.animateOut();
+	    			else
+	    				statsFragment.animateIn();
+	    		}
 	            return true;
 	    	case R.id.export_list_of_runs:
 	        	runListDB.saveToExternal(this);

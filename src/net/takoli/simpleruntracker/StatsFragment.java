@@ -2,19 +2,22 @@ package net.takoli.simpleruntracker;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 public class StatsFragment extends Fragment {
 
+	static boolean active = true;
 	private MainActivity mainActivity;
-	private static View thisView;
-	private static RunDB runDB;
-	private static boolean active;
+	private View thisView;
+	private RunDB runDB;
 	private String unit;
 	private CheckBox mileChB, kmChB, bothChB;
 	private TextView statPeriod, distAvg, distMax, distTotal, paceSpeedAvg, paceSpeedMax;
@@ -22,9 +25,8 @@ public class StatsFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.mainActivity = (MainActivity) getActivity();
-		this.unit = mainActivity.getUnit();
-		active = true;
+		mainActivity = (MainActivity) getActivity();
+		Log.i("run", "created: " + this.hashCode() + ", active: " + active);
 	}
 
 	@Override
@@ -53,6 +55,25 @@ public class StatsFragment extends Fragment {
 		distTotal = (TextView) mainActivity.findViewById(R.id.stats_distance_total);
 		paceSpeedAvg = (TextView) mainActivity.findViewById(R.id.stats_pace_speed_avg);
 		paceSpeedMax = (TextView) mainActivity.findViewById(R.id.stats_pace_speed_max);
+		mileChB = (CheckBox) mainActivity.findViewById(R.id.stats_mi);
+		kmChB = (CheckBox) mainActivity.findViewById(R.id.stats_km);
+		bothChB = (CheckBox) mainActivity.findViewById(R.id.stats_mi_and_km);
+		mileChB.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) 
+					onStatsInMi(); } });
+		kmChB.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) 
+					onStatsInKm(); } });
+		bothChB.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) 
+					onStatsInMiAndKm(); } });
+		unit = mainActivity.getUnit();
 		if (unit.compareTo("km") == 0) {
 			kmChB.setChecked(true);
 			onStatsInKm(); }
@@ -64,13 +85,13 @@ public class StatsFragment extends Fragment {
 	
 	public void animateOut() {
 		active = false;
+		mainActivity.findViewById(R.id.stats_left).setAlpha(0);		
 		int width = getResources().getDisplayMetrics().widthPixels;
 		thisView.animate().translationX(width).setDuration(700);
-		mainActivity.findViewById(R.id.stats_left).setAlpha(0);		
 	}
 	
 	public void animateIn() {
-		active ? (return : active) = true;
+		active = true;
 		thisView.animate().translationX(0).setDuration(700);
 		mainActivity.findViewById(R.id.stats_left).animate().alpha(0.5f)
 				.setDuration(2000).setInterpolator(new AccelerateInterpolator());

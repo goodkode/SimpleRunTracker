@@ -99,22 +99,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minEms="7"
-            android:text="Miles"
-            android:onClick="onStatsInMi"/>
+            android:text="Miles" />
         <CheckBox 
             android:id="@+id/stats_km"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minEms="7"
-            android:text="Kilometers"
-            android:onClick="onStatsInKm"/>
+            android:text="Kilometers" />
         <CheckBox 
             android:id="@+id/stats_mi_and_km"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minEms="7"
-            android:text="Miles and Km"
-            android:onClick="onStatsInMiAndKm"/>
+            android:text="Miles and Km" />
             
     </LinearLayout>
 
