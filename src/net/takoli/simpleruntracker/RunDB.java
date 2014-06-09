@@ -188,22 +188,9 @@ public class RunDB {
 		}
 	}
 	
-	// delete ALL records
-	public void deleteDB(Context context) {
-		runList.clear();
-		sumDistDec = 0;
-		sumTimeSec = 0;
-		try {
-			context.deleteFile(FILE_NAME);
-		} catch (Exception e) {
-			Toast.makeText(context,"Can't delete " + FILE_NAME, Toast.LENGTH_LONG).show();
-			e.printStackTrace();
-		}
-	}
-	
 
 	// Save DB to SD Card. Also considering Google Docs sync in the future
-	public void saveToExternal(Context context) {
+	public void saveToExternalMemory(Context context) {
 		saveRunDB(context);
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			Toast.makeText(context, "SD Card is not available",Toast.LENGTH_LONG).show();
@@ -227,6 +214,20 @@ public class RunDB {
         		os.close();	
 		}
 	}
+	
+	// delete ALL records
+	public void deleteDB(Context context) {
+		runList.clear();
+		sumDistDec = 0;
+		sumTimeSec = 0;
+		try {
+			context.deleteFile(FILE_NAME);
+		} catch (Exception e) {
+			Toast.makeText(context,"Can't delete " + FILE_NAME, Toast.LENGTH_LONG).show();
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public Intent emailIntent(Context context) {
 		try {
