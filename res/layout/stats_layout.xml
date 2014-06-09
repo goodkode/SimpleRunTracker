@@ -29,13 +29,16 @@
 	        android:background="#FFA3D0FF" />
 	</LinearLayout>
     
-    <LinearLayout
+    <ScrollView 
         android:layout_weight="70"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:padding="6dp"
-        android:orientation="vertical"
         android:background="#FFFFFFFF" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="6dp"
+        android:orientation="vertical" >
         
         <TextView
             android:id="@+id/stats_title"
@@ -114,5 +117,6 @@
             android:text="Miles and Km" />
             
     </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

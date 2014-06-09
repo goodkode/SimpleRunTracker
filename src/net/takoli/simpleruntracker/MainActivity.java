@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
 	
 	private SharedPreferences settings;
 	
-	RelativeLayout mainLayout;
+	private RelativeLayout mainLayout;
 	private ListView runListLayout;
 	private FrameLayout runFragLayout;
 	protected Fragment enterRun;
@@ -39,8 +39,8 @@ public class MainActivity extends Activity {
 	private FragmentManager fragMngr;
 	private boolean runFragOpen;
 
-	private RunDB runListDB;       // ArrayList<Run> abstraction and file IO functions
-	private RunAdapter myAdapter;  // Activity's ListView adapter - uses ArrayList<Run> received from runListDB
+	private RunDB runDB;       // ArrayList<Run> abstraction and file IO functions
+	private RunAdapter myAdapter;  // Activity's ListView adapter - uses ArrayList<Run> received from runDB
 	
 	private GraphView graph;
 	
@@ -53,6 +53,12 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayShowTitleEnabled(false);
 		settings = getPreferences(MODE_PRIVATE);
+		
+		// check for first run
+		if (getUnit().compareTo("") == 0) {
+			(new SettingsDialog()).show(fragMngr, "SettingsDialog");
+		}
+		setDBLimit("100");  // change it to first run
 		
 		// Set up variables and fields
 		setContentView(R.layout.activity_main);
@@ -84,8 +90,9 @@ public class MainActivity extends Activity {
 			
 		// List of Runs setup:
 		runListLayout = (ListView) findViewById(R.id.my_runs);
-		runListDB = new RunDB(this);
-		myAdapter = new RunAdapter(this, R.layout.one_run, runListDB, fragMngr);
+		runDB = new RunDB(this);
+		runDB.setDBLimit(getDBLimit());
+		myAdapter = new RunAdapter(this, R.layout.one_run, runDB, fragMngr);
 		myAdapter.addHeader(mainLayout);
 		runListLayout.setAdapter(myAdapter);
 		runListLayout.setOnItemClickListener(new OnItemClickListener() {  // open items in two lines with details
@@ -104,22 +111,21 @@ public class MainActivity extends Activity {
 				return false; }
 		});
 		
-		// check for first run
-		if (getUnit().compareTo("") == 0) {
-			//Log.i("run", getUnit());
-			(new SettingsDialog()).show(fragMngr, "SettingsDialog");
-		}
-		
 		// Graph initial setup
 		graph = (GraphView) findViewById(R.id.graph);
-		graph.setRunList(runListDB, getUnit());
+		graph.setRunList(runDB, getUnit());
 		
 		
 	}
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		return gestDect.onTouchEvent(event);
+		if (StatsFragment.active){
+			Log.i("run", "statsfragment gesture");
+			return false;
+		}
+		else
+			return gestDect.onTouchEvent(event);
 	}
 	
 	@Override
@@ -136,7 +142,7 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onStop() {
-		runListDB.updateAndSaveRunDB(this);
+		runDB.updateAndSaveRunDB(this);
 		super.onStop();
 	}
 
@@ -170,8 +176,8 @@ public class MainActivity extends Activity {
 	    		}
 	            return true;
 	    	case R.id.export_list_of_runs:
-	        	runListDB.saveToExternal(this);
-	        	Intent emailIntent = runListDB.emailIntent(this);
+	        	runDB.saveToExternal(this);
+	        	Intent emailIntent = runDB.emailIntent(this);
 	        	if (emailIntent != null)
 	        		startActivity(emailIntent);
 	            return true;
@@ -236,7 +242,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public RunDB getRunDB() {
-		return runListDB; }
+		return runDB; }
 	
 	public RunAdapter getRunAdapter() {
 		return myAdapter; }
@@ -256,6 +262,14 @@ public class MainActivity extends Activity {
 		else if (u.compareTo("km") == 0)
 			return "kilometers";
 		else return "";
+	}
+	public void setDBLimit(String limit) {
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("limit", limit);
+		editor.commit();
+	}
+	public String getDBLimit() {
+		return settings.getString("limit", "");
 	}
 	public void updateGraph() {
 		if (graph != null) {

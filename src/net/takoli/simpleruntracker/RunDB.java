@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 public class RunDB {
@@ -24,14 +25,16 @@ public class RunDB {
 	private long sumDistDec, sumTimeSec;
 	
 	private final String FILE_NAME = "RunTracker-runlist.csv";
-	private final int MAX = 100;
-	//private final Calendar FROMDATE;
+	private int MAXSIZE;
+	private Calendar FROMDATE;
+	private boolean num_limit;
 	private File intDir, extDownloadsDir;
 
 	// This will run every time the app starts up (or OnCreate is called...)
 	public RunDB(Context context) {
 		runList = new ArrayList<Run>();
-		sumDistDec = sumTimeSec = 0;
+		sumDistDec = 0;
+		sumTimeSec = 0;
 		Run nRun;
 		// /data/data/net.takoli.simpleruntracker/files/ - where OpenFileOutput saves
 		try {
@@ -51,6 +54,27 @@ public class RunDB {
 		} catch (Exception e) {
 			Toast.makeText(context,"Can't read SimpleRunTrackerDB.csv", Toast.LENGTH_LONG).show();
 			e.printStackTrace();
+		}
+	}
+	
+	public void setDBLimit(String limit) {
+		num_limit = true;
+		try {
+			MAXSIZE = Integer.parseInt(limit);
+		} catch (NumberFormatException nfe) {
+			num_limit = false;
+		}
+		if (!num_limit) {
+			String[] dateSt;
+			try {
+				dateSt = limit.split("/");
+			} catch (Exception e) {
+				Log.i("run", "setDBLimit error");
+				return;
+			}
+			FROMDATE.set(Calendar.MONTH, Integer.parseInt(dateSt[0]));
+			FROMDATE.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateSt[0]));
+			FROMDATE.set(Calendar.YEAR, Integer.parseInt(dateSt[0]));
 		}
 	}
 		
@@ -126,7 +150,7 @@ public class RunDB {
 		});
 		try {
 			FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
-			int start = size > MAX ? runList.size()-MAX : 0;
+			int start = size > MAXSIZE ? runList.size()-MAXSIZE : 0;
 			for (int i = start; i < size; i++)
 				outputStream.write((runList.get(i).toString()+"\n").getBytes());
 			outputStream.close();
