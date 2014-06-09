@@ -151,7 +151,7 @@ public class EnterRun extends Fragment {
 			         public void run() { 
 			        	 enterRunButton.setEnabled(true); 
 			         } 
-			    }, 2000); 
+			    }, 700); 
 				String unit = ((MainActivity) getActivity()).getUnit();
 				int dd = dist10.getValue() * 10 + dist1.getValue();
 				int _dd = dist_1.getValue() * 10 + dist_01.getValue();
@@ -162,7 +162,7 @@ public class EnterRun extends Fragment {
 				if ((dd + _dd) == 0 || (h + mm + ss) == 0)
 					return; // not valid run
 				runListDB.addNewRun(getActivity(), new Run(runDate, dd, _dd, unit, h, mm, ss));
-				runListDB.updateAndSaveRunDB(getActivity());
+				runListDB.saveRunDB(getActivity());
 				runAdapter.aninmateNewRun();
 				ListView myListView = (ListView) getActivity().findViewById(R.id.my_runs);
 				myListView.setSelection(runAdapter.getCount() - 1);
@@ -172,10 +172,6 @@ public class EnterRun extends Fragment {
 		});
 	}
 	
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
 	
 	// this and the DatePickerFragment support picking a date
 	public void pickDate() {
