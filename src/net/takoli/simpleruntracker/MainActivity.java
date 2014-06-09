@@ -142,7 +142,7 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onStop() {
-		runDB.updateAndSaveRunDB(this);
+		runDB.saveRunDB(this);
 		super.onStop();
 	}
 
@@ -176,7 +176,7 @@ public class MainActivity extends Activity {
 	    		}
 	            return true;
 	    	case R.id.export_list_of_runs:
-	        	runDB.saveToExternal(this);
+	        	runDB.saveToExternalMemory(this);
 	        	Intent emailIntent = runDB.emailIntent(this);
 	        	if (emailIntent != null)
 	        		startActivity(emailIntent);
