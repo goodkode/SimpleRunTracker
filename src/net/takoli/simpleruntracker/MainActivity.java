@@ -54,12 +54,6 @@ public class MainActivity extends Activity {
 		getActionBar().setDisplayShowTitleEnabled(false);
 		settings = getPreferences(MODE_PRIVATE);
 		
-		// check for first run
-		if (getUnit().compareTo("") == 0) {
-			(new SettingsDialog()).show(fragMngr, "SettingsDialog");
-		}
-		setDBLimit("100");  // change it to first run
-		
 		// Set up variables and fields
 		setContentView(R.layout.activity_main);
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -115,6 +109,12 @@ public class MainActivity extends Activity {
 		graph = (GraphView) findViewById(R.id.graph);
 		graph.setRunList(runDB, getUnit());
 		
+		// check for first run
+		// Initialize UNIT and MAXSIZE / FROMDATE
+		if (runDB.isEmpty()) {
+			(new FirstRunDialog()).show(fragMngr, "FirstRunDialog");
+			Log.i("run", "first run dialog"); }
+
 		
 	}
 	
@@ -122,8 +122,7 @@ public class MainActivity extends Activity {
 	public boolean onTouchEvent(MotionEvent event) {
 		if (StatsFragment.active){
 			Log.i("run", "statsfragment gesture");
-			return false;
-		}
+			return false; }
 		else
 			return gestDect.onTouchEvent(event);
 	}
@@ -131,6 +130,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {		
 		super.onResume();
+		Log.i("run", "main onresume");
 		runFragLayout.setY(screenHeight * -3/10);
 		slideDown();
 	}
@@ -253,10 +253,10 @@ public class MainActivity extends Activity {
 		editor.commit();
 	}
 	public String getUnit() {
-		return settings.getString("unit", "");
+		return settings.getString("unit", "mi");
 	}
 	public String getUnitInFull() {
-		String u = settings.getString("unit", "");
+		String u = settings.getString("unit", "mi");
 		if (u.compareTo("mi") == 0)
 			return "miles";
 		else if (u.compareTo("km") == 0)
@@ -269,7 +269,7 @@ public class MainActivity extends Activity {
 		editor.commit();
 	}
 	public String getDBLimit() {
-		return settings.getString("limit", "");
+		return settings.getString("limit", "100");
 	}
 	public void updateGraph() {
 		if (graph != null) {
