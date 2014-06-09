@@ -27,7 +27,7 @@ public class RunDB {
 	private final String FILE_NAME = "RunTracker-runlist.csv";
 	private int MAXSIZE;
 	private Calendar FROMDATE;
-	private boolean num_limit;
+	private boolean MAXSIZEisUsed;
 	private File intDir, extDownloadsDir;
 
 	// This will run every time the app starts up (or OnCreate is called...)
@@ -50,47 +50,83 @@ public class RunDB {
 				sumDistDec += nRun.getDistDecInM();
 				sumTimeSec += nRun.getTimeInSec();
 			}
-			inputStream.close();
 		} catch (Exception e) {
-			Toast.makeText(context,"Can't read SimpleRunTrackerDB.csv", Toast.LENGTH_LONG).show();
+			Toast.makeText(context,"Can't read " + FILE_NAME, Toast.LENGTH_LONG).show();
 			e.printStackTrace();
+		} finally {
+			inputStream.close();
 		}
+		Log.i("run", "RunDB initiated");
 	}
 	
 	public void setDBLimit(String limit) {
-		num_limit = true;
+		MAXSIZEisUsed = true;
 		try {
 			MAXSIZE = Integer.parseInt(limit);
 		} catch (NumberFormatException nfe) {
-			num_limit = false;
+			MAXSIZEisUsed = false;
 		}
-		if (!num_limit) {
+		if (!MAXSIZEisUsed) {
 			String[] dateSt;
 			try {
 				dateSt = limit.split("/");
 			} catch (Exception e) {
-				Log.i("run", "setDBLimit error");
+				Log.i("run", "setDBLimit string split error");
 				return;
 			}
 			FROMDATE.set(Calendar.MONTH, Integer.parseInt(dateSt[0]));
-			FROMDATE.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateSt[0]));
-			FROMDATE.set(Calendar.YEAR, Integer.parseInt(dateSt[0]));
+			FROMDATE.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateSt[1]));
+			FROMDATE.set(Calendar.YEAR, Integer.parseInt(dateSt[2]));
 		}
+		ensureDBLimit();
+	}
+	
+	public void ensureDBLimit() {
+		Collections.sort(runList, new Comparator<Run>() {
+			public int compare(Run a, Run b) {
+		        return a.date.compareTo(b.date);
+		    }
+		});
+		if (MAXSIZEisUsed) {
+			int toDelete = size - MAXSIZE;
+			for (int i = 0; i < toDelete; i++) {
+				sumDistDec -= runList.get(i).getDistDecInM();
+				sumTimeSec -= runList.get(i).getTimeInSec();
+			}
+			if (toDelete > 0)
+				runList.removeRange(0, toDelete);
+			Log.i("run", "ensureDBLimit NUM delete: " + toDelete);
+		}
+		else {
+			int toDelete = 0;
+			while (toDelete < size && runList.get(toDelete).before(FROMDATE)) {
+				sumDistDec -= runList.get(toDelete).getDistDecInM();
+				sumTimeSec -= runList.get(toDelete).getTimeInSec();
+				toDelete++;
+			}
+			runList.removeRange(0, toDelete);
+			Log.i("run", "ensureDBLimit DATE delete: " + toDelete);
+		}
+	}
+	
+	public ArrayList<Run> getRunList() {
+		return runList;
+	}
+	
+	public boolean isEmpty() {
+		return (runList.size() == 0);
 	}
 		
 	public void addNewRun(Context context, Run newRun) {
 		runList.add(newRun);
-		// for statistics:
 		sumDistDec += newRun.getDistDecInM();
 		sumTimeSec += newRun.getTimeInSec();
-		//Log.i("run", "sumDist: " + sumDistDec);
 	}
 	
 	public void updateRun(int pos, int[] updates) {
 		Run toUpdate = runList.get(pos);
 		sumDistDec -= toUpdate.getDistDecInM();
 		sumTimeSec -= toUpdate.getTimeInSec();
-		
 		toUpdate.dd = updates[0];
 		toUpdate._dd = updates[1];
 		toUpdate.h = updates[2];
@@ -115,16 +151,14 @@ public class RunDB {
 	}
 	
 	public int[] getLastValues() {
-		int lastIndex = runList.size() - 1;
-		if (lastIndex == -1)
+		Run lastRun = runList.getLastRun();
+		if (lastRun != null)
+			return new int[] {lastRun.dd, lastRun._dd, lastRun.h, lastRun.mm, lastRun.ss};
+		else
 			return new int[] {0, 0, 0, 0, 0};
-		Run lastRun = runList.get(lastIndex);
-		return new int[] {lastRun.dd, lastRun._dd, lastRun.h, lastRun.mm, lastRun.ss};
 	}
 	
-	public ArrayList<Run> getRunList() {
-		return runList;
-	}
+
 	
 	// for STATISTICS:
 	public int getAvgDistDec() {
@@ -141,33 +175,26 @@ public class RunDB {
 	}
 	
 	// save all changes
-	public void updateAndSaveRunDB(Context context) {  
-		int size = runList.size();
-		Collections.sort(runList, new Comparator<Run>() {
-			public int compare(Run a, Run b) {
-		        return a.date.compareTo(b.date);
-		    }
-		});
+	public void saveRunDB(Context context) {
+		ensureDBLimit();
 		try {
 			FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
-			int start = size > MAXSIZE ? runList.size()-MAXSIZE : 0;
-			for (int i = start; i < size; i++)
+			for (int i = 0; i < runList.size(); i++)
 				outputStream.write((runList.get(i).toString()+"\n").getBytes());
 			outputStream.close();
 		} catch (Exception e) {
-			Toast.makeText(context, FILE_NAME +" is not reachable to append",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, FILE_NAME +" can't be saved :(",Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
 	}
 	
 	// delete ALL records
 	public void deleteDB(Context context) {
+		runList.clear();
 		sumDistDec = 0;
 		sumTimeSec = 0;
 		try {
 			context.deleteFile(FILE_NAME);
-			runList.clear();
-			sumTimeSec = sumDistDec = 0;
 		} catch (Exception e) {
 			Toast.makeText(context,"Can't delete " + FILE_NAME, Toast.LENGTH_LONG).show();
 			e.printStackTrace();
@@ -177,7 +204,7 @@ public class RunDB {
 
 	// Save DB to SD Card. Also considering Google Docs sync in the future
 	public void saveToExternal(Context context) {
-		updateAndSaveRunDB(context);
+		saveRunDB(context);
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			Toast.makeText(context, "SD Card is not available",Toast.LENGTH_LONG).show();
 			return;
@@ -192,11 +219,12 @@ public class RunDB {
         	byte[] data = new byte[is.available()];
 			is.read(data);
         	os.write(data);
-        	is.close();
-        	os.close();
 		} catch (Exception e) {
 			Toast.makeText(context, "File write error", Toast.LENGTH_LONG)
 					.show();
+		} finally {
+		        is.close();
+        		os.close();	
 		}
 	}
 	
