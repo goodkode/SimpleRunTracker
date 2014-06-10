@@ -26,6 +26,7 @@ public class StatsFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mainActivity = (MainActivity) getActivity();
+		runDB = mainActivity.getRunDB();
 		Log.i("run", "created: " + this.hashCode() + ", active: " + active);
 	}
 
@@ -100,6 +101,12 @@ public class StatsFragment extends Fragment {
 	public void onStatsInMi() {
 		kmChB.setChecked(false);
 		bothChB.setChecked(false);
+//		statPeriod.setText(text);
+//		distAvg.setText(text);
+//		distMax.setText(text);
+//		distTotal.setText(text);
+//		paceSpeedAvg.setText(text);
+//		paceSpeedMax.setText(text);
 	}
 	public void onStatsInKm() {
 		mileChB.setChecked(false);

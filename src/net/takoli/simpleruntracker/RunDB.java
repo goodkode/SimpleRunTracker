@@ -50,12 +50,10 @@ public class RunDB {
 				sumDistDec += nRun.getDistDecInM();
 				sumTimeSec += nRun.getTimeInSec();
 			}
+			inputStream.close();
 		} catch (Exception e) {
 			Toast.makeText(context,"Can't read " + FILE_NAME, Toast.LENGTH_LONG).show();
-			e.printStackTrace();
-		} finally {
-			inputStream.close();
-		}
+			e.printStackTrace(); }
 		Log.i("run", "RunDB initiated");
 	}
 	
@@ -87,25 +85,27 @@ public class RunDB {
 		        return a.date.compareTo(b.date);
 		    }
 		});
+		int size = runList.size();
 		if (MAXSIZEisUsed) {
 			int toDelete = size - MAXSIZE;
 			for (int i = 0; i < toDelete; i++) {
 				sumDistDec -= runList.get(i).getDistDecInM();
 				sumTimeSec -= runList.get(i).getTimeInSec();
 			}
-			if (toDelete > 0)
-				runList.removeRange(0, toDelete);
-			Log.i("run", "ensureDBLimit NUM delete: " + toDelete);
+			if (toDelete > 0) {
+				runList.subList(0, toDelete).clear();
+				Log.i("run", "ensureDBLimit NUM delete: " + toDelete); }
 		}
 		else {
 			int toDelete = 0;
-			while (toDelete < size && runList.get(toDelete).before(FROMDATE)) {
+			while (toDelete < size && runList.get(toDelete).date.before(FROMDATE)) {
 				sumDistDec -= runList.get(toDelete).getDistDecInM();
 				sumTimeSec -= runList.get(toDelete).getTimeInSec();
 				toDelete++;
 			}
-			runList.removeRange(0, toDelete);
-			Log.i("run", "ensureDBLimit DATE delete: " + toDelete);
+			runList.subList(0, toDelete).clear();
+			if (toDelete > 0)
+				Log.i("run", "ensureDBLimit DATE delete: " + toDelete);
 		}
 	}
 	
@@ -151,7 +151,7 @@ public class RunDB {
 	}
 	
 	public int[] getLastValues() {
-		Run lastRun = runList.getLastRun();
+		Run lastRun = this.getLastRun();
 		if (lastRun != null)
 			return new int[] {lastRun.dd, lastRun._dd, lastRun.h, lastRun.mm, lastRun.ss};
 		else
@@ -206,13 +206,10 @@ public class RunDB {
         	byte[] data = new byte[is.available()];
 			is.read(data);
         	os.write(data);
+        	is.close();
+    		os.close();	
 		} catch (Exception e) {
-			Toast.makeText(context, "File write error", Toast.LENGTH_LONG)
-					.show();
-		} finally {
-		        is.close();
-        		os.close();	
-		}
+			Toast.makeText(context, "File write error", Toast.LENGTH_LONG).show(); }
 	}
 	
 	// delete ALL records

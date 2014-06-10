@@ -119,15 +119,6 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if (StatsFragment.active){
-			Log.i("run", "statsfragment gesture");
-			return false; }
-		else
-			return gestDect.onTouchEvent(event);
-	}
-	
-	@Override
 	protected void onResume() {		
 		super.onResume();
 		Log.i("run", "main onresume");
@@ -144,6 +135,15 @@ public class MainActivity extends Activity {
 	protected void onStop() {
 		runDB.saveRunDB(this);
 		super.onStop();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
+		if (statsFragment != null)
+			statsFragment.animateOut();
+		else
+			super.onBackPressed();
 	}
 
 	@Override
@@ -190,12 +190,52 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
-	public void onBackPressed() {
-		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
-		if (statsFragment != null)
-			statsFragment.animateOut();
+	public boolean onTouchEvent(MotionEvent event) {
+		if (fragMngr.findFragmentByTag("statsFragment") != null && StatsFragment.active){
+			Log.i("run", "statsfragment gesture");
+			return false; }
 		else
-			super.onBackPressed();
+			return gestDect.onTouchEvent(event);
+	}
+	
+	public GraphView getGraphView() {
+		return graph;
+	}
+	
+	public RunDB getRunDB() {
+		return runDB; }
+	
+	public RunAdapter getRunAdapter() {
+		return myAdapter; }
+	
+	public void setUnit(String unit) {
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("unit", unit);
+		editor.commit();
+	}
+	public String getUnit() {
+		return settings.getString("unit", "mi");
+	}
+	public String getUnitInFull() {
+		String u = settings.getString("unit", "mi");
+		if (u.compareTo("mi") == 0)
+			return "miles";
+		else if (u.compareTo("km") == 0)
+			return "kilometers";
+		else return "";
+	}
+	public void setDBLimit(String limit) {
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("limit", limit);
+		editor.commit();
+	}
+	public String getDBLimit() {
+		return settings.getString("limit", "5");
+	}
+	public void updateGraph() {
+		if (graph != null) {
+			graph.updateData();
+			graph.invalidate(); }
 	}
 	
 	public void slideUp() {
@@ -236,47 +276,6 @@ public class MainActivity extends Activity {
 		runFragLayout.animate().setDuration(700).translationY(0);
 		runFragOpen = true;
 	}
-	
-	public GraphView getGraphView() {
-		return graph;
-	}
-	
-	public RunDB getRunDB() {
-		return runDB; }
-	
-	public RunAdapter getRunAdapter() {
-		return myAdapter; }
-	
-	public void setUnit(String unit) {
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("unit", unit);
-		editor.commit();
-	}
-	public String getUnit() {
-		return settings.getString("unit", "mi");
-	}
-	public String getUnitInFull() {
-		String u = settings.getString("unit", "mi");
-		if (u.compareTo("mi") == 0)
-			return "miles";
-		else if (u.compareTo("km") == 0)
-			return "kilometers";
-		else return "";
-	}
-	public void setDBLimit(String limit) {
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("limit", limit);
-		editor.commit();
-	}
-	public String getDBLimit() {
-		return settings.getString("limit", "100");
-	}
-	public void updateGraph() {
-		if (graph != null) {
-			graph.updateData();
-			graph.invalidate(); }
-	}
-	
 	
 	
 	
