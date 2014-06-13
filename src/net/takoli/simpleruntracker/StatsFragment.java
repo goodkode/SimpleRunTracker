@@ -75,12 +75,10 @@ public class StatsFragment extends Fragment {
 				if (isChecked) 
 					onStatsInMiAndKm(); } });
 		unit = mainActivity.getUnit();
-		if (unit.compareTo("km") == 0) {
+		if (unit.compareTo("km") == 0)
 			kmChB.setChecked(true);
-			onStatsInKm(); }
-		else {
+		else 
 			mileChB.setChecked(true);
-			onStatsInMi(); }
 		animateIn();
 	}
 	
@@ -96,17 +94,26 @@ public class StatsFragment extends Fragment {
 		thisView.animate().translationX(0).setDuration(700);
 		mainActivity.findViewById(R.id.stats_left).animate().alpha(0.5f)
 				.setDuration(2000).setInterpolator(new AccelerateInterpolator());
+		if (kmChB.isChecked())
+			onStatsInKm();
+		else if (mileChB.isChecked())
+			onStatsInMi();
+		else if (bothChB.isChecked())
+			onStatsInMiAndKm();
 	}
 	
 	public void onStatsInMi() {
 		kmChB.setChecked(false);
 		bothChB.setChecked(false);
-//		statPeriod.setText(text);
-//		distAvg.setText(text);
-//		distMax.setText(text);
-//		distTotal.setText(text);
-//		paceSpeedAvg.setText(text);
-//		paceSpeedMax.setText(text);
+		if (noStats())
+			return;
+		statPeriod.setText("Since " + runDB.getRunList().get(0).getDate() + 
+					" (" + runDB.getRunList().getSize() + ")");
+		distAvg.setText(runDB.getAvgDistString("mi");
+		distMax.setText(runDB.getMaxDistString("mi"));
+		distTotal.setText("to do");
+		paceSpeedAvg.setText("to do");
+		paceSpeedMax.setText("to do");
 	}
 	public void onStatsInKm() {
 		mileChB.setChecked(false);
@@ -115,5 +122,19 @@ public class StatsFragment extends Fragment {
 	public void onStatsInMiAndKm() {
 		kmChB.setChecked(false);
 		mileChB.setChecked(false);
+	}
+	
+	public boolean noStats() {
+		if (runDB.isEmpty()) {
+			statPeriod.setText("No stats to display yet");
+			distAvg.setText("");
+			distMax.setText("");
+			distTotal.setText("");
+			paceSpeedAvg.setText("");
+			paceSpeedMax.setText("");
+			return true;
+		}
+		else
+			return false;
 	}
 }
