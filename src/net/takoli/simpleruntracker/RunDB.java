@@ -24,6 +24,7 @@ public class RunDB {
 	private ArrayList<Run> runList;
 	private long sumDistDec, sumTimeSec;
 	
+	private static final double MI_TO_KM = 1.60934;
 	private final String FILE_NAME = "RunTracker-runlist.csv";
 	private int MAXSIZE;
 	private Calendar FROMDATE;
@@ -172,6 +173,30 @@ public class RunDB {
 	public int getAvgSpeedDecInMPH() {
 		if (sumDistDec == 0) return 0;
 		else return (int) ((sumDistDec) / (sumTimeSec / 60.0 / 60.0));
+	}
+	// for STATISTICS return Strings
+	public String getAvgDistString(String unit) {
+		if (runList.size() == 0) return "-";
+		double avgDistDecInMi = (1.0 * sumDistDec / runList.size());
+		if (unit.equals("mi")) {
+			int avgDistMiDec = Math.round(avgDistDecInMi);
+			return (avgDistMiDec / 100) + "." + (avgDistMiDec % 100); }
+		if (unit.equals("km")) {
+			int avgDistKmDec = Math.round(avgDistDecInMi * MI_TO_KM);
+			return (avgDistKmDec / 100) + "." + (avgDistKmDec % 100); }
+		else return "-";
+	}
+	public String getMaxDistString(String unit) {
+		int size = runList.size();
+		if (size == 0) return "-";
+		int maxDist_dec = runList.get(0).getDistDec();
+		for (int i = 0; i < size; i++)
+			if (runList.get(0).getDistDec())
+		if (unit.equals("mi")) {
+			return ; }
+		if (unit.equals("km")) {
+			return ; }
+		else return "-";
 	}
 	
 	// save all changes
