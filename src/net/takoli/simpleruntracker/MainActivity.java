@@ -140,7 +140,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
-		if (statsFragment != null)
+		if (statsFragment != null && StatsFragment.active)
 			statsFragment.animateOut();
 		else
 			super.onBackPressed();
@@ -230,7 +230,7 @@ public class MainActivity extends Activity {
 		editor.commit();
 	}
 	public String getDBLimit() {
-		return settings.getString("limit", "5");
+		return settings.getString("limit", "10");
 	}
 	public void updateGraph() {
 		if (graph != null) {
