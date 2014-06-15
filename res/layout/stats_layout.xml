@@ -13,6 +13,7 @@
         
     
     <!-- 3/4 of the screen will be for STATISTICS -->
+    <!-- this is for the line -->
     <LinearLayout
         android:layout_weight="5"
         android:layout_width="0dp"
@@ -29,6 +30,7 @@
 	        android:background="#FFA3D0FF" />
 	</LinearLayout>
     
+    <!-- and for the actual content -->
     <ScrollView 
         android:layout_weight="70"
         android:layout_width="0dp"
@@ -37,13 +39,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="6dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
         android:orientation="vertical" >
         
         <TextView
             android:id="@+id/stats_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:textSize="28sp"
             android:textStyle="italic"
             android:text="Stats" />
@@ -51,30 +55,35 @@
             android:id="@+id/stats_for_period"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp" />
+            android:textSize="15sp"
+            android:text="for period" />
         
         <TextView
             android:id="@+id/stats_distance_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:textSize="20sp"
             android:text="Distance" />
         <TextView
             android:id="@+id/stats_distance_avg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="15sp"
             android:text="Distance average" />
         <TextView
             android:id="@+id/stats_distance_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="15sp"
             android:text="Distance maximum"  />
         <TextView
             android:id="@+id/stats_distance_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="15sp"
             android:text="Distance total"  />
             
@@ -82,18 +91,21 @@
             android:id="@+id/stats_pace_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:textSize="20sp"
             android:text="Pace and Speed" />
         <TextView
             android:id="@+id/stats_pace_speed_avg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="15sp"
             android:text="Pace and speed average" />
         <TextView
             android:id="@+id/stats_pace_speed_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="15sp"
             android:text="Pace and speed maximum"  />
             
@@ -101,6 +113,7 @@
             android:id="@+id/stats_mi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:minEms="7"
             android:text="Miles" />
         <CheckBox 
@@ -109,12 +122,6 @@
             android:layout_height="wrap_content"
             android:minEms="7"
             android:text="Kilometers" />
-        <CheckBox 
-            android:id="@+id/stats_mi_and_km"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minEms="7"
-            android:text="Miles and Km" />
             
     </LinearLayout>
     </ScrollView>

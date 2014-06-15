@@ -22,9 +22,9 @@ import android.widget.Toast;
 public class RunDB {
 
 	private ArrayList<Run> runList;
-	private long sumDistDec, sumTimeSec;
+	private long sumDistU, sumTimeU;
+	private static final float KM_TO_MI = 1.60934f;
 	
-	private static final double MI_TO_KM = 1.60934;
 	private final String FILE_NAME = "RunTracker-runlist.csv";
 	private int MAXSIZE;
 	private Calendar FROMDATE;
@@ -34,8 +34,8 @@ public class RunDB {
 	// This will run every time the app starts up (or OnCreate is called...)
 	public RunDB(Context context) {
 		runList = new ArrayList<Run>();
-		sumDistDec = 0;
-		sumTimeSec = 0;
+		sumDistU = 0;
+		sumTimeU = 0;
 		Run nRun;
 		// /data/data/net.takoli.simpleruntracker/files/ - where OpenFileOutput saves
 		try {
@@ -48,14 +48,14 @@ public class RunDB {
 				nRun = new Run(line);
 				runList.add(nRun);
 				// for statistics:
-				sumDistDec += nRun.getDistDecInM();
-				sumTimeSec += nRun.getTimeInSec();
+				sumDistU += nRun.getDistUNIT();
+				sumTimeU += nRun.getTimeUNIT();
 			}
 			inputStream.close();
 		} catch (Exception e) {
 			Toast.makeText(context,"Can't read " + FILE_NAME, Toast.LENGTH_LONG).show();
 			e.printStackTrace(); }
-		Log.i("run", "RunDB initiated");
+		//Log.i("run", "RunDB initiated");
 	}
 	
 	public void setDBLimit(String limit) {
@@ -90,8 +90,8 @@ public class RunDB {
 		if (MAXSIZEisUsed) {
 			int toDelete = size - MAXSIZE;
 			for (int i = 0; i < toDelete; i++) {
-				sumDistDec -= runList.get(i).getDistDecInM();
-				sumTimeSec -= runList.get(i).getTimeInSec();
+				sumDistU -= runList.get(i).getDistUNIT();
+				sumTimeU -= runList.get(i).getTimeUNIT();
 			}
 			if (toDelete > 0) {
 				runList.subList(0, toDelete).clear();
@@ -100,8 +100,8 @@ public class RunDB {
 		else {
 			int toDelete = 0;
 			while (toDelete < size && runList.get(toDelete).date.before(FROMDATE)) {
-				sumDistDec -= runList.get(toDelete).getDistDecInM();
-				sumTimeSec -= runList.get(toDelete).getTimeInSec();
+				sumDistU -= runList.get(toDelete).getDistUNIT();
+				sumTimeU -= runList.get(toDelete).getTimeUNIT();
 				toDelete++;
 			}
 			runList.subList(0, toDelete).clear();
@@ -120,27 +120,27 @@ public class RunDB {
 		
 	public void addNewRun(Context context, Run newRun) {
 		runList.add(newRun);
-		sumDistDec += newRun.getDistDecInM();
-		sumTimeSec += newRun.getTimeInSec();
+		sumDistU += newRun.getDistUNIT();
+		sumTimeU += newRun.getTimeUNIT();
 	}
 	
 	public void updateRun(int pos, int[] updates) {
 		Run toUpdate = runList.get(pos);
-		sumDistDec -= toUpdate.getDistDecInM();
-		sumTimeSec -= toUpdate.getTimeInSec();
+		sumDistU -= toUpdate.getDistUNIT();
+		sumTimeU -= toUpdate.getTimeUNIT();
 		toUpdate.dd = updates[0];
 		toUpdate._dd = updates[1];
 		toUpdate.h = updates[2];
 		toUpdate.mm = updates[3];
 		toUpdate.ss = updates[4];
-		sumDistDec += toUpdate.getDistDecInM();
-		sumTimeSec += toUpdate.getTimeInSec();
+		sumDistU += toUpdate.getDistUNIT();
+		sumTimeU += toUpdate.getTimeUNIT();
 	}
 	
 	public void removeRun(int pos) {
 		Run toUpdate = runList.get(pos);
-		sumDistDec -= toUpdate.getDistDecInM();
-		sumTimeSec -= toUpdate.getTimeInSec();
+		sumDistU -= toUpdate.getDistUNIT();
+		sumTimeU -= toUpdate.getTimeUNIT();
 		runList.remove(pos);
 	}
 	
@@ -162,40 +162,60 @@ public class RunDB {
 
 	
 	// for STATISTICS:
-	public int getAvgDistDec() {
-		if (runList.size() == 0) return 0;
-		else return (int) (1.0 * sumDistDec / runList.size());
+	public int getAvgDistUNIT() {
+		return Math.round(1f * sumDistU / runList.size());
 	}
-	public int getAvgPaceSec() {
-		if (sumDistDec == 0) return 0;
-		else return (int) (sumTimeSec * 100 / sumDistDec);
+	public int getAvgPaceUNIT() {
+		return Math.round(100f * sumTimeU / sumDistU);
 	}
-	public int getAvgSpeedDecInMPH() {
-		if (sumDistDec == 0) return 0;
-		else return (int) ((sumDistDec) / (sumTimeSec / 60.0 / 60.0));
+	public int getAvgSpeedUNIT() {
+		return Math.round((sumDistU) / (sumTimeU / 60.0f / 60.0f));
 	}
 	// for STATISTICS return Strings
 	public String getAvgDistString(String unit) {
 		if (runList.size() == 0) return "-";
-		double avgDistDecInMi = (1.0 * sumDistDec / runList.size());
-		if (unit.equals("mi")) {
-			int avgDistMiDec = Math.round(avgDistDecInMi);
-			return (avgDistMiDec / 100) + "." + (avgDistMiDec % 100); }
-		if (unit.equals("km")) {
-			int avgDistKmDec = Math.round(avgDistDecInMi * MI_TO_KM);
-			return (avgDistKmDec / 100) + "." + (avgDistKmDec % 100); }
+		if (unit.equals("mi"))
+			return Run.dec2string(getAvgDistUNIT());
+		if (unit.equals("km"))
+			return Run.dec2string(Run.mi2km(getAvgDistUNIT()));
 		else return "-";
 	}
 	public String getMaxDistString(String unit) {
 		int size = runList.size();
 		if (size == 0) return "-";
-		int maxDist_dec = runList.get(0).getDistDec();
+		long maxDistUnit = runList.get(0).getDistUNIT();
 		for (int i = 0; i < size; i++)
-			if (runList.get(0).getDistDec())
+			if (runList.get(i).getDistUNIT() > maxDistUnit)
+				maxDistUnit = runList.get(i).getDistUNIT();
+		if (unit.equals("mi"))
+			return Run.dec2string(maxDistUnit);
+		if (unit.equals("km"))
+			return Run.dec2string(Run.mi2km(maxDistUnit));
+		else return "-";
+	}
+	public String getTotalDistString(String unit) {
+		if (unit.equals("mi")) 
+			return Run.dec2string(sumDistU); 
+		if (unit.equals("km")) 
+			return Run.dec2string(Run.mi2km(sumDistU)); 
+		else return "-";
+	}
+	public String getAvgSpeedString(String unit) {
+		if (unit.equals("mi")) 
+			return Run.dec2string(getAvgSpeedUNIT()); 
+		if (unit.equals("km")) 
+			return Run.dec2string(Math.round(getAvgSpeedUNIT() * KM_TO_MI)); 
+		else return "-";
+	}
+	public String getMaxSpeedString(String unit) {
+		int size = runList.size();
+		if (size == 0) return "-";
+		long maxPace_dec = runList.get(0).getPace_dec();
 		if (unit.equals("mi")) {
-			return ; }
+			return (sumDistU / 100) + "." + (sumDistU % 100); }
 		if (unit.equals("km")) {
-			return ; }
+			int sumDistKm_dec = Math.round(sumDistU * KM_TO_MI);
+			return (sumDistKm_dec / 100) + "." + (sumDistKm_dec % 100); }
 		else return "-";
 	}
 	
@@ -240,8 +260,8 @@ public class RunDB {
 	// delete ALL records
 	public void deleteDB(Context context) {
 		runList.clear();
-		sumDistDec = 0;
-		sumTimeSec = 0;
+		sumDistU = 0;
+		sumTimeU = 0;
 		try {
 			context.deleteFile(FILE_NAME);
 		} catch (Exception e) {

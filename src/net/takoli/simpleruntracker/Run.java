@@ -4,12 +4,15 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class Run {
-	int dd, _dd;   // distance in units and in decimals
-	int h, mm, ss;   // time in hour, min, and sec
-	String unit;   // miles or kilometers
+	int dd, _dd;	// distance in units and in decimals
+	int distU;		// COMMON UNIT (100 * MI)
+	int h, mm, ss;   // timeU in hour, min, and sec
+	int timeU;		 // COMMON UNIT (SEC)
+	int paceU;		 // COMMON UNIT (SEC / MI)
+	String unit;     // miles or kilometers
 	Calendar date;
 	boolean expanded;
-	private final double KM_TO_M = 1.60934;
+	private static final float KM_TO_MI = 1.60934f;
 	
 	public Run(Calendar date, int dd, int _dd, String unit, int h, int mm, int ss) {
 		this.date = date;
@@ -19,13 +22,17 @@ public class Run {
 		this.h = h;
 		this.mm = mm;
 		this.ss = ss;
+		// Common units:
+		distU = 100 * dd + _dd;
+		if (unit.compareTo("km") == 0)
+			distU = km2mi(distU);
+		timeU = 60 * 60 * h + 60 * mm + ss;
+		paceU = 100 * timeU / distU;
 		expanded = false;
 	}
 	
 	public Run(String line) {
 		String[] fields = line.split(",");
-		//Log.i("run", "date:"+ fields[0] + ", dist: " + fields[1] + 
-		//		fields[2] + ", time: " + fields[3]);
 		String[] dateSt = fields[0].split("/");
 		String[] distSt = fields[1].split("\\.");
 		String[] timeSt = fields[3].split("\\:");
@@ -39,10 +46,21 @@ public class Run {
 		this.h = Integer.parseInt(timeSt[0]);
 		this.mm = Integer.parseInt(timeSt[1]);
 		this.ss = Integer.parseInt(timeSt[2]);
+		// Common units:
+		distU = 100 * dd + _dd;
+		if (unit.compareTo("km") == 0)
+			distU = km2mi(distU);
+		timeU = 60 * 60 * h + 60 * mm + ss;
+		paceU = 100 * timeU / distU;
 		expanded = false;
 	}
 	
-	public String getDate() {
+	public void switchExpanded() {
+		if (expanded)   expanded = false;
+		else expanded = true;
+	}
+	
+	public String getDateString() {
 		Calendar today = Calendar.getInstance();
 		if (date.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) &&
 				date.get(Calendar.YEAR) == today.get(Calendar.YEAR))
@@ -66,59 +84,56 @@ public class Run {
 			case 11: month = "Dec"; break;
 			default: month = ""; break; }
 		int y = date.get(Calendar.YEAR) % 100;
-		String year = y < 10 ? "'0"+y : "'"+y;
-		return month + " " + date.get(Calendar.DAY_OF_MONTH) + ", "+year;
+		String year = y < 10 ? ("'0" + y) : ("'" + y);
+		return month + " " + date.get(Calendar.DAY_OF_MONTH) + ", " + year;
 	}
 	
-	public String getDistance() {
+	public String getDistanceString() {
 		return ((dd < 10 ? " " + dd : dd) + "." + 
 					(_dd < 10 ? ("0" + _dd) : _dd) + " " + unit);
 	}
 	
-	public String getTime() {
+	public String getTimeString() {
 		String sTime = h + ":";
-		if (mm < 10)	sTime += "0" + mm + ":";
-		else			sTime += mm + ":";
-		if (ss < 10)	sTime += "0" + ss;
-		else			sTime += ss;
+		if (mm < 10)   sTime += "0" + mm + ":";
+		else   sTime += mm + ":";
+		if (ss < 10)   sTime += "0" + ss;
+		else   sTime += ss;
 		return  sTime;
 	}
 	
-	public String getPace() {
-		int totalSec = h * 60*60 + mm * 60 + ss;
-		if (dd + _dd == 0)	return "-";
-		int paceInSec = totalSec * 100 / (dd * 100 + _dd);
-		return  (paceInSec / 60) + ":" + ((paceInSec % 60) < 10 ? 
-				"0"+paceInSec % 60 : paceInSec % 60) + " min/" + unit;
+	public String getPaceString() {
+		return  (paceU / 60) + ":" + 
+				((paceU % 60) < 10 ? ("0"+paceU % 60) : paceU % 60) + 
+				" min/" + unit;
 	}
 	
-	public String getSpeed() {
-		int totalSec = h * 60*60 + mm * 60 + ss;
-		if (totalSec == 0) return "-";
-		int speedPerSec = (int) ((dd * 100 + _dd) / (totalSec / 60.0 / 60.0));
-		return (speedPerSec / 100) + "." + ((speedPerSec % 100) < 10 ? 
-				"0" + speedPerSec % 100 : speedPerSec % 100) + 
-				(unit.compareTo("mi")==0 ? " mph" : " km/h");
+	public String getSpeedString() {
+		int speed = getSpeedUNIT();
+		return (speed / 100) + "." + ((speed % 100) < 10 ? 
+				"0" + speed % 100 : speed % 100) + 
+				(unit.compareTo("km") != 0 ? " mph" : " km/h");
 	}
+	
 	
 	// For STATISTICS:
 	
-	// utility:
-	public long getDistDecInM() {
-		long distDec =  (100 * dd + _dd);
-		if (unit.compareTo("km") == 0)	return (long) (distDec / KM_TO_M);
-		else return distDec; }
-	public long getTimeInSec() {
-		return (60 * 60 * h + 60 * mm + ss); }
-	public long getSpeedDecInMPH(long distDecInM) {
-		return Math.round(distDecInM / (h + (mm / 60.0) + (ss / 60.0 / 60.0))); }
+	public long getDistUNIT() {
+		return distU; }
+	public int getTimeUNIT() {
+		return timeU; }
+	public int getPaceUNIT() {
+		return paceU; }
+	public int getSpeedUNIT() {
+		return Math.round(distU / (timeU / 60f / 60f)); }
 
 	
-	// Performance Score - subjective score '3' - '10'
+	// For PERFORMANCE SCORE - subjective score '3' - '10':
+	
 	public String getPerfScore(int avgDistDec, int avgPaceSec) {
 		if (avgDistDec == 0 || avgPaceSec == 0)	return "";
 		// each 20% over average distance is a point extra
-		double dPrcnt = (100.0 * getDistDecInM() / avgDistDec) - 100;
+		double dPrcnt = (100.0 * getDistUNIT() / avgDistDec) - 100;
 		long dScore = Math.round(dPrcnt / 20);
 		// each 2% over average speed is a point extra
 		double sPrcnt = avgPaceSec / ((60.0 * 60 * h + 60 * mm + ss) / (dd * 100 + _dd)) - 100;
@@ -129,19 +144,15 @@ public class Run {
 		if (perfScore > 10) return "10";
 		return "" + perfScore;
 	}
-	
-	// Distance performance - % or average
 	public String getPerfDist(int avgDistDec) {
 		if (avgDistDec == 0)
 			return "-";
-		return 100 * getDistDecInM() / avgDistDec + "%";
+		return 100 * getDistUNIT() / avgDistDec + "%";
 	}
-	
-	// Pace (speed) performance - % of average
 	public String getPerfPace(int avgPaceSec) {
 		int totalSec = (60 * 60 * h + 60 * mm + ss);
 		if (dd + _dd == 0)  return "-";
-		int paceInSec = totalSec * 100 / (int) getDistDecInM();
+		int paceInSec = totalSec * 100 / (int) getDistUNIT();
 		if (paceInSec == 0)  return "-";		
 		int prct = 100 *  avgPaceSec / paceInSec;
 		return prct + "%";
@@ -152,8 +163,19 @@ public class Run {
 					date.get(Calendar.YEAR)+","+dd+"."+_dd+","+unit+","+h+":"+mm+":"+ss;
 	}
 	
-	public void switchDetails() {
-		if (expanded)   expanded = false;
-		else expanded = true;
+	// utility functions
+	public static String dec2string(long NNnn) {
+		long whole = NNnn / 100;
+		long dec = NNnn % 100;
+		if (dec == 0)
+			return whole + ".00";
+		else
+			return whole + "." + dec;
+	}
+	public static int km2mi(float km) {
+		return Math.round(km / KM_TO_MI);
+	}
+	public static int mi2km(float mi) {
+		return Math.round(mi * KM_TO_MI);
 	}
 }

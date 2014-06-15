@@ -14,12 +14,12 @@ import android.widget.TextView;
 
 public class StatsFragment extends Fragment {
 
-	static boolean active = true;
+	private boolean active;
 	private MainActivity mainActivity;
-	private View thisView;
+	private View thisView, leftOverlay;
 	private RunDB runDB;
 	private String unit;
-	private CheckBox mileChB, kmChB, bothChB;
+	private CheckBox mileChB, kmChB;
 	private TextView statPeriod, distAvg, distMax, distTotal, paceSpeedAvg, paceSpeedMax;
 	
 	@Override
@@ -27,7 +27,8 @@ public class StatsFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		mainActivity = (MainActivity) getActivity();
 		runDB = mainActivity.getRunDB();
-		Log.i("run", "created: " + this.hashCode() + ", active: " + active);
+		active = true;
+		//Log.i("run", "created: " + this.hashCode() + ", active: " + active);
 	}
 
 	@Override
@@ -42,23 +43,22 @@ public class StatsFragment extends Fragment {
 		super.onStart();
 		int width = getResources().getDisplayMetrics().widthPixels;
 		thisView.setX(width); 
-		mainActivity.findViewById(R.id.stats_left).setAlpha(0);
+		getActivity().findViewById(R.id.stats_left).setAlpha(0);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (!active)
-			return;
-		statPeriod = (TextView) mainActivity.findViewById(R.id.stats_for_period);
-		distAvg = (TextView) mainActivity.findViewById(R.id.stats_distance_avg);
-		distMax = (TextView) mainActivity.findViewById(R.id.stats_distance_max);
-		distTotal = (TextView) mainActivity.findViewById(R.id.stats_distance_total);
-		paceSpeedAvg = (TextView) mainActivity.findViewById(R.id.stats_pace_speed_avg);
-		paceSpeedMax = (TextView) mainActivity.findViewById(R.id.stats_pace_speed_max);
-		mileChB = (CheckBox) mainActivity.findViewById(R.id.stats_mi);
-		kmChB = (CheckBox) mainActivity.findViewById(R.id.stats_km);
-		bothChB = (CheckBox) mainActivity.findViewById(R.id.stats_mi_and_km);
+		//Log.i("run", "onresume " + this.hashCode() + "; main: " + getActivity().hashCode());
+		leftOverlay = getActivity().findViewById(R.id.stats_left);
+		statPeriod = (TextView) getActivity().findViewById(R.id.stats_for_period);
+		distAvg = (TextView) getActivity().findViewById(R.id.stats_distance_avg);
+		distMax = (TextView) getActivity().findViewById(R.id.stats_distance_max);
+		distTotal = (TextView) getActivity().findViewById(R.id.stats_distance_total);
+		paceSpeedAvg = (TextView) getActivity().findViewById(R.id.stats_pace_speed_avg);
+		paceSpeedMax = (TextView) getActivity().findViewById(R.id.stats_pace_speed_max);
+		mileChB = (CheckBox) getActivity().findViewById(R.id.stats_mi);
+		kmChB = (CheckBox) getActivity().findViewById(R.id.stats_km);
 		mileChB.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -69,22 +69,20 @@ public class StatsFragment extends Fragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked) 
 					onStatsInKm(); } });
-		bothChB.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (isChecked) 
-					onStatsInMiAndKm(); } });
-		unit = mainActivity.getUnit();
-		if (unit.compareTo("km") == 0)
-			kmChB.setChecked(true);
-		else 
-			mileChB.setChecked(true);
-		animateIn();
+		unit = ((MainActivity) getActivity()).getUnit();
+		if (unit.compareTo("km") == 0)   kmChB.setChecked(true);
+		else 							mileChB.setChecked(true);
+		if (active)	
+			animateIn();
+	}
+	
+	public boolean isActive() {
+		return active;
 	}
 	
 	public void animateOut() {
 		active = false;
-		mainActivity.findViewById(R.id.stats_left).setAlpha(0);		
+		leftOverlay.animate().alpha(0f).setDuration(100);		
 		int width = getResources().getDisplayMetrics().widthPixels;
 		thisView.animate().translationX(width).setDuration(700);
 	}
@@ -92,46 +90,45 @@ public class StatsFragment extends Fragment {
 	public void animateIn() {
 		active = true;
 		thisView.animate().translationX(0).setDuration(700);
-		mainActivity.findViewById(R.id.stats_left).animate().alpha(0.5f)
+		leftOverlay.animate().alpha(0.5f)
 				.setDuration(2000).setInterpolator(new AccelerateInterpolator());
 		if (kmChB.isChecked())
 			onStatsInKm();
 		else if (mileChB.isChecked())
 			onStatsInMi();
-		else if (bothChB.isChecked())
-			onStatsInMiAndKm();
 	}
 	
 	public void onStatsInMi() {
 		kmChB.setChecked(false);
-		bothChB.setChecked(false);
 		if (noStats())
 			return;
-		statPeriod.setText("Since " + runDB.getRunList().get(0).getDate() + 
-					" (" + runDB.getRunList().getSize() + ")");
-		distAvg.setText(runDB.getAvgDistString("mi");
-		distMax.setText(runDB.getMaxDistString("mi"));
-		distTotal.setText("to do");
-		paceSpeedAvg.setText("to do");
-		paceSpeedMax.setText("to do");
+		statPeriod.setText("Since " + runDB.getRunList().get(0).getDateString() + 
+					" (" + runDB.getRunList().size() + " runs)");
+		distAvg.setText("Average: " + runDB.getAvgDistString("mi"));
+		distMax.setText("Longest: " + runDB.getMaxDistString("mi"));
+		distTotal.setText("Total: " + runDB.getTotalDistString("mi"));
+		paceSpeedAvg.setText("Average: " + runDB.getAvgSpeedString("mi"));
+		paceSpeedMax.setText("Fastest: " + runDB.getMaxSpeedString("mi"));
 	}
 	public void onStatsInKm() {
 		mileChB.setChecked(false);
-		bothChB.setChecked(false);
-	}
-	public void onStatsInMiAndKm() {
-		kmChB.setChecked(false);
-		mileChB.setChecked(false);
+		statPeriod.setText("Since " + runDB.getRunList().get(0).getDateString() + 
+				" (" + runDB.getRunList().size() + " runs)");
+		distAvg.setText("Average: " + runDB.getAvgDistString("km"));
+		distMax.setText("Longest: " + runDB.getMaxDistString("km"));
+		distTotal.setText("Total: " + runDB.getTotalDistString("km"));
+		paceSpeedAvg.setText("Average: " + runDB.getAvgSpeedString("km"));
+		paceSpeedMax.setText("Fastest: " + runDB.getMaxSpeedString("km"));
 	}
 	
 	public boolean noStats() {
 		if (runDB.isEmpty()) {
 			statPeriod.setText("No stats to display yet");
-			distAvg.setText("");
-			distMax.setText("");
-			distTotal.setText("");
-			paceSpeedAvg.setText("");
-			paceSpeedMax.setText("");
+			distAvg.setText("Average: -");
+			distMax.setText("Longest: -");
+			distTotal.setText("Total: -");
+			paceSpeedAvg.setText("Average: -");
+			paceSpeedMax.setText("Fastest: -");
 			return true;
 		}
 		else

@@ -94,7 +94,7 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View runView, int pos, long id) {
 				pos--;  // to compensate for header
 				//Log.i("run","onclick pos: " +pos);
-				myAdapter.getRunItem(pos).switchDetails();
+				myAdapter.getRunItem(pos).switchExpanded();
 				myAdapter.notifyDataSetChanged(); }
 		});
 		runListLayout.setOnTouchListener(new OnTouchListener() {
@@ -121,7 +121,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {		
 		super.onResume();
-		Log.i("run", "main onresume");
+		//Log.i("run", "main onresume");
 		runFragLayout.setY(screenHeight * -3/10);
 		slideDown();
 	}
@@ -140,7 +140,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
-		if (statsFragment != null && StatsFragment.active)
+		if (statsFragment != null && statsFragment.isActive())
 			statsFragment.animateOut();
 		else
 			super.onBackPressed();
@@ -163,13 +163,13 @@ public class MainActivity extends Activity {
 	    		if (statsFragment == null) {
 	    			Log.i("run", "new fragment");
 	    			statsFragment = new StatsFragment();
+	    			statsFragment.setRetainInstance(true);
 		    		fragTrans = fragMngr.beginTransaction();
 		    		fragTrans.add(R.id.main, statsFragment, "statsFragment");
 		    		fragTrans.commit();
 		    	}
 	    		else {
-	    			Log.i("run", "fragment reused");
-	    			if (StatsFragment.active)
+	    			if (statsFragment.isActive())
 	    				statsFragment.animateOut();
 	    			else
 	    				statsFragment.animateIn();
@@ -191,7 +191,7 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (fragMngr.findFragmentByTag("statsFragment") != null && StatsFragment.active){
+		if (fragMngr.findFragmentByTag("statsFragment") != null && statsFragment.isActive()){
 			Log.i("run", "statsfragment gesture");
 			return false; }
 		else

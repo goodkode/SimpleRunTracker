@@ -89,13 +89,13 @@ public class GraphView extends View {
 			//Log.i("run", "nothing to chart");
 			return; }
 		fullPlotSize = dataPlotSize + 1;  // plot '0' is the average
-		dists[0] = runListDB.getAvgDistDec();
-		speeds[0] = runListDB.getAvgSpeedDecInMPH();
+		dists[0] = runListDB.getAvgDistUNIT();
+		speeds[0] = runListDB.getAvgSpeedUNIT();
 		//Log.i("run", "avgspeed: " + speeds[0]);
 		int j = 1;
 		for (int i = fullSize - dataPlotSize; i < fullSize; i++) {
-			dists[j] = runList.get(i).getDistDecInM();
-			speeds[j] = runList.get(i).getSpeedDecInMPH(dists[j]);
+			dists[j] = runList.get(i).getDistUNIT();
+			speeds[j] = runList.get(i).getSpeedUNIT();
 			//Log.i("run", "speed " + j + ": " + speeds[j]);
 			j++;
 		}

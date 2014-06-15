@@ -69,10 +69,10 @@ public class RunAdapter extends BaseAdapter {
 			rDist = (TextView) oneRun.findViewById(R.id.run_dist);
 			rTime = (TextView) oneRun.findViewById(R.id.run_time);
 			rPace = (TextView) oneRun.findViewById(R.id.run_pace);
-			rDate.setText(run.getDate());
-			rDist.setText(run.getDistance());
-			rTime.setText(run.getTime() + "s ");
-			rPace.setText(run.getPace());
+			rDate.setText(run.getDateString());
+			rDist.setText(run.getDistanceString());
+			rTime.setText(run.getTimeString() + "s ");
+			rPace.setText(run.getPaceString());
 			if (pos == runList.size() - 1) {
 				oneRun.setBackgroundColor(0xFF88C1FC);
 				if (toAnimate) {
@@ -101,13 +101,13 @@ public class RunAdapter extends BaseAdapter {
 			rPerformScore = (TextView) oneRun.findViewById(R.id.perform_score);
 			rPerfDist = (TextView) oneRun.findViewById(R.id.perf_dist);
 			rPerfPace = (TextView) oneRun.findViewById(R.id.perf_pace);
-			rDate.setText(run.getDate());
-			rDist.setText(run.getDistance());
-			rTime.setText(run.getTime() + "s ");
-			rPace.setText(run.getPace());
-			rSpeed.setText("(" + run.getSpeed() + ")");
-			int avgDistDec = runListDB.getAvgDistDec();
-			int avgPaceSec = runListDB.getAvgPaceSec();
+			rDate.setText(run.getDateString());
+			rDist.setText(run.getDistanceString());
+			rTime.setText(run.getTimeString() + "s ");
+			rPace.setText(run.getPaceString());
+			rSpeed.setText("(" + run.getSpeedString() + ")");
+			int avgDistDec = runListDB.getAvgDistUNIT();
+			int avgPaceSec = runListDB.getAvgPaceUNIT();
 			rPerformScore.setText(run.getPerfScore(avgDistDec, avgPaceSec));
 			rPerfDist.setText(run.getPerfDist(avgDistDec) + " of average distance,  ");
 			rPerfPace.setText(run.getPerfPace(avgPaceSec) + " of average speed");
@@ -121,7 +121,7 @@ public class RunAdapter extends BaseAdapter {
 					RunUpdateDialog updateRunDialog = new RunUpdateDialog();
 					Bundle bundle = new Bundle();
 					bundle.putInt("pos", position);
-					bundle.putString("date", editRun.getDate());
+					bundle.putString("date", editRun.getDateString());
 					bundle.putString("dd", "0" + editRun.dd);
 					bundle.putString("_dd", "0" + editRun._dd);
 					bundle.putString("h", "" + editRun.h);
