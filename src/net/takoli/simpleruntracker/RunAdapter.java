@@ -106,11 +106,11 @@ public class RunAdapter extends BaseAdapter {
 			rTime.setText(run.getTimeString() + "s ");
 			rPace.setText(run.getPaceString());
 			rSpeed.setText("(" + run.getSpeedString() + ")");
-			int avgDistDec = runListDB.getAvgDistUNIT();
-			int avgPaceSec = runListDB.getAvgPaceUNIT();
-			rPerformScore.setText(run.getPerfScore(avgDistDec, avgPaceSec));
-			rPerfDist.setText(run.getPerfDist(avgDistDec) + " of average distance,  ");
-			rPerfPace.setText(run.getPerfPace(avgPaceSec) + " of average speed");
+			int avgDistU = runListDB.getAvgDistUNIT();
+			int avgPaceU = runListDB.getAvgPaceUNIT();
+			rPerformScore.setText(run.getPerfScore(avgDistU, avgPaceU));
+			rPerfDist.setText(run.getPerfDist(avgDistU) + " of average distance,  ");
+			rPerfPace.setText(run.getPerfPace(avgPaceU) + " of average speed");
 			
 			ImageView edit = (ImageView) oneRun.findViewById(R.id.run_edit);
 			edit.setOnClickListener(new OnClickListener() {
