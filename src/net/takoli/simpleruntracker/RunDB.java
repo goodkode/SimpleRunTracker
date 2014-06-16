@@ -200,11 +200,31 @@ public class RunDB {
 			return Run.dec2string(Run.mi2km(sumDistU)); 
 		else return "-";
 	}
+	public String getAvgPaceString(String unit) {
+		if (unit.equals("mi")) 
+			return Run.dec2string(getAvgSpeedUNIT()); 
+		if (unit.equals("km")) 
+			return Run.dec2string(Run.mi2km(Math.round(getAvgPaceUNIT()))); 
+		else return "-";
+	}
 	public String getAvgSpeedString(String unit) {
 		if (unit.equals("mi")) 
 			return Run.dec2string(getAvgSpeedUNIT()); 
 		if (unit.equals("km")) 
 			return Run.dec2string(Math.round(getAvgSpeedUNIT() * KM_TO_MI)); 
+		else return "-";
+	}
+	public String getMaxPaceString(String unit) {
+		int size = runList.size();
+		if (size == 0) return "-";
+		int maxPaceU = runList.get(0).getPaceUNIT();
+		for (int i = 1; i < size; i++) 
+			if (runList.get(i).getPaceUNIT() > maxPaceU)
+				maxPaceU = runList.get(i).getPaceUNIT();
+		if (unit.equals("mi")) 
+			return Run.time2string(maxPaceU); 
+		if (unit.equals("km")) 
+			return Run.time2string(Run.km2mi(maxPaceU));
 		else return "-";
 	}
 	public String getMaxSpeedString(String unit) {
