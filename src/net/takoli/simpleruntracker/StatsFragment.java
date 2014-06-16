@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
@@ -19,7 +19,7 @@ public class StatsFragment extends Fragment {
 	private View thisView, leftOverlay;
 	private RunDB runDB;
 	private String unit;
-	private CheckBox mileChB, kmChB;
+	private RadioButton mileChB, kmChB;
 	private TextView statPeriod, distAvg, distMax, distTotal, paceSpeedAvg, paceSpeedMax;
 	
 	@Override
@@ -57,8 +57,8 @@ public class StatsFragment extends Fragment {
 		distTotal = (TextView) getActivity().findViewById(R.id.stats_distance_total);
 		paceSpeedAvg = (TextView) getActivity().findViewById(R.id.stats_pace_speed_avg);
 		paceSpeedMax = (TextView) getActivity().findViewById(R.id.stats_pace_speed_max);
-		mileChB = (CheckBox) getActivity().findViewById(R.id.stats_mi);
-		kmChB = (CheckBox) getActivity().findViewById(R.id.stats_km);
+		mileChB = (RadioButton) getActivity().findViewById(R.id.stats_mi);
+		kmChB = (RadioButton) getActivity().findViewById(R.id.stats_km);
 		mileChB.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
