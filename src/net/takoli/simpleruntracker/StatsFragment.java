@@ -104,21 +104,25 @@ public class StatsFragment extends Fragment {
 			return;
 		statPeriod.setText("Since " + runDB.getRunList().get(0).getDateString() + 
 					" (" + runDB.getRunList().size() + " runs)");
-		distAvg.setText("Average: " + runDB.getAvgDistString("mi"));
-		distMax.setText("Longest: " + runDB.getMaxDistString("mi"));
-		distTotal.setText("Total: " + runDB.getTotalDistString("mi"));
-		paceSpeedAvg.setText("Average: " + runDB.getAvgSpeedString("mi"));
-		paceSpeedMax.setText("Fastest: " + runDB.getMaxSpeedString("mi"));
+		distAvg.setText("Average: " + runDB.getAvgDistString("mi") + " mi");
+		distMax.setText("Longest: " + runDB.getMaxDistString("mi") + " mi");
+		distTotal.setText("Total: " + runDB.getTotalDistString("mi") + " mi");
+		paceSpeedAvg.setText("Average: " + runDB.getAvgPaceString("mi") + " min/mi" +
+									" (" + runDB.getAvgSpeedString("mi") + " mph)");
+		paceSpeedMax.setText("Fastest: " + runDB.getMaxPaceString("mi") + " min/mi" +
+									" (" + runDB.getMaxSpeedString("mi") + " mph)");
 	}
 	public void onStatsInKm() {
 		mileChB.setChecked(false);
 		statPeriod.setText("Since " + runDB.getRunList().get(0).getDateString() + 
 				" (" + runDB.getRunList().size() + " runs)");
-		distAvg.setText("Average: " + runDB.getAvgDistString("km"));
-		distMax.setText("Longest: " + runDB.getMaxDistString("km"));
-		distTotal.setText("Total: " + runDB.getTotalDistString("km"));
-		paceSpeedAvg.setText("Average: " + runDB.getAvgSpeedString("km"));
-		paceSpeedMax.setText("Fastest: " + runDB.getMaxSpeedString("km"));
+		distAvg.setText("Average: " + runDB.getAvgDistString("km") + " km");
+		distMax.setText("Longest: " + runDB.getMaxDistString("km") + " km");
+		distTotal.setText("Total: " + runDB.getTotalDistString("km") + " km");
+		paceSpeedAvg.setText("Average: " + runDB.getAvgPaceString("km") + " min/km" +
+									" (" + runDB.getAvgSpeedString("km") + " km/h)");
+		paceSpeedMax.setText("Fastest: " + runDB.getMaxPaceString("km") + " min/km" +
+									" (" + runDB.getMaxSpeedString("km") + " km/h)");
 	}
 	
 	public boolean noStats() {

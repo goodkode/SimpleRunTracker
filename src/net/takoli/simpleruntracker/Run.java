@@ -178,4 +178,22 @@ public class Run {
 	public static int mi2km(float mi) {
 		return Math.round(mi * KM_TO_MI);
 	}
+	public static String sec2MMss(int sec) {
+		String MM = "" + (sec / 60);
+		sec %= 60;
+		if (sec < 10)
+			return MM + ":0" + sec;
+		else
+			return MM + ":" + sec;
+	}
+	public static String sec2hMMss(int sec) {
+		String h = "" + (sec / 60 / 60);
+		sec /= 60;
+		String MM = (sec / 60) < 10 ? ("0" + (sec/60)) : ("" + (sec/60));
+		sec %= 60;
+		if (sec < 10)
+			return h + ":" + MM + ":0" + sec;
+		else
+			return h + ":" + MM + ":" + sec;
+	}
 }

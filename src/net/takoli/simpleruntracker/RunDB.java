@@ -171,6 +171,8 @@ public class RunDB {
 	public int getAvgSpeedUNIT() {
 		return Math.round((sumDistU) / (sumTimeU / 60.0f / 60.0f));
 	}
+	
+	
 	// for STATISTICS return Strings
 	public String getAvgDistString(String unit) {
 		if (runList.size() == 0) return "-";
@@ -202,16 +204,16 @@ public class RunDB {
 	}
 	public String getAvgPaceString(String unit) {
 		if (unit.equals("mi")) 
-			return Run.dec2string(getAvgSpeedUNIT()); 
+			return Run.sec2MMss(getAvgPaceUNIT()); 
 		if (unit.equals("km")) 
-			return Run.dec2string(Run.mi2km(Math.round(getAvgPaceUNIT()))); 
+			return Run.sec2MMss(Run.km2mi(getAvgPaceUNIT())); 
 		else return "-";
 	}
 	public String getAvgSpeedString(String unit) {
 		if (unit.equals("mi")) 
 			return Run.dec2string(getAvgSpeedUNIT()); 
 		if (unit.equals("km")) 
-			return Run.dec2string(Math.round(getAvgSpeedUNIT() * KM_TO_MI)); 
+			return Run.dec2string(Run.mi2km(getAvgSpeedUNIT())); 
 		else return "-";
 	}
 	public String getMaxPaceString(String unit) {
@@ -219,23 +221,25 @@ public class RunDB {
 		if (size == 0) return "-";
 		int maxPaceU = runList.get(0).getPaceUNIT();
 		for (int i = 1; i < size; i++) 
-			if (runList.get(i).getPaceUNIT() > maxPaceU)
+			if (runList.get(i).getPaceUNIT() < maxPaceU)
 				maxPaceU = runList.get(i).getPaceUNIT();
 		if (unit.equals("mi")) 
-			return Run.time2string(maxPaceU); 
+			return Run.sec2MMss(maxPaceU); 
 		if (unit.equals("km")) 
-			return Run.time2string(Run.km2mi(maxPaceU));
+			return Run.sec2MMss(Run.km2mi(maxPaceU));
 		else return "-";
 	}
 	public String getMaxSpeedString(String unit) {
 		int size = runList.size();
 		if (size == 0) return "-";
-		long maxPace_dec = runList.get(0).getPace_dec();
-		if (unit.equals("mi")) {
-			return (sumDistU / 100) + "." + (sumDistU % 100); }
-		if (unit.equals("km")) {
-			int sumDistKm_dec = Math.round(sumDistU * KM_TO_MI);
-			return (sumDistKm_dec / 100) + "." + (sumDistKm_dec % 100); }
+		long maxSpeedU = runList.get(0).getSpeedUNIT();
+		for (int i = 1; i < size; i++) 
+			if (runList.get(i).getSpeedUNIT() > maxSpeedU)
+				maxSpeedU = runList.get(i).getSpeedUNIT();
+		if (unit.equals("mi")) 
+			return Run.dec2string(maxSpeedU); 
+		if (unit.equals("km")) 
+			return Run.dec2string(Run.mi2km(maxSpeedU));
 		else return "-";
 	}
 	
