@@ -191,11 +191,7 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (fragMngr.findFragmentByTag("statsFragment") != null && statsFragment.isActive()){
-			Log.i("run", "statsfragment gesture");
-			return false; }
-		else
-			return gestDect.onTouchEvent(event);
+		return gestDect.onTouchEvent(event);
 	}
 	
 	public GraphView getGraphView() {

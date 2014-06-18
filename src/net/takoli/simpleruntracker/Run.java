@@ -103,15 +103,13 @@ public class Run {
 	}
 	
 	public String getPaceString() {
-		return  (paceU / 60) + ":" + 
-				((paceU % 60) < 10 ? ("0"+paceU % 60) : paceU % 60) + 
-				" min/" + unit;
+		int paceSec = (100 * timeU) / (100 * dd + _dd);
+		return  sec2MMss(paceSec) + " min/" + unit;
 	}
 	
 	public String getSpeedString() {
-		int speed = getSpeedUNIT();
-		return (speed / 100) + "." + ((speed % 100) < 10 ? 
-				"0" + speed % 100 : speed % 100) + 
+		int speed = Math.round((100 * dd + _dd) / (timeU / 60f / 60f));
+		return (speed / 100) + "." + (speed % 100) + 
 				(unit.compareTo("km") != 0 ? " mph" : " km/h");
 	}
 	

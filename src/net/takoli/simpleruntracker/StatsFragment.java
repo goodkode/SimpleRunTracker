@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -138,4 +139,9 @@ public class StatsFragment extends Fragment {
 		else
 			return false;
 	}
+	
+//	@Override
+//	public boolean onTouchEvent(MotionEvent event) {
+//		return gestDect.onTouchEvent(event);
+//	}
 }
