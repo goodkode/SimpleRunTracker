@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
 	
 	private DisplayMetrics dm;
 	private int screenHeight, screenWidth;
-	private GestureDetector gestDect;
+	protected GestureDetector gestDect;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +73,14 @@ public class MainActivity extends Activity {
 		fragTrans.replace(R.id.enter_run_frame, enterRun);
 		fragTrans.commit();
 		mainLayout.addView(runFragLayout);
-			// enable fling up and down to open/close the top panel
-			gestDect = new GestureDetector(this, new MyGestureListener());
-			runFragLayout.setOnTouchListener(new OnTouchListener() {
-			    @Override
-				public boolean onTouch(View v, MotionEvent event) {
-			        return gestDect.onTouchEvent(event);
-			    }
-			});
+		// enable fling up and down to open/close the top panel
+		gestDect = new GestureDetector(this, new MyGestureListener());
+		runFragLayout.setOnTouchListener(new OnTouchListener() {
+		    @Override
+			public boolean onTouch(View v, MotionEvent event) {
+		        return gestDect.onTouchEvent(event);
+		    }
+		});
 			
 		// List of Runs setup:
 		runListLayout = (ListView) findViewById(R.id.my_runs);
@@ -111,17 +111,13 @@ public class MainActivity extends Activity {
 		
 		// check for first run
 		// Initialize UNIT and MAXSIZE / FROMDATE
-		if (runDB.isEmpty()) {
+		if (runDB.isEmpty())
 			(new FirstRunDialog()).show(fragMngr, "FirstRunDialog");
-			Log.i("run", "first run dialog"); }
-
-		
 	}
 	
 	@Override
 	protected void onResume() {		
 		super.onResume();
-		//Log.i("run", "main onresume");
 		runFragLayout.setY(screenHeight * -3/10);
 		slideDown();
 	}
@@ -161,7 +157,6 @@ public class MainActivity extends Activity {
 	    	case R.id.statistics:
 	    		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
 	    		if (statsFragment == null) {
-	    			Log.i("run", "new fragment");
 	    			statsFragment = new StatsFragment();
 	    			statsFragment.setRetainInstance(true);
 		    		fragTrans = fragMngr.beginTransaction();
@@ -284,12 +279,25 @@ public class MainActivity extends Activity {
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 			float deltaY = e2.getY() - e1.getY();
-			float absDeltaX = Math.abs(e2.getX() - e1.getX());
+			float deltaX = e2.getX() - e1.getX();
+			statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
+			if (statsFragment != null && statsFragment.isActive() && e1.getX() / screenWidth > 0.25) {
+				Log.i("run", "onFling stats");
+				if (Math.abs(deltaY) > SWIPE_BAD_MAX_DIST || Math.abs(velocityX) < SWIPE_THRESHOLD_VELOCITY) {
+					Log.i("run", "onFling stats invalid");
+					return false; }
+				else if (deltaX > SWIPE_MIN_DISTANCE) {
+					Log.i("run", "onFling stats animateOut");
+					statsFragment.animateOut();
+					return true; }
+			}
+			else {
 				if ((e1.getX() / screenWidth > 0.15 &&  e1.getX() / screenWidth < 0.85) 
 						&&  e1.getY() / screenHeight < 0.33) {
-					//Log.i("run", "onFling invalid");
+					//Log.i("run", "onFling out of area");
 					return false; }
-				if (absDeltaX > SWIPE_BAD_MAX_DIST || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
+				if (Math.abs(deltaX) > SWIPE_BAD_MAX_DIST || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
+					//Log.i("run", "onFling invalid");
 					return false; }
 				else if (deltaY < -(SWIPE_MIN_DISTANCE)) {
 					//Log.i("run", "onFling UP");
@@ -299,11 +307,16 @@ public class MainActivity extends Activity {
 					//Log.i("run", "onFling DOWN");
 					if (!runFragOpen) slideDown();
 					return true; }
-				return false;
+			}
+			return false;
 		}
 		@Override
 		public boolean onDown(MotionEvent e) {
-			if (!runFragOpen)
+			statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
+			if (statsFragment != null && statsFragment.isActive() && e.getX() / screenWidth < 0.25) {
+				Log.i("run", "stats ondown");
+				statsFragment.animateOut(); }
+			else if (!runFragOpen)
 				slideDown();
 			return true; }
 	}

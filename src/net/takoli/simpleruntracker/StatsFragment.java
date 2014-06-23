@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.RadioButton;
@@ -29,13 +30,19 @@ public class StatsFragment extends Fragment {
 		mainActivity = (MainActivity) getActivity();
 		runDB = mainActivity.getRunDB();
 		active = true;
-		//Log.i("run", "created: " + this.hashCode() + ", active: " + active);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		thisView = inflater.inflate(R.layout.stats_layout, container, false);
+		thisView.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Log.i("run", "stats ontouch");
+				return mainActivity.gestDect.onTouchEvent(event);
+			}
+		});
 		return thisView;
 	}
 	
@@ -115,6 +122,8 @@ public class StatsFragment extends Fragment {
 	}
 	public void onStatsInKm() {
 		mileChB.setChecked(false);
+		if (noStats())
+			return;
 		statPeriod.setText("Since " + runDB.getRunList().get(0).getDateString() + 
 				" (" + runDB.getRunList().size() + " runs)");
 		distAvg.setText("Average: " + runDB.getAvgDistString("km") + " km");
@@ -139,9 +148,4 @@ public class StatsFragment extends Fragment {
 		else
 			return false;
 	}
-	
-//	@Override
-//	public boolean onTouchEvent(MotionEvent event) {
-//		return gestDect.onTouchEvent(event);
-//	}
 }

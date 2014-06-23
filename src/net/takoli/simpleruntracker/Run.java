@@ -3,6 +3,8 @@ package net.takoli.simpleruntracker;
 import java.util.Calendar;
 import java.util.Locale;
 
+import android.util.Log;
+
 public class Run {
 	int dd, _dd;	// distance in units and in decimals
 	int distU;		// COMMON UNIT (100 * MI)
@@ -174,7 +176,9 @@ public class Run {
 		return Math.round(km / KM_TO_MI);
 	}
 	public static int mi2km(float mi) {
-		return Math.round(mi * KM_TO_MI);
+		int km = Math.round(mi * KM_TO_MI);
+		if (km % 100 == 99)	km++;
+		return km;
 	}
 	public static String sec2MMss(int sec) {
 		String MM = "" + (sec / 60);
