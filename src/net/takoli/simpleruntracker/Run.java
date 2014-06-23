@@ -167,8 +167,8 @@ public class Run {
 	public static String dec2string(long NNnn) {
 		long whole = NNnn / 100;
 		long dec = NNnn % 100;
-		if (dec == 0)
-			return whole + ".00";
+		if (dec < 10)
+			return whole + ".0" + dec;
 		else
 			return whole + "." + dec;
 	}
