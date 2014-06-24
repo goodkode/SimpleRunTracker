@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
 		fragTrans.commit();
 		mainLayout.addView(runFragLayout);
 		// enable fling up and down to open/close the top panel
-		gestDect = new GestureDetector(this, new MyGestureListener());
+		gestDect = new GestureDetector(this, new MainGestureListener());
 		runFragLayout.setOnTouchListener(new OnTouchListener() {
 		    @Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -251,7 +251,8 @@ public class MainActivity extends Activity {
 	public void slideDown() {
 		// move Distance and Time texts in
 		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
-		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);		float moveTextBy = dm.widthPixels / 5.5f - ((MyNumberPicker) findViewById(R.id.dist10)).getTextSize()*dm.density*2;
+		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);		
+		float moveTextBy = dm.widthPixels / 5.5f - ((MyNumberPicker) findViewById(R.id.dist10)).getTextSize()*dm.density*2;
 		distance.animate().translationXBy(moveTextBy).setDuration(1000);
 		time.animate().translationXBy(- moveTextBy).setDuration(1000);
 		// make the date radio buttons reappear
@@ -271,7 +272,7 @@ public class MainActivity extends Activity {
 	
 	
 	// TO OPEN AND CLOSE TOP PANEL GestureListener
-	class MyGestureListener extends SimpleOnGestureListener {
+	class MainGestureListener extends SimpleOnGestureListener {
 		private static final int SWIPE_MIN_DISTANCE = 20;
 		private static final int SWIPE_BAD_MAX_DIST = 200;
 	    private static final int SWIPE_THRESHOLD_VELOCITY = 20;
@@ -280,43 +281,26 @@ public class MainActivity extends Activity {
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 			float deltaY = e2.getY() - e1.getY();
 			float deltaX = e2.getX() - e1.getX();
-			statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
-			if (statsFragment != null && statsFragment.isActive() && e1.getX() / screenWidth > 0.25) {
-				Log.i("run", "onFling stats");
-				if (Math.abs(deltaY) > SWIPE_BAD_MAX_DIST || Math.abs(velocityX) < SWIPE_THRESHOLD_VELOCITY) {
-					Log.i("run", "onFling stats invalid");
-					return false; }
-				else if (deltaX > SWIPE_MIN_DISTANCE) {
-					Log.i("run", "onFling stats animateOut");
-					statsFragment.animateOut();
+			if ((e1.getX() / screenWidth > 0.15 &&  e1.getX() / screenWidth < 0.85) 
+					&&  e1.getY() / screenHeight < 0.33) {
+				//Log.i("run", "onFling out of area");
+				return false; }
+			if (Math.abs(deltaX) > SWIPE_BAD_MAX_DIST || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
+				//Log.i("run", "onFling invalid");
+				return false; }
+			else if (deltaY < -(SWIPE_MIN_DISTANCE)) {
+				//Log.i("run", "onFling UP");
+				slideUp();
+				return true; }
+			else if (deltaY > SWIPE_MIN_DISTANCE) {
+				//Log.i("run", "onFling DOWN");
+				if (!runFragOpen) slideDown();
 					return true; }
-			}
-			else {
-				if ((e1.getX() / screenWidth > 0.15 &&  e1.getX() / screenWidth < 0.85) 
-						&&  e1.getY() / screenHeight < 0.33) {
-					//Log.i("run", "onFling out of area");
-					return false; }
-				if (Math.abs(deltaX) > SWIPE_BAD_MAX_DIST || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
-					//Log.i("run", "onFling invalid");
-					return false; }
-				else if (deltaY < -(SWIPE_MIN_DISTANCE)) {
-					//Log.i("run", "onFling UP");
-					slideUp();
-					return true; }
-				else if (deltaY > SWIPE_MIN_DISTANCE) {
-					//Log.i("run", "onFling DOWN");
-					if (!runFragOpen) slideDown();
-					return true; }
-			}
 			return false;
 		}
 		@Override
 		public boolean onDown(MotionEvent e) {
-			statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
-			if (statsFragment != null && statsFragment.isActive() && e.getX() / screenWidth < 0.25) {
-				Log.i("run", "stats ondown");
-				statsFragment.animateOut(); }
-			else if (!runFragOpen)
+			if (!runFragOpen)
 				slideDown();
 			return true; }
 	}

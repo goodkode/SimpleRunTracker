@@ -1,11 +1,14 @@
 package net.takoli.simpleruntracker;
 
+import net.takoli.simpleruntracker.MainActivity.MainGestureListener;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -36,22 +39,27 @@ public class StatsFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		thisView = inflater.inflate(R.layout.stats_layout, container, false);
-		thisView.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				Log.i("run", "stats ontouch");
-				return mainActivity.gestDect.onTouchEvent(event);
-			}
-		});
 		return thisView;
 	}
 	
 	@Override
 	public void onStart() {
 		super.onStart();
+		View statsPanel = getActivity().findViewById(R.id.stats_panel_scroll);
+		View leftPanel = getActivity().findViewById(R.id.stats_left);
 		int width = getResources().getDisplayMetrics().widthPixels;
+		OnTouchListener touchToClose = new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				animateOut();
+				return true;
+				//GestureDetector statsGestDect = new GestureDetector(mainActivity, new StatsGestureListener());
+				//return statsGestDect.onTouchEvent(event);
+			} };
 		thisView.setX(width); 
-		getActivity().findViewById(R.id.stats_left).setAlpha(0);
+		leftPanel.setAlpha(0);
+		statsPanel.setOnTouchListener(touchToClose);
+		leftPanel.setOnTouchListener(touchToClose);
 	}
 
 	@Override
@@ -111,7 +119,8 @@ public class StatsFragment extends Fragment {
 		if (noStats())
 			return;
 		statPeriod.setText("Since " + runDB.getRunList().get(0).getDateString() + 
-					" (" + runDB.getRunList().size() + " runs)");
+					" (" + runDB.getRunList().size() +
+					(runDB.getRunList().size() == 1 ? " run)" : " runs)"));
 		distAvg.setText("Average: " + runDB.getAvgDistString("mi") + " mi");
 		distMax.setText("Longest: " + runDB.getMaxDistString("mi") + " mi");
 		distTotal.setText("Total: " + runDB.getTotalDistString("mi") + " mi");
@@ -125,7 +134,8 @@ public class StatsFragment extends Fragment {
 		if (noStats())
 			return;
 		statPeriod.setText("Since " + runDB.getRunList().get(0).getDateString() + 
-				" (" + runDB.getRunList().size() + " runs)");
+				" (" + runDB.getRunList().size() +
+				(runDB.getRunList().size() == 1 ? " run)" : " runs)"));
 		distAvg.setText("Average: " + runDB.getAvgDistString("km") + " km");
 		distMax.setText("Longest: " + runDB.getMaxDistString("km") + " km");
 		distTotal.setText("Total: " + runDB.getTotalDistString("km") + " km");
@@ -147,5 +157,23 @@ public class StatsFragment extends Fragment {
 		}
 		else
 			return false;
+	}
+	
+	// TO OPEN AND CLOSE TOP PANEL GestureListener
+	class StatsGestureListener extends SimpleOnGestureListener {
+		private static final int SWIPE_MIN_DISTANCE = 20;
+		private static final int SWIPE_BAD_MAX_DIST = 200;
+	    private static final int SWIPE_THRESHOLD_VELOCITY = 20;
+		
+		public boolean onScroll(MotionEvent e1, MotionEvent e2,
+				float distanceX, float distanceY) {
+			if (distanceX > SWIPE_MIN_DISTANCE && distanceY < SWIPE_BAD_MAX_DIST)
+				animateOut();
+			Log.i("run", distanceX + ", " + distanceY);
+			return super.onScroll(e1, e2, distanceX, distanceY);
+		}
+		@Override
+		public boolean onDown(MotionEvent e) {
+			return true; }
 	}
 }
