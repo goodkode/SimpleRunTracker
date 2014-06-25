@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -110,27 +111,35 @@ public class MainActivity extends Activity {
 		graph.setRunList(runDB, getUnit());
 		
 		// check for first run
-		// Initialize UNIT and MAXSIZE / FROMDATE
+		// Initialize UNIT
 		if (runDB.isEmpty())
 			(new FirstRunDialog()).show(fragMngr, "FirstRunDialog");
 	}
 	
 	@Override
-	protected void onResume() {		
+	protected void onResume() {
 		super.onResume();
-		runFragLayout.setY(screenHeight * -3/10);
+		if (runFragLayout != null)
+			runFragLayout.setY(screenHeight * -3/10);
 		slideDown();
 	}
 	@Override
 	protected void onPause() {
 		slideUp();
 		super.onPause();
+		onDestroy();
 	}
 	
 	@Override
 	protected void onStop() {
 		runDB.saveRunDB(this);
 		super.onStop();
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		Log.i("run", "configchanged");
+		super.onConfigurationChanged(newConfig);
 	}
 	
 	@Override
@@ -149,11 +158,8 @@ public class MainActivity extends Activity {
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
-	    	case R.id.settings:
-	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
-	            return true; 
+	    	case R.id.stats_icon:
 	    	case R.id.statistics:
 	    		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
 	    		if (statsFragment == null) {
@@ -170,6 +176,9 @@ public class MainActivity extends Activity {
 	    				statsFragment.animateIn();
 	    		}
 	            return true;
+	    	case R.id.settings:
+	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
+	            return true; 
 	    	case R.id.export_list_of_runs:
 	        	runDB.saveToExternalMemory(this);
 	        	Intent emailIntent = runDB.emailIntent(this);
@@ -221,7 +230,7 @@ public class MainActivity extends Activity {
 		editor.commit();
 	}
 	public String getDBLimit() {
-		return settings.getString("limit", "10");
+		return settings.getString("limit", "100");
 	}
 	public void updateGraph() {
 		if (graph != null) {

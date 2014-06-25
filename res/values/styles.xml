@@ -20,7 +20,6 @@
     </style>
     
     <style name="AlertDialogCustom" parent="android:Theme.Holo.Light" >
-        <item name="android:textColor">#FF0000</item>
     </style>
 
 </resources>

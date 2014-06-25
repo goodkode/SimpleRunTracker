@@ -45,7 +45,7 @@ public class StatsFragment extends Fragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		View statsPanel = getActivity().findViewById(R.id.stats_panel_scroll);
+		View statsPanel = getActivity().findViewById(R.id.stats_panel);
 		View leftPanel = getActivity().findViewById(R.id.stats_left);
 		int width = getResources().getDisplayMetrics().widthPixels;
 		OnTouchListener touchToClose = new OnTouchListener() {
@@ -53,8 +53,6 @@ public class StatsFragment extends Fragment {
 			public boolean onTouch(View v, MotionEvent event) {
 				animateOut();
 				return true;
-				//GestureDetector statsGestDect = new GestureDetector(mainActivity, new StatsGestureListener());
-				//return statsGestDect.onTouchEvent(event);
 			} };
 		thisView.setX(width); 
 		leftPanel.setAlpha(0);
@@ -157,23 +155,5 @@ public class StatsFragment extends Fragment {
 		}
 		else
 			return false;
-	}
-	
-	// TO OPEN AND CLOSE TOP PANEL GestureListener
-	class StatsGestureListener extends SimpleOnGestureListener {
-		private static final int SWIPE_MIN_DISTANCE = 20;
-		private static final int SWIPE_BAD_MAX_DIST = 200;
-	    private static final int SWIPE_THRESHOLD_VELOCITY = 20;
-		
-		public boolean onScroll(MotionEvent e1, MotionEvent e2,
-				float distanceX, float distanceY) {
-			if (distanceX > SWIPE_MIN_DISTANCE && distanceY < SWIPE_BAD_MAX_DIST)
-				animateOut();
-			Log.i("run", distanceX + ", " + distanceY);
-			return super.onScroll(e1, e2, distanceX, distanceY);
-		}
-		@Override
-		public boolean onDown(MotionEvent e) {
-			return true; }
 	}
 }

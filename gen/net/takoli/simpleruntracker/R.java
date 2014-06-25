@@ -46,6 +46,7 @@ public final class R {
         public static final int runtracker_icon_promo=0x7f020009;
         public static final int runtracker_wide=0x7f02000a;
         public static final int runtracker_wide_simple=0x7f02000b;
+        public static final int stats_icon=0x7f02000c;
     }
     public static final class id {
         public static final int after_run_message=0x7f070005;
@@ -55,7 +56,7 @@ public final class R {
         public static final int date_radiobuttons=0x7f07001b;
         public static final int date_today=0x7f07001c;
         public static final int date_yesterday=0x7f07001d;
-        public static final int delete_db=0x7f070049;
+        public static final int delete_db=0x7f07004a;
         public static final int dist1=0x7f07000c;
         public static final int dist10=0x7f07000b;
         public static final int dist_01=0x7f07000f;
@@ -69,7 +70,7 @@ public final class R {
         public static final int edit_name=0x7f07003b;
         public static final int enter_run_button=0x7f07001f;
         public static final int enter_run_frame=0x7f070000;
-        public static final int export_list_of_runs=0x7f070048;
+        public static final int export_list_of_runs=0x7f070049;
         public static final int graph=0x7f070004;
         public static final int header_info=0x7f07002b;
         public static final int hour=0x7f070012;
@@ -93,7 +94,7 @@ public final class R {
         public static final int run_time=0x7f070023;
         public static final int sec1=0x7f070018;
         public static final int sec10=0x7f070017;
-        public static final int settings=0x7f070046;
+        public static final int settings=0x7f070048;
         public static final int statistics=0x7f070047;
         public static final int stats_distance_avg=0x7f070033;
         public static final int stats_distance_label=0x7f070032;
@@ -101,6 +102,7 @@ public final class R {
         public static final int stats_distance_total=0x7f070035;
         public static final int stats_divider=0x7f07002e;
         public static final int stats_for_period=0x7f070031;
+        public static final int stats_icon=0x7f070046;
         public static final int stats_km=0x7f07003a;
         public static final int stats_layout=0x7f07002c;
         public static final int stats_left=0x7f07002d;
@@ -108,7 +110,7 @@ public final class R {
         public static final int stats_pace_label=0x7f070036;
         public static final int stats_pace_speed_avg=0x7f070037;
         public static final int stats_pace_speed_max=0x7f070038;
-        public static final int stats_panel_scroll=0x7f07002f;
+        public static final int stats_panel=0x7f07002f;
         public static final int stats_title=0x7f070030;
         public static final int time=0x7f07001a;
         public static final int top=0x7f07000a;
@@ -142,6 +144,7 @@ public final class R {
         public static final int export_list_of_runs=0x7f0a0002;
         public static final int settings=0x7f0a0001;
         public static final int statistics=0x7f0a0004;
+        public static final int stats=0x7f0a0005;
     }
     public static final class style {
         public static final int AlertDialogCustom=0x7f080004;
