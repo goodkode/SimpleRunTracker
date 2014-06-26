@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 public class StatsFragment extends Fragment {
 
-	private boolean active;
+	private boolean active = true;
 	private MainActivity mainActivity;
 	private View thisView, leftOverlay;
 	private RunDB runDB;
@@ -30,20 +30,22 @@ public class StatsFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mainActivity = (MainActivity) getActivity();
-		runDB = mainActivity.getRunDB();
 		active = true;
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		//Log.i("run", "onCreateView");
+		mainActivity = (MainActivity) getActivity();
+		runDB = mainActivity.getRunDB();
 		thisView = inflater.inflate(R.layout.stats_layout, container, false);
 		return thisView;
 	}
 	
 	@Override
 	public void onStart() {
+		//Log.i("run", "onStart");
 		super.onStart();
 		View statsPanel = getActivity().findViewById(R.id.stats_panel);
 		View leftPanel = getActivity().findViewById(R.id.stats_left);
@@ -84,8 +86,10 @@ public class StatsFragment extends Fragment {
 				if (isChecked) 
 					onStatsInKm(); } });
 		unit = ((MainActivity) getActivity()).getUnit();
-		if (unit.compareTo("km") == 0)   kmChB.setChecked(true);
-		else 							mileChB.setChecked(true);
+		if (unit.compareTo("km") == 0)   
+			kmChB.setChecked(true);
+		else 							
+			mileChB.setChecked(true);
 		if (active)	
 			animateIn();
 	}
@@ -104,8 +108,7 @@ public class StatsFragment extends Fragment {
 	public void animateIn() {
 		active = true;
 		thisView.animate().translationX(0).setDuration(700);
-		leftOverlay.animate().alpha(0.5f)
-				.setDuration(2000).setInterpolator(new AccelerateInterpolator());
+		leftOverlay.animate().alpha(0.5f).setDuration(2000).setInterpolator(new AccelerateInterpolator());
 		if (kmChB.isChecked())
 			onStatsInKm();
 		else if (mileChB.isChecked())
