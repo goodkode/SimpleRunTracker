@@ -198,4 +198,17 @@ public class Run {
 		else
 			return h + ":" + MM + ":" + sec;
 	}
+	public static Calendar setTodayDate() {
+		return Calendar.getInstance();
+	}
+	public static Calendar setYesterdayDate() {
+		Calendar date =  Calendar.getInstance();
+		date.add(Calendar.DAY_OF_YEAR, -1);
+		return date;
+	}
+	public static Calendar setCustomDate(int month, int day, int year) {
+		Calendar date =  Calendar.getInstance();
+		date.set(year, month, day);
+		return date;
+	}
 }

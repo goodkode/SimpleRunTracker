@@ -121,7 +121,7 @@ public class StatsFragment extends Fragment {
 			return;
 		statPeriod.setText("Since " + runDB.getRunList().get(0).getDateString() + 
 					" (" + runDB.getRunList().size() +
-					(runDB.getRunList().size() == 1 ? " run)" : " runs)"));
+					(runDB.getRunList().size() == 1 ? " workout)" : " workouts)"));
 		distAvg.setText("Average: " + runDB.getAvgDistString("mi") + " mi");
 		distMax.setText("Longest: " + runDB.getMaxDistString("mi") + " mi");
 		distTotal.setText("Total: " + runDB.getTotalDistString("mi") + " mi");
@@ -136,7 +136,7 @@ public class StatsFragment extends Fragment {
 			return;
 		statPeriod.setText("Since " + runDB.getRunList().get(0).getDateString() + 
 				" (" + runDB.getRunList().size() +
-				(runDB.getRunList().size() == 1 ? " run)" : " runs)"));
+				(runDB.getRunList().size() == 1 ? " workout)" : " workouts)"));
 		distAvg.setText("Average: " + runDB.getAvgDistString("km") + " km");
 		distMax.setText("Longest: " + runDB.getMaxDistString("km") + " km");
 		distTotal.setText("Total: " + runDB.getTotalDistString("km") + " km");

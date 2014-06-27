@@ -109,24 +109,22 @@ public class EnterRun extends Fragment {
 		dividerLine.setPadding(dm.widthPixels / 5, 0, dm.widthPixels / 5, 0);
 		
 		// Datepicker 
+		runDate = Run.setTodayDate();
 		((RadioButton) getActivity().findViewById(R.id.date_today)).setTextSize(hour.getTextSize() / 1.6f);
 		((RadioButton) getActivity().findViewById(R.id.date_yesterday)).setTextSize(hour.getTextSize() / 1.6f);
 		((RadioButton) getActivity().findViewById(R.id.date_picker)).setTextSize(hour.getTextSize() / 1.6f);
-		runDate = Calendar.getInstance(Locale.US);
 		dateGroup = (RadioGroup) getActivity().findViewById(R.id.date_radiobuttons);
 		dateGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				switch (checkedId) {
 				case R.id.date_today:
-					runDate = Calendar.getInstance();
+					runDate = Run.setTodayDate();
 					break;
 				case R.id.date_yesterday:
-					runDate = Calendar.getInstance();
-					runDate.roll(Calendar.DAY_OF_YEAR, -1);
+					runDate = Run.setYesterdayDate();
 					break;
-				default:
-					runDate = Calendar.getInstance();
+				case R.id.date_picker:
 					break;
 				}
 			}});
@@ -232,7 +230,7 @@ public class EnterRun extends Fragment {
 		public void onDateSet(DatePicker view, int year, int month, int day) {
 			MainActivity mainActivity = (MainActivity) getActivity();
 			EnterRun enterRun = (EnterRun) mainActivity.enterRun;
-			enterRun.runDate.set(year, month, day);
+			enterRun.runDate = Run.setCustomDate(month, day, year);
 			String m;
 			switch (month) {
 				case 0: m = "Jan"; break;

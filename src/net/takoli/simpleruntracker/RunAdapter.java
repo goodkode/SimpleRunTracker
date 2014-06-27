@@ -52,8 +52,12 @@ public class RunAdapter extends BaseAdapter {
 		super.notifyDataSetChanged();
 		TextView headerText = (TextView) parent.findViewById(R.id.header_info);
 		String header;
-		if (runList.size() == 0) header = "Empty list";
- 		else header = "Showing " + runList.size();
+		if (runList.size() == 0) 
+			header = "Empty list";
+ 		else if (runList.size() == 1) 
+ 			header = "Showing " + runList.size() + " workout";
+		else 
+			header = "Showing " + runList.size() + " workouts";
  		headerText.setText(header);
 	}
 
