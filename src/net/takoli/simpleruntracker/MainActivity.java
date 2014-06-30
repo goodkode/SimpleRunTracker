@@ -55,6 +55,9 @@ public class MainActivity extends Activity {
 		getActionBar().setDisplayShowTitleEnabled(false);
 		settings = getPreferences(MODE_PRIVATE);
 		
+		// FOR TESTING ONLY
+		setDBLimit("100");
+		
 		// Set up variables and fields
 		setContentView(R.layout.activity_main);
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);

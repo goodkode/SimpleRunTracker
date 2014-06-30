@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settings_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/settings_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center_horizontal"
+        android:textSize="17sp"
+        android:text="Please select the distance unit of your workouts" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/settings_miles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:textSize="16sp"
+            android:text="Miles" />
+
+        <RadioButton
+            android:id="@+id/settings_kilometers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Kilometers" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/settings_how_many_to_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center_horizontal"
+        android:textSize="17sp"
+        android:text="How many workouts to save:" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+	    <RadioButton
+	        android:id="@+id/settings_100"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="6dp"
+            android:textSize="16sp"
+	        android:text="100" />
+	
+	    <RadioButton
+	        android:id="@+id/settings_300"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="6dp"
+            android:textSize="16sp"
+	        android:text="300" />
+	
+	    <RadioButton
+	        android:id="@+id/settings_500"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:textSize="16sp"
+	        android:text="500" />
+	</RadioGroup> 
+	
+    <TextView
+        android:id="@+id/settings_based_on_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textSize="17sp"
+        android:text="Or based on a date:" />
+
+    <RadioButton
+        android:id="@+id/settings_starting_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Pick a date..." />
+    
+</LinearLayout>

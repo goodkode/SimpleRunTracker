@@ -13,7 +13,6 @@ import android.widget.Toast;
 public class FirstRunDialog extends DialogFragment {
 
 	MainActivity main;
-	View settingsView;
 	TextView unitTV;
 	String unit;
 	boolean updated = false;
@@ -46,10 +45,9 @@ public class FirstRunDialog extends DialogFragment {
     	super.onStop();
     	if (updated) {
     	main.setUnit(unit);
-	    	Toast.makeText(main, "New runs will be entered in " + main.getUnitInFull(), Toast.LENGTH_LONG).show();
+	    	Toast.makeText(main, "New runs will be entered in " + main.getUnitInFull(), Toast.LENGTH_SHORT).show();
 	    	unitTV = ((TextView) main.findViewById(R.id.dist_unit));
 	    	unitTV.setText(unit);
-	    	//unitTV.setGravity(Gravity.CENTER_VERTICAL);
 	    	main.getGraphView().setRunList(main.getRunDB(), main.getUnit());
 	    	main.updateGraph();}
     }

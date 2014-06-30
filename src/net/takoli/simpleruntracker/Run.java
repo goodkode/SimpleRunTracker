@@ -164,6 +164,23 @@ public class Run {
 	}
 	
 	// utility functions
+	public static Calendar string2date(String stringDate) {
+		Calendar date = Calendar.getInstance();
+		String[] stringDateArray = stringDate.split("/");
+		try {
+			date.setTimeInMillis(0);
+			date.set(Calendar.MONTH, (Integer.parseInt(stringDateArray[0]) - 1));
+			date.set(Calendar.DAY_OF_MONTH, Integer.parseInt(stringDateArray[1]));
+			date.set(Calendar.YEAR, Integer.parseInt(stringDateArray[2]));
+			return date;
+		} catch (Exception e) {
+			Log.i("run", "date parse exception");
+			date.setTimeInMillis(0);
+			date.set(Calendar.MONTH, 0);
+			date.set(Calendar.DAY_OF_MONTH, 1);
+			date.set(Calendar.YEAR, 2010);
+			return date; }
+	}
 	public static String dec2string(long NNnn) {
 		long whole = NNnn / 100;
 		long dec = NNnn % 100;
