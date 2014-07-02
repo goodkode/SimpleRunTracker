@@ -3,12 +3,15 @@ package net.takoli.simpleruntracker;
 import java.util.Calendar;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -83,8 +86,11 @@ public class SettingsDialog extends DialogFragment {
 				if (((RadioButton) v).isChecked()) {
 					r100.setChecked(false);
 					r300.setChecked(false);
-					r500.setChecked(false);
-		} } });
+					r500.setChecked(false); }
+				SettingsDatePickerFragment datePicker = new SettingsDatePickerFragment();
+				datePicker.setParentView(settingsView);
+				datePicker.show(getFragmentManager(), "settingsDatePicker");
+		} });
     }
     
     private void updateValues() {
@@ -114,4 +120,35 @@ public class SettingsDialog extends DialogFragment {
     		Toast.makeText(main, "New size of the DB is " + newLimit, Toast.LENGTH_SHORT).show();
     	}
     }
+    
+	public static class SettingsDatePickerFragment extends DialogFragment implements
+			DatePickerDialog.OnDateSetListener {
+		
+		DatePickerDialog datePickerDialog;
+		AlertDialog settingsDialog;
+		MainActivity main;
+		RadioButton startDate;
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			datePickerDialog = new DatePickerDialog(getActivity(), this, 2010, 0, 1);
+			DatePicker datePicker = datePickerDialog.getDatePicker();
+			datePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
+			datePickerDialog.setTitle("Save workouts from this date on");
+			return datePickerDialog;
+		}
+		
+		public void setParentView(AlertDialog parent) {
+			settingsDialog = parent;
+		}
+
+		public void onDateSet(DatePicker view, int year, int month, int day) {
+			main = (MainActivity) getActivity();
+			startDate = (RadioButton) settingsDialog.findViewById(R.id.settings_starting_date);
+			if (startDate == null)
+				Log.i("run", "null");
+			else
+			startDate.setText(Run.getFullStringDate(year, month, day));
+		}
+	}
 }

@@ -228,4 +228,24 @@ public class Run {
 		date.set(year, month, day);
 		return date;
 	}
+	public static String getFullStringDate(int year, int month, int day) {
+		String m = "";
+		switch (month) {
+			case 0: 	m = "Jan"; break;
+			case 1: 	m = "Feb"; break;
+			case 2: 	m = "Mar"; break;
+			case 3: 	m = "Apr"; break;
+			case 4: 	m = "May"; break;
+			case 5: 	m = "Jun"; break;
+			case 6: 	m = "Jul"; break;
+			case 7: 	m = "Aug"; break;
+			case 8: 	m = "Sep"; break;
+			case 9: 	m = "Oct"; break;
+			case 10: 	m = "Nov"; break;
+			case 11: 	m = "Dec"; break;
+		}
+		String y = year % 100 < 10 ? ("'0" + year % 100)
+				: ("'" + year % 100);
+		return m + " " + day + ", " + y;
+	}
 }

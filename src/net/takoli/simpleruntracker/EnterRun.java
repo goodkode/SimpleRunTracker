@@ -2,7 +2,6 @@ package net.takoli.simpleruntracker;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
-import java.util.Locale;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -171,13 +170,13 @@ public class EnterRun extends Fragment {
 	}
 	
 	
-	// this and the DatePickerFragment support picking a date
+	// this and the RedDatePickerFragment support picking a date
 	public void pickDate() {
-		DialogFragment datePickerFragment = new DatePickerFragment();
+		DialogFragment datePickerFragment = new RedDatePickerFragment();
 		datePickerFragment.show(getFragmentManager(), "datePicker");
 	}
 	
-	public static class DatePickerFragment extends DialogFragment implements
+	public static class RedDatePickerFragment extends DialogFragment implements
 			DatePickerDialog.OnDateSetListener {
 
 		@Override
