@@ -21,11 +21,11 @@ public class SettingsDialog extends DialogFragment {
 	private MainActivity main;
 	private AlertDialog settingsView;
 	private RadioButton rMiles, rKm, r100, r300, r500, rDate;
-	private Calendar startDate;
 	private String origUnit;
 	private String origLimit;
 	private String newUnit;
-	private String newLimit;
+	private String newLimit, newLimitDate;
+	private boolean rDateUpdated = false;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -68,14 +68,14 @@ public class SettingsDialog extends DialogFragment {
     	else if (origLimit.compareTo("500") == 0)
     		r500.setChecked(true);
     	else {
-    		startDate = Run.string2date(origLimit);
-    		rDate.setText(origLimit);
+    		rDate.setText(Run.getFullStringDate(origLimit));
+    		rDate.setChecked(true);
     	}
     	OnClickListener deselectRDate = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (((RadioButton) v).isChecked())
-					rDate.setChecked(false); 
+					rDate.setChecked(false);
 		} };
     	r100.setOnClickListener(deselectRDate);
     	r300.setOnClickListener(deselectRDate);
@@ -88,6 +88,7 @@ public class SettingsDialog extends DialogFragment {
 					r300.setChecked(false);
 					r500.setChecked(false); }
 				SettingsDatePickerFragment datePicker = new SettingsDatePickerFragment();
+				datePicker.setParent(SettingsDialog.this);
 				datePicker.setParentView(settingsView);
 				datePicker.show(getFragmentManager(), "settingsDatePicker");
 		} });
@@ -113,11 +114,18 @@ public class SettingsDialog extends DialogFragment {
     		newLimit = "300";
     	else if (r500.isChecked())
     		newLimit = "500";
-    	else
-    		newLimit = "TO DO";
+    	else if (rDateUpdated)
+    		newLimit = newLimitDate;
+    	else 
+    		newLimit = origLimit;
     	if (newLimit.compareTo(origLimit) != 0) {
     		main.setDBLimit(newLimit);
-    		Toast.makeText(main, "New size of the DB is " + newLimit, Toast.LENGTH_SHORT).show();
+    		if (rDate.isChecked())
+    			Toast.makeText(main, "Workouts after " + Run.getFullStringDate(newLimitDate) + " will be recorded", 
+    					Toast.LENGTH_SHORT).show();
+    		else
+    			Toast.makeText(main, "Last " + newLimit + " workouts will be recorded", 
+    					Toast.LENGTH_SHORT).show();
     	}
     }
     
@@ -125,7 +133,8 @@ public class SettingsDialog extends DialogFragment {
 			DatePickerDialog.OnDateSetListener {
 		
 		DatePickerDialog datePickerDialog;
-		AlertDialog settingsDialog;
+		SettingsDialog settingsDialog;
+		AlertDialog settingsDialogView;
 		MainActivity main;
 		RadioButton startDate;
 
@@ -138,17 +147,20 @@ public class SettingsDialog extends DialogFragment {
 			return datePickerDialog;
 		}
 		
-		public void setParentView(AlertDialog parent) {
+		public void setParent(SettingsDialog parent) {
 			settingsDialog = parent;
+		}
+		
+		public void setParentView(AlertDialog parentView) {
+			settingsDialogView = parentView;
 		}
 
 		public void onDateSet(DatePicker view, int year, int month, int day) {
 			main = (MainActivity) getActivity();
-			startDate = (RadioButton) settingsDialog.findViewById(R.id.settings_starting_date);
-			if (startDate == null)
-				Log.i("run", "null");
-			else
+			startDate = (RadioButton) settingsDialogView.findViewById(R.id.settings_starting_date);
 			startDate.setText(Run.getFullStringDate(year, month, day));
+			settingsDialog.newLimitDate = (month + 1) + "/" + day + "/" + year;
+			settingsDialog.rDateUpdated = true;
 		}
 	}
 }

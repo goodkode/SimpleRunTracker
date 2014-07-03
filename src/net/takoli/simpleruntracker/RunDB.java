@@ -22,9 +22,7 @@ import android.widget.Toast;
 public class RunDB {
 
 	private ArrayList<Run> runList;
-	private long sumDistU, sumTimeU;
-	private static final float KM_TO_MI = 1.60934f;
-	
+	private long sumDistU, sumTimeU;	
 	private final String FILE_NAME = "RunTracker-runlist.csv";
 	private int MAXSIZE;
 	private Calendar FROMDATE;
@@ -64,20 +62,12 @@ public class RunDB {
 			MAXSIZE = Integer.parseInt(limit);
 		} catch (NumberFormatException nfe) {
 			MAXSIZEisUsed = false;
-		}
-		if (!MAXSIZEisUsed) {
-			String[] dateSt;
-			try {
-				dateSt = limit.split("/");
-			} catch (Exception e) {
-				Log.i("run", "setDBLimit string split error");
-				return;
+		} finally {
+			if (!MAXSIZEisUsed) {
+				Log.i("run", "DB: date");
+				FROMDATE = Run.string2calendar(limit);
 			}
-			FROMDATE.set(Calendar.MONTH, Integer.parseInt(dateSt[0]));
-			FROMDATE.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateSt[1]));
-			FROMDATE.set(Calendar.YEAR, Integer.parseInt(dateSt[2]));
-		}
-		ensureDBLimit();
+			ensureDBLimit(); }
 	}
 	
 	public void ensureDBLimit() {

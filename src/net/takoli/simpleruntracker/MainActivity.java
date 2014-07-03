@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
 		settings = getPreferences(MODE_PRIVATE);
 		
 		// FOR TESTING ONLY
-		setDBLimit("100");
+		//setDBLimit("100");
 		
 		// Set up variables and fields
 		setContentView(R.layout.activity_main);
@@ -108,13 +108,13 @@ public class MainActivity extends Activity {
 					slideUp(); return true; }
 				return false; }
 		});
+		myAdapter.notifyDataSetChanged();
 		
 		// Graph initial setup
 		graph = (GraphView) findViewById(R.id.graph);
 		graph.setRunList(runDB, getUnit());
 		
 		// check for first run
-		// Initialize UNIT
 		if (runDB.isEmpty())
 			(new FirstRunDialog()).show(fragMngr, "FirstRunDialog");
 	}
@@ -137,12 +137,6 @@ public class MainActivity extends Activity {
 	protected void onStop() {
 		runDB.saveRunDB(this);
 		super.onStop();
-	}
-	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		Log.i("run", "configchanged");
-		super.onConfigurationChanged(newConfig);
 	}
 	
 	@Override
@@ -231,6 +225,7 @@ public class MainActivity extends Activity {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putString("limit", limit);
 		editor.commit();
+		runDB.ensureDBLimit();
 	}
 	public String getDBLimit() {
 		return settings.getString("limit", "100");
