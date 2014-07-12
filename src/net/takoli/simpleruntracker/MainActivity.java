@@ -225,6 +225,7 @@ public class MainActivity extends Activity {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putString("limit", limit);
 		editor.commit();
+		runDB.setDBLimit(limit);
 		runDB.ensureDBLimit();
 	}
 	public String getDBLimit() {
@@ -259,7 +260,7 @@ public class MainActivity extends Activity {
 		// move Distance and Time texts in
 		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
 		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);		
-		float moveTextBy = dm.widthPixels / 5.5f - ((MyNumberPicker) findViewById(R.id.dist10)).getTextSize()*dm.density*2;
+		float moveTextBy = dm.widthPixels / 5.5f - ((BigNumberPicker) findViewById(R.id.dist10)).getTextSize()*dm.density*2;
 		distance.animate().translationXBy(moveTextBy).setDuration(1000);
 		time.animate().translationXBy(- moveTextBy).setDuration(1000);
 		// make the date radio buttons reappear

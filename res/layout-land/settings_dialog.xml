@@ -14,9 +14,9 @@
         android:id="@+id/settings_unit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:gravity="center_horizontal"
-        android:textSize="17sp"
+        android:textSize="15sp"
         android:text="Please select the distance unit of your workouts" />
 
     <RadioGroup
@@ -29,30 +29,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="6dp"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:text="Miles" />
 
         <RadioButton
             android:id="@+id/settings_kilometers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:text="Kilometers" />
     </RadioGroup>
     
     <View
         android:layout_width="140dp"
         android:layout_height="6px"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:background="#33b5e5" />
 
     <TextView
         android:id="@+id/settings_how_many_to_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:gravity="center_horizontal"
-        android:textSize="17sp"
+        android:textSize="15sp"
         android:text="How many workouts to save:" />
 
     <RadioGroup
@@ -64,7 +64,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginRight="6dp"
-            android:textSize="16sp"
+            android:textSize="14sp"
 	        android:text="100" />
 	
 	    <RadioButton
@@ -72,29 +72,29 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginRight="6dp"
-            android:textSize="16sp"
+            android:textSize="14sp"
 	        android:text="300" />
 	
 	    <RadioButton
 	        android:id="@+id/settings_500"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="14sp"
 	        android:text="500" />
 	</RadioGroup> 
 	
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:textSize="17sp"
+        android:layout_marginTop="4dp"
+        android:textSize="15sp"
         android:text="Or starting this date:" />
 
     <RadioButton
         android:id="@+id/settings_starting_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:text="Pick a date..." />
     
 </LinearLayout>

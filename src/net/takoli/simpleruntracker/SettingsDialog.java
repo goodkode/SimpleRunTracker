@@ -8,7 +8,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.DatePicker;
@@ -30,9 +29,8 @@ public class SettingsDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
     	main = (MainActivity) getActivity();
-    	View view = getActivity().getLayoutInflater().inflate(R.layout.settings_dialog, null);
         settingsView =  new AlertDialog.Builder(getActivity())
-        		.setView(view)
+        		.setView(getActivity().getLayoutInflater().inflate(R.layout.settings_dialog, null))
         		.setTitle("Settings")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Ok",
@@ -120,12 +118,14 @@ public class SettingsDialog extends DialogFragment {
     		newLimit = origLimit;
     	if (newLimit.compareTo(origLimit) != 0) {
     		main.setDBLimit(newLimit);
+    		main.getRunDB().ensureDBLimit();
     		if (rDate.isChecked())
     			Toast.makeText(main, "Workouts after " + Run.getFullStringDate(newLimitDate) + " will be recorded", 
     					Toast.LENGTH_SHORT).show();
     		else
     			Toast.makeText(main, "Last " + newLimit + " workouts will be recorded", 
     					Toast.LENGTH_SHORT).show();
+    		main.getRunAdapter().notifyDataSetChanged();
     	}
     }
     

@@ -25,7 +25,7 @@ public class StatsFragment extends Fragment {
 	private RunDB runDB;
 	private String unit;
 	private RadioButton mileChB, kmChB;
-	private TextView statPeriod, distAvg, distMax, distTotal, paceSpeedAvg, paceSpeedMax;
+	private TextView statPeriod, distAvg, distMax, distTotal, paceSpeedAvg, paceSpeedMax, dailyAvg;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class StatsFragment extends Fragment {
 		distTotal = (TextView) getActivity().findViewById(R.id.stats_distance_total);
 		paceSpeedAvg = (TextView) getActivity().findViewById(R.id.stats_pace_speed_avg);
 		paceSpeedMax = (TextView) getActivity().findViewById(R.id.stats_pace_speed_max);
+		dailyAvg = (TextView) getActivity().findViewById(R.id.stats_daily_avg_portrait_only);
 		mileChB = (RadioButton) getActivity().findViewById(R.id.stats_mi);
 		kmChB = (RadioButton) getActivity().findViewById(R.id.stats_km);
 		mileChB.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -129,6 +130,9 @@ public class StatsFragment extends Fragment {
 									" (" + runDB.getAvgSpeedString("mi") + " mph)");
 		paceSpeedMax.setText("Fastest: " + runDB.getMaxPaceString("mi") + " min/mi" +
 									" (" + runDB.getMaxSpeedString("mi") + " mph)");
+		if (dailyAvg != null)
+			dailyAvg.setText("Your daily average is " + runDB.getDailyAvgString("mi") + " miles." + 
+								"\nThat's " + runDB.getWeeklyAvgString("mi") + " miles weekly.");
 	}
 	public void onStatsInKm() {
 		mileChB.setChecked(false);
@@ -144,6 +148,9 @@ public class StatsFragment extends Fragment {
 									" (" + runDB.getAvgSpeedString("km") + " km/h)");
 		paceSpeedMax.setText("Fastest: " + runDB.getMaxPaceString("km") + " min/km" +
 									" (" + runDB.getMaxSpeedString("km") + " km/h)");
+		if (dailyAvg != null)
+			dailyAvg.setText("Your daily average is " + runDB.getDailyAvgString("km") + " km." + 
+								"\nThat's " + runDB.getWeeklyAvgString("km") + " km weekly.");
 	}
 	
 	public boolean noStats() {

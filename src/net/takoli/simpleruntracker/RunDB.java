@@ -64,8 +64,8 @@ public class RunDB {
 			MAXSIZEisUsed = false;
 		} finally {
 			if (!MAXSIZEisUsed) {
-				Log.i("run", "DB: date");
 				FROMDATE = Run.string2calendar(limit);
+				FROMDATE.add(Calendar.DAY_OF_YEAR, -1);
 			}
 			ensureDBLimit(); }
 	}
@@ -83,9 +83,8 @@ public class RunDB {
 				sumDistU -= runList.get(i).getDistUNIT();
 				sumTimeU -= runList.get(i).getTimeUNIT();
 			}
-			if (toDelete > 0) {
+			if (toDelete > 0)
 				runList.subList(0, toDelete).clear();
-				Log.i("run", "ensureDBLimit NUM delete: " + toDelete); }
 		}
 		else {
 			int toDelete = 0;
@@ -95,8 +94,6 @@ public class RunDB {
 				toDelete++;
 			}
 			runList.subList(0, toDelete).clear();
-			if (toDelete > 0)
-				Log.i("run", "ensureDBLimit DATE delete: " + toDelete);
 		}
 	}
 	
@@ -161,6 +158,11 @@ public class RunDB {
 	public int getAvgSpeedUNIT() {
 		return Math.round((sumDistU) / (sumTimeU / 60.0f / 60.0f));
 	}
+	public int getDailyAvgUNIT() {
+		long daysPassed = (runList.get(runList.size() - 1).date.getTimeInMillis() - 
+				runList.get(0).date.getTimeInMillis()) / 1000 / 60 / 60 / 24 + 1;
+		return (int) (sumDistU / daysPassed);
+	}
 	
 	
 	// for STATISTICS return Strings
@@ -190,6 +192,20 @@ public class RunDB {
 			return Run.dec2string(sumDistU); 
 		if (unit.equals("km")) 
 			return Run.dec2string(Run.mi2km(sumDistU)); 
+		else return "-";
+	}
+	public String getDailyAvgString(String unit) {
+		if (unit.equals("mi")) 
+			return Run.dec2string(getDailyAvgUNIT()); 
+		if (unit.equals("km")) 
+			return Run.dec2string(Run.mi2km(getDailyAvgUNIT())); 
+		else return "-";
+	}
+	public String getWeeklyAvgString(String unit) {
+		if (unit.equals("mi")) 
+			return Run.dec2string(getDailyAvgUNIT() * 7); 
+		if (unit.equals("km")) 
+			return Run.dec2string(Run.mi2km(getDailyAvgUNIT()) * 7); 
 		else return "-";
 	}
 	public String getAvgPaceString(String unit) {

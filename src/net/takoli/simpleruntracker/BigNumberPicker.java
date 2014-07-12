@@ -11,14 +11,14 @@ import android.widget.NumberPicker;
 
 import net.takoli.simpleruntracker.R;
 
-public class MyNumberPicker extends NumberPicker {
+public class BigNumberPicker extends NumberPicker {
 	
 	private DisplayMetrics dm;
 	private float textSize;
 	final int DIVIDER_SCALE = 15;
 	final int TEXT_SCALE = 22;
 	
-	public MyNumberPicker(Context context, AttributeSet attrs) {
+	public BigNumberPicker(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		dm = getResources().getDisplayMetrics();
 		setMinValue(0);

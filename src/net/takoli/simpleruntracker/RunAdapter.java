@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -54,10 +55,23 @@ public class RunAdapter extends BaseAdapter {
 		String header;
 		if (runList.size() == 0) 
 			header = "Empty list";
- 		else if (runList.size() == 1) 
- 			header = "Showing " + runList.size() + " workout";
-		else 
-			header = "Showing " + runList.size() + " workouts";
+		else {
+			String limit = ((MainActivity) context).getDBLimit();
+			boolean numberLimitUsed = true;
+			try {
+				Integer.parseInt(limit);
+			} catch (NumberFormatException nfe) {
+				numberLimitUsed = false; }
+			if (numberLimitUsed) {
+				header = "Showing " + runList.size() + " of " + limit + " workouts";
+			}
+			else {
+				header = "Showing " + runList.size() + " workout";
+				if (runList.size() != 1) 
+		 			header += "s";
+				header += " since " + Run.getFullStringDate(limit);
+			}
+		}
  		headerText.setText(header);
 	}
 
@@ -80,8 +94,6 @@ public class RunAdapter extends BaseAdapter {
 			if (pos == runList.size() - 1) {
 				oneRun.setBackgroundColor(0xFF88C1FC);
 				if (toAnimate) {
-					//Animation animation = AnimationUtils.loadAnimation(context, R.anim.new_list_entry);
-					//oneRun.startAnimation(animation);
 					ObjectAnimator colorAnim = ObjectAnimator.ofFloat(oneRun, "alpha", 0f, 1f);
 					colorAnim.setInterpolator(new DecelerateInterpolator());
 					colorAnim.setDuration(2500);
@@ -145,9 +157,7 @@ public class RunAdapter extends BaseAdapter {
 	public void aninmateNewRun() {
 		toAnimate = true;
 		notifyDataSetChanged();
-		
 	}
-	
 
 	@Override
 	public int getCount() {

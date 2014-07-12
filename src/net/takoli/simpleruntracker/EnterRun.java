@@ -26,8 +26,8 @@ import android.widget.TextView;
 
 public class EnterRun extends Fragment {
 
-	MyNumberPicker dist10, dist1, dist_1, dist_01;
-	MyNumberPicker hour, min10, min1, sec10, sec1;
+	BigNumberPicker dist10, dist1, dist_1, dist_01;
+	BigNumberPicker hour, min10, min1, sec10, sec1;
 	RadioGroup dateGroup;
 	RadioButton dateRadioButton;
 	Calendar runDate;
@@ -59,31 +59,31 @@ public class EnterRun extends Fragment {
 		dm = getResources().getDisplayMetrics();
 		
 		// Set up DISTANCE fields
-		dist10 = (MyNumberPicker) getView().findViewById(R.id.dist10);
-		dist1 = (MyNumberPicker) getView().findViewById(R.id.dist1);
+		dist10 = (BigNumberPicker) getView().findViewById(R.id.dist10);
+		dist1 = (BigNumberPicker) getView().findViewById(R.id.dist1);
 		div_d = ((TextView) getView().findViewById(R.id.div_d));
 			div_d.setTextSize(dist1.getTextSize());
-		dist_1 = (MyNumberPicker) getView().findViewById(R.id.dist_1);
-		dist_01 = (MyNumberPicker) getView().findViewById(R.id.dist_01);
+		dist_1 = (BigNumberPicker) getView().findViewById(R.id.dist_1);
+		dist_01 = (BigNumberPicker) getView().findViewById(R.id.dist_01);
 		distUnit = (TextView) getView().findViewById(R.id.dist_unit);
 			distUnit.setText(((MainActivity) getActivity()).getUnit());
 			distUnit.setTextSize(dist1.getTextSize() * 0.8f);
 			distUnit.animate().translationYBy(4);
 			
 		// Set up TIME fields
-		hour = (MyNumberPicker) getView().findViewById(R.id.hour);
+		hour = (BigNumberPicker) getView().findViewById(R.id.hour);
 		div_th = ((TextView) getView().findViewById(R.id.div_th));
 			div_th.setTextSize(hour.getTextSize());
-		min10 = (MyNumberPicker) getView().findViewById(R.id.min10);
+		min10 = (BigNumberPicker) getView().findViewById(R.id.min10);
 			min10.setMaxValue(5);
 			min10.setWrapSelectorWheel(true);
-		min1 = (MyNumberPicker) getView().findViewById(R.id.min1);
+		min1 = (BigNumberPicker) getView().findViewById(R.id.min1);
 		div_tm = ((TextView) getView().findViewById(R.id.div_tm));
 			div_tm.setTextSize(hour.getTextSize());
-		sec10 = (MyNumberPicker) getView().findViewById(R.id.sec10);
+		sec10 = (BigNumberPicker) getView().findViewById(R.id.sec10);
 			sec10.setMaxValue(5);
 			sec10.setWrapSelectorWheel(true);
-		sec1 = (MyNumberPicker) getView().findViewById(R.id.sec1);
+		sec1 = (BigNumberPicker) getView().findViewById(R.id.sec1);
 		
 		// Show last run values at start
 		int[] lastValues = runListDB.getLastValues();

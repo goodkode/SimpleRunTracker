@@ -173,11 +173,15 @@ public class Run {
 			return whole + "." + dec;
 	}
 	public static int km2mi(float km) {
-		return Math.round(km / KM_TO_MI);
+		int m =  Math.round(km / KM_TO_MI);
+		if (m % 100 == 99)	m++;
+		if (m % 100 == 1)  m--;
+		return m;
 	}
 	public static int mi2km(float mi) {
 		int km = Math.round(mi * KM_TO_MI);
 		if (km % 100 == 99)	km++;
+		if (km % 100 == 1)  km--;
 		return km;
 	}
 	public static String sec2MMss(int sec) {
@@ -249,16 +253,29 @@ public class Run {
 		}
 	}
 	public static Calendar setTodayDate() {
-		return Calendar.getInstance();
+		Calendar today =  Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		today.set(Calendar.MINUTE, 0);
+		today.set(Calendar.SECOND, 0);
+		today.set(Calendar.MILLISECOND, 0);
+		return today;
 	}
 	public static Calendar setYesterdayDate() {
-		Calendar date =  Calendar.getInstance();
-		date.add(Calendar.DAY_OF_YEAR, -1);
-		return date;
+		Calendar yesterday =  Calendar.getInstance();
+		yesterday.add(Calendar.DAY_OF_YEAR, -1);
+		yesterday.set(Calendar.HOUR_OF_DAY, 0);
+		yesterday.set(Calendar.MINUTE, 0);
+		yesterday.set(Calendar.SECOND, 0);
+		yesterday.set(Calendar.MILLISECOND, 0);
+		return yesterday;
 	}
 	public static Calendar setCustomDate(int month, int day, int year) {
 		Calendar date =  Calendar.getInstance();
 		date.set(year, month, day);
+		date.set(Calendar.HOUR_OF_DAY, 0);
+		date.set(Calendar.MINUTE, 0);
+		date.set(Calendar.SECOND, 0);
+		date.set(Calendar.MILLISECOND, 0);
 		return date;
 	}
 }

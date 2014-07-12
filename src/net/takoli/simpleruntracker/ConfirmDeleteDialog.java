@@ -13,7 +13,7 @@ public class ConfirmDeleteDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(getActivity())
         		.setTitle("Confirm delete")
-        		.setMessage("This will remove all run records and can not be undone.")
+        		.setMessage("This will remove all run records and cannot be undone.")
                 .setNegativeButton("Cancel",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
