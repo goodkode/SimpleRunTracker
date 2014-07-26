@@ -15,7 +15,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
-public class GraphView extends View {
+public class GraphViewFullScreen extends GraphView {
 	
 	private RunDB runListDB;
 	private ArrayList<Run> runList;
@@ -36,41 +36,42 @@ public class GraphView extends View {
 	private Paint coordPaint, distPaint, speedPaint, distLabelPaint, speedLabelPaint;
 	
 	// set up the view
-	public GraphView(Context context, AttributeSet attrs) {
-	        super(context, attrs);
-	        // initialize fields
-	        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-	        if (display.getRotation() == Configuration.ORIENTATION_PORTRAIT)
-	        	MAX_PLOTS = 31;
-	        else MAX_PLOTS = 16;
-	        dists = new long[MAX_PLOTS];
-	        speeds = new long[MAX_PLOTS];
-	        dX = new float[MAX_PLOTS];
-	        dY = new float[MAX_PLOTS];
-	        sX = new float[MAX_PLOTS];
-	        sY = new float[MAX_PLOTS];
-	        inMiles = true;
-	        dUnit = "mi";
-	        dUnit = "mph";
-	        coordPaint = new Paint();
-	        distPaint = new Paint();
-	        speedPaint = new Paint();
-	        distLabelPaint = new Paint();
-	        speedLabelPaint = new Paint();
-	        coordPaint.setStyle(Style.FILL);
-	        coordPaint.setColor(Color.BLACK);
-	        distPaint.setStyle(Style.STROKE);
-	        distPaint.setStrokeWidth(4);
-	        distPaint.setAntiAlias(true);
-	        distPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
-	        distPaint.setColor(MY_RED);
-	        speedPaint.setStyle(Style.STROKE);
-	        speedPaint.setStrokeWidth(4);
-	        speedPaint.setAntiAlias(true);
-	        speedPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
-	        speedPaint.setColor(MY_BLUE);
-	        distLabelPaint.setColor(MY_RED);
-	        speedLabelPaint.setColor(MY_BLUE);
+	public GraphViewFullScreen(Context context, AttributeSet attrs) {
+        super(context, attrs);
+		Log.i("run", "graphfullscreen init");
+        // initialize fields
+        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        if (display.getRotation() == Configuration.ORIENTATION_PORTRAIT)
+        	MAX_PLOTS = 31;
+        else MAX_PLOTS = 16;
+        dists = new long[MAX_PLOTS];
+        speeds = new long[MAX_PLOTS];
+        dX = new float[MAX_PLOTS];
+        dY = new float[MAX_PLOTS];
+        sX = new float[MAX_PLOTS];
+        sY = new float[MAX_PLOTS];
+        inMiles = true;
+        dUnit = "mi";
+        dUnit = "mph";
+        coordPaint = new Paint();
+        distPaint = new Paint();
+        speedPaint = new Paint();
+        distLabelPaint = new Paint();
+        speedLabelPaint = new Paint();
+        coordPaint.setStyle(Style.FILL);
+        coordPaint.setColor(Color.BLACK);
+        distPaint.setStyle(Style.STROKE);
+        distPaint.setStrokeWidth(4);
+        distPaint.setAntiAlias(true);
+        distPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
+        distPaint.setColor(MY_RED);
+        speedPaint.setStyle(Style.STROKE);
+        speedPaint.setStrokeWidth(4);
+        speedPaint.setAntiAlias(true);
+        speedPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
+        speedPaint.setColor(MY_BLUE);
+        distLabelPaint.setColor(MY_RED);
+        speedLabelPaint.setColor(MY_BLUE);
 	}
 
 		
@@ -80,7 +81,7 @@ public class GraphView extends View {
 		inMiles = (unit.compareTo("mi") == 0);
 		if (inMiles)	{ dUnit = "mi"; sUnit = "mph";}
 		else			{ dUnit = "km"; sUnit = "km/h"; }
-		updateData();
+		//updateData();
 	}
 	
 	public void updateData() {
@@ -118,6 +119,7 @@ public class GraphView extends View {
 	
 	@Override
     protected void onDraw(Canvas canvas) {
+    		this.
 		sPad = this.getPaddingLeft();
 		bPad = this.getPaddingBottom();
 		tPad = this.getPaddingTop();

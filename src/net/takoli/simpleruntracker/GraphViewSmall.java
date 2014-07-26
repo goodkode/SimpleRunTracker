@@ -15,7 +15,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
-public class GraphView extends View {
+public class GraphViewSmall extends View {
 	
 	private RunDB runListDB;
 	private ArrayList<Run> runList;
@@ -36,7 +36,7 @@ public class GraphView extends View {
 	private Paint coordPaint, distPaint, speedPaint, distLabelPaint, speedLabelPaint;
 	
 	// set up the view
-	public GraphView(Context context, AttributeSet attrs) {
+	public GraphViewSmall(Context context, AttributeSet attrs) {
 	        super(context, attrs);
 	        // initialize fields
 	        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();

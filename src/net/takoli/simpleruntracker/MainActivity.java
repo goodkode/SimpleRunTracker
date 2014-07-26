@@ -41,7 +41,9 @@ public class MainActivity extends Activity {
 	private RunDB runDB;       // ArrayList<Run> abstraction and file IO functions
 	private RunAdapter myAdapter;  // Activity's ListView adapter - uses ArrayList<Run> received from runDB
 	
-	private GraphView graph;
+	private GraphViewSmall graphSmall;
+	private GraphView graphFull;
+	private ChartFullScreenDialog graphFullFragment;
 	
 	private DisplayMetrics dm;
 	private int screenHeight, screenWidth;
@@ -52,9 +54,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayShowTitleEnabled(false);
 		settings = getPreferences(MODE_PRIVATE);
-		
-		// FOR TESTING ONLY
-		//setDBLimit("100");
 		
 		// Set up variables and fields
 		setContentView(R.layout.activity_main);
@@ -109,8 +108,8 @@ public class MainActivity extends Activity {
 		myAdapter.notifyDataSetChanged();
 		
 		// Graph initial setup
-		graph = (GraphView) findViewById(R.id.graph);
-		graph.setRunList(runDB, getUnit());
+		graphSmall = (GraphViewSmall) findViewById(R.id.graph);
+		graphSmall.setRunList(runDB, getUnit());
 		
 		// check for first run
 		if (runDB.isEmpty())
@@ -190,11 +189,20 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		return gestDect.onTouchEvent(event);
+		if (event.getY() / screenHeight > 0.8) {
+			graphFullFragment = (ChartFullScreenDialog) getFragmentManager().findFragmentByTag("ChartFullScreen");
+			if (graphFullFragment == null) {
+				graphFullFragment = new ChartFullScreenDialog();
+				graphFullFragment.show(fragMngr, "ChartFullScreen");	
+			}
+			return true;
+		}
+		else
+			return gestDect.onTouchEvent(event);
 	}
 	
-	public GraphView getGraphView() {
-		return graph;
+	public GraphViewSmall getGraphView() {
+		return graphSmall;
 	}
 	
 	public RunDB getRunDB() {
@@ -230,9 +238,9 @@ public class MainActivity extends Activity {
 		return settings.getString("limit", "100");
 	}
 	public void updateGraph() {
-		if (graph != null) {
-			graph.updateData();
-			graph.invalidate(); }
+		if (graphSmall != null) {
+			graphSmall.updateData();
+			graphSmall.invalidate(); }
 	}
 	
 	public void slideUp() {
