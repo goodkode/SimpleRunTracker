@@ -7,9 +7,10 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class ChartFullScreenDialog extends DialogFragment {
 	
@@ -32,6 +33,7 @@ public class ChartFullScreenDialog extends DialogFragment {
     @Override
     public void onResume() {
     	super.onResume();
+    	// set sizes based on orientation
     	DisplayMetrics dm = getResources().getDisplayMetrics();
     	int width = (int) (dm.widthPixels * 0.98);
     	int height = (int) (dm.heightPixels * 0.4);
@@ -39,8 +41,20 @@ public class ChartFullScreenDialog extends DialogFragment {
         if (display.getRotation() == Configuration.ORIENTATION_PORTRAIT)
         	height = (int) (height * 1.8);
     	getDialog().getWindow().setLayout(width, height);
-    	GraphView v = (GraphView) chartFullScreenView.findViewById(R.id.chart_full_screen);
+    	// get resources and listeners
+    	GraphView graph = (GraphView) chartFullScreenView.findViewById(R.id.chart_full_screen);
+    	SeekBar seekbar = (SeekBar) chartFullScreenView.findViewById(R.id.seekBar);
+    	seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				
+			}
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) { }
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { }
+		});
     	MainActivity main = (MainActivity) getActivity();
-    	v.setRunList(main.getRunDB(), main.getUnit());
+    	graph.setRunList(main.getRunDB(), main.getUnit());
     }
 }

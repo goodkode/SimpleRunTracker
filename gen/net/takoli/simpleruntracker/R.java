@@ -49,7 +49,7 @@ public final class R {
         public static final int stats_icon=0x7f02000c;
     }
     public static final class id {
-        public static final int chart_full_screen=0x7f070007;
+        public static final int chart_full_screen=0x7f070006;
         public static final int date_picker=0x7f07001e;
         public static final int date_radiobuttons=0x7f07001b;
         public static final int date_today=0x7f07001c;
@@ -92,6 +92,7 @@ public final class R {
         public static final int run_time=0x7f070023;
         public static final int sec1=0x7f070018;
         public static final int sec10=0x7f070017;
+        public static final int seekBar=0x7f070007;
         public static final int settings=0x7f070051;
         public static final int settings_100=0x7f070030;
         public static final int settings_300=0x7f070031;
@@ -120,7 +121,6 @@ public final class R {
         public static final int stats_pace_speed_max=0x7f070040;
         public static final int stats_panel=0x7f070037;
         public static final int stats_title=0x7f070038;
-        public static final int test=0x7f070006;
         public static final int time=0x7f07001a;
         public static final int top=0x7f07000a;
         public static final int update_dist_comma=0x7f070048;
