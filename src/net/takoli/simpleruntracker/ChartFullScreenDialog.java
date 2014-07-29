@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.SeekBar;
@@ -42,17 +43,19 @@ public class ChartFullScreenDialog extends DialogFragment {
         	height = (int) (height * 1.8);
     	getDialog().getWindow().setLayout(width, height);
     	// get resources and listeners
-    	GraphView graph = (GraphView) chartFullScreenView.findViewById(R.id.chart_full_screen);
+    	final GraphView graph = (GraphView) chartFullScreenView.findViewById(R.id.chart_full_screen);
     	SeekBar seekbar = (SeekBar) chartFullScreenView.findViewById(R.id.seekBar);
     	seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				
-			}
+			public void onStopTrackingTouch(SeekBar seekBar) { }
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) { }
 			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { }
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				Log.i("run", "progress: " + progress);
+				graph.updateData(progress / 3 + 7);
+				graph.invalidate();
+			}
 		});
     	MainActivity main = (MainActivity) getActivity();
     	graph.setRunList(main.getRunDB(), main.getUnit());

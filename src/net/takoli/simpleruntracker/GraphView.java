@@ -19,9 +19,8 @@ public class GraphView extends View {
 	
 	private RunDB runListDB;
 	private ArrayList<Run> runList;
-	public final int MAX_PLOTS = 50;
-	private int plots, totalPlots;
-	private int dataPlotSize;
+	private final int MAX_PLOTS = 50;
+	private int plots;
 	private long[] dists, speeds;
 	private long distMin, distMax, speedMin, speedMax;
 	private float[] dX, dY, sX, sY;
@@ -67,47 +66,38 @@ public class GraphView extends View {
 		inMiles = (unit.compareTo("mi") == 0);
 		if (inMiles)	{ dUnit = "mi"; sUnit = "mph";}
 		else			{ dUnit = "km"; sUnit = "km/h"; }
-		totalPlots = runList.size() > MAX_PLOTS ? MAX_PLOTS : runList.size();
 		updateData(15);
 	}
 	
 	public void updateData(int plotSize) {
-		plots = plots < totalPlots ? plots : totalPlots;
-		plots++;
+		plots = plotSize < getMaxPlots() ? plotSize : getMaxPlots();
+		plots++;  // an extra for plot[0] for average
         dists = new long[plots];
         speeds = new long[plots];
         dX = new float[plots];
         dY = new float[plots];
         sX = new float[plots];
         sY = new float[plots];
-	}
-	
-	public void updateData() {
-		int fullSize = runList.size();
-		dataPlotSize = fullSize > (plots - 1) ? (plots - 1) : fullSize;
-		if (dataPlotSize == 0) {
-			//Log.i("run", "nothing to chart");
-			return; }
-		totalPlots = dataPlotSize + 1;  // plot '0' is the average
-		dists[0] = runListDB.getAvgDistUNIT();
+        // set values
+        int fullSize = runList.size();
+        dists[0] = runListDB.getAvgDistUNIT();
 		speeds[0] = runListDB.getAvgSpeedUNIT();
-		//Log.i("run", "avgspeed: " + speeds[0]);
 		int j = 1;
-		for (int i = fullSize - dataPlotSize; i < fullSize; i++) {
+		for (int i = fullSize - plots + 1; i < fullSize; i++) {
 			dists[j] = runList.get(i).getDistUNIT();
 			speeds[j] = runList.get(i).getSpeedUNIT();
 			//Log.i("run", "speed " + j + ": " + speeds[j]);
 			j++;
 		}
-		// in case we want to see the graph in KM:
-		if (!inMiles) for (int i = 0; i < totalPlots; i++) {
-			dists[i] = Math.round(dists[i] * KM_TO_M);
-			speeds[i] = Math.round(speeds[i] * KM_TO_M);
+		// rescale for KM:
+		if (!inMiles) for (int i = 0; i < plots; i++) {
+			dists[i] = Run.mi2km(dists[i]);
+			speeds[i] = Run.mi2km(speeds[i]);
 		}
 		// check for min and max values:
 		distMax = distMin = dists[0];
 		speedMax = speedMin = speeds[0];
-		for (int i = 0; i < totalPlots; i++) {
+		for (int i = 0; i < plots; i++) {
 			if (dists[i] < distMin)	distMin = dists[i];
 			if (dists[i] > distMax)	distMax = dists[i];
 			if (speeds[i] < speedMin)	speedMin = speeds[i];
@@ -117,6 +107,7 @@ public class GraphView extends View {
 	
 	@Override
     protected void onDraw(Canvas canvas) {
+		int dataPlotSize = plots - 1;
 		sPad = this.getPaddingLeft();
 		bPad = this.getPaddingBottom();
 		tPad = this.getPaddingTop();
@@ -135,6 +126,7 @@ public class GraphView extends View {
 
 	private void drawCoordSystem(Canvas canvas, long distMin, long distMax,
 			long speedMin, long speedMax) {
+		int dataPlotSize = plots - 1;
 		// left, bottom, right lines
         coordPaint.setStrokeWidth(2);
 		canvas.drawLine((float)sPad, (float)tPad, (float)sPad, (float)(tPad+height), coordPaint);
@@ -166,13 +158,14 @@ public class GraphView extends View {
 		float SMOOTH = 0.15f;
 		Path path = new Path();
         path.moveTo(X[0], Y[0]);
+        int dataPlotSize = plots - 1;
         if (dataPlotSize == 1) {
         	//Log.i("run", "graph single");
         	//Log.i("run", "X: " + X[0] + ", " + X[1]);
         	//Log.i("run", "Y: " + Y[0] + ", " + Y[1]);
         	path.lineTo(X[1], Y[1]);
         } else {
-        for (int i = 0; i < totalPlots; i++) {
+        for (int i = 0; i < plots; i++) {
             float startdiffX = (X[i(i + 1)] - X[i(i - 1)]);
             float startdiffY = (Y[i(i + 1)] - Y[i(i - 1)]);
             float endDiffX = (X[i(i + 2)] - X[i(i)]);
@@ -195,7 +188,7 @@ public class GraphView extends View {
 		float sTop = tPad + height * 0.25f;
 		float dRange = distMax - distMin;
 		float sRange = speedMax - speedMin;
-		for (int i = 0; i < totalPlots; i++) {
+		for (int i = 0; i < plots; i++) {
 			dX[i] = sPad + wUnit * i;
 			dY[i] = dTop + dHeight * (distMax - dists[i]) / dRange;
 			if (dRange == 0)	dY[i] = dTop + dHeight / 2;
@@ -205,8 +198,12 @@ public class GraphView extends View {
 		}
 	}
 	
+	public int getMaxPlots() {
+		return runList.size() > MAX_PLOTS ? MAX_PLOTS : runList.size();
+	}
+	
 	private int i(int i) {
-		if (i >= totalPlots)	return totalPlots - 1;
+		if (i >= plots)	return plots - 1;
 	        else if (i < 0)		return 0;
 	        return i;
 	    }
