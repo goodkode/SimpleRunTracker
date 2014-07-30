@@ -27,6 +27,7 @@ public class GraphViewFull extends View {
 	private final int MY_SHADOW = 0x88000000;
 	private int width, height;
 	private Paint avgLinePaint, distPaint, speedPaint, distLabelPaint, speedLabelPaint;
+	private TextView avgText, runNumText;
 	
 	// set up the view
 	public GraphViewFull(Context context, AttributeSet attrs) {
@@ -62,6 +63,15 @@ public class GraphViewFull extends View {
 		if (inMiles)	{ dUnit = "mi"; sUnit = "mph";}
 		else			{ dUnit = "km"; sUnit = "km/h"; }
 		updateData(15);
+		this.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+					showDetailsAtFinger(event.getX());
+					return true; 
+				}
+				return false; }
+		});
 	}
 	
 	public void updateData(int plotSize) {
@@ -118,6 +128,8 @@ public class GraphViewFull extends View {
 		int dataPlotSize = plots - 1;
 		// line for average
 		canvas.drawLine(0, height / 2, width, height / 2, avgLinePaint);
+		avgText = (TextView) findViewById(R.id.chart_avg_label);
+		avgText.setVisibility();
 		// miles or km and mph or km/h
 		distLabelPaint.setTextSize(height * 0.1f);
 		speedLabelPaint.setTextSize(height * 0.1f);
@@ -167,6 +179,10 @@ public class GraphViewFull extends View {
 			sY[i] = sTop + sHeight * (speedMax - speeds[i]) / sRange;
 			if (sRange == 0)	sY[i] = sTop + sHeight / 2;
 		}
+	}
+	
+	private void showDetailsAtFinger(int x) {
+		
 	}
 	
 	public int getMaxPlots() {
