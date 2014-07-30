@@ -43,7 +43,7 @@ public class ChartFullScreenDialog extends DialogFragment {
         	height = (int) (height * 1.8);
     	getDialog().getWindow().setLayout(width, height);
     	// get resources and listeners
-    	final GraphView graph = (GraphView) chartFullScreenView.findViewById(R.id.chart_full_screen);
+    	final GraphViewFull graph = (GraphViewFull) chartFullScreenView.findViewById(R.id.chart_full_screen);
     	SeekBar seekbar = (SeekBar) chartFullScreenView.findViewById(R.id.seekBar);
     	seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override

@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
 	private RunAdapter myAdapter;  // Activity's ListView adapter - uses ArrayList<Run> received from runDB
 	
 	private GraphViewSmall graphSmall;
-	private GraphView graphFull;
+	private GraphViewFull graphFull;
 	private ChartFullScreenDialog graphFullFragment;
 	
 	private DisplayMetrics dm;

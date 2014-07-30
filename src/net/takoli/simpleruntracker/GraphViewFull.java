@@ -3,19 +3,15 @@ package net.takoli.simpleruntracker;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 
-public class GraphView extends View {
+public class GraphViewFull extends View {
 	
 	private RunDB runListDB;
 	private ArrayList<Run> runList;
@@ -26,25 +22,24 @@ public class GraphView extends View {
 	private float[] dX, dY, sX, sY;
 	private boolean inMiles;
 	private String dUnit, sUnit;
-	private final double KM_TO_M = 1.60934;
 	private final int MY_RED = 0xFFFFA4A4;
 	private final int MY_BLUE = 0xFF9FC6FF;
 	private final int MY_SHADOW = 0x88000000;
 	private int width, height;
-	private int sPad, tPad, bPad;
-	private Paint coordPaint, distPaint, speedPaint, distLabelPaint, speedLabelPaint;
+	private Paint avgLinePaint, distPaint, speedPaint, distLabelPaint, speedLabelPaint;
 	
 	// set up the view
-	public GraphView(Context context, AttributeSet attrs) {
+	public GraphViewFull(Context context, AttributeSet attrs) {
 	        super(context, attrs);
 	        // initialize fields
-	        coordPaint = new Paint();
+	        avgLinePaint = new Paint();
 	        distPaint = new Paint();
 	        speedPaint = new Paint();
 	        distLabelPaint = new Paint();
 	        speedLabelPaint = new Paint();
-	        coordPaint.setStyle(Style.FILL);
-	        coordPaint.setColor(Color.BLACK);
+	        avgLinePaint.setStyle(Style.STROKE);
+	        avgLinePaint.setColor(Color.BLACK);
+	        avgLinePaint.setStrokeWidth(1);
 	        distPaint.setStyle(Style.STROKE);
 	        distPaint.setStrokeWidth(4);
 	        distPaint.setAntiAlias(true);
@@ -107,16 +102,10 @@ public class GraphView extends View {
 	
 	@Override
     protected void onDraw(Canvas canvas) {
-		int dataPlotSize = plots - 1;
-		sPad = this.getPaddingLeft();
-		bPad = this.getPaddingBottom();
-		tPad = this.getPaddingTop();
-		width = this.getWidth() - sPad * 2;
-		height = this.getHeight() - tPad - bPad;
-		if (dataPlotSize == 0) {
-			coordPaint.setTextSize(height / 5f);
-			coordPaint.setTextAlign(Paint.Align.CENTER);
-			canvas.drawText("No runs to chart yet", canvas.getWidth() / 2, canvas.getHeight() / 2, coordPaint);
+		width = this.getWidth();
+		height = this.getHeight();
+		if (plots <= 1) {
+			// too few data
 			return; }
 		drawCoordSystem(canvas, distMin, distMax, speedMin, speedMax);
 		setPlotCoordinates();
@@ -125,33 +114,15 @@ public class GraphView extends View {
 	}
 
 	private void drawCoordSystem(Canvas canvas, long distMin, long distMax,
-			long speedMin, long speedMax) {
+		long speedMin, long speedMax) {
 		int dataPlotSize = plots - 1;
-		// left, bottom, right lines
-        coordPaint.setStrokeWidth(2);
-		canvas.drawLine((float)sPad, (float)tPad, (float)sPad, (float)(tPad+height), coordPaint);
-		canvas.drawLine((float)sPad, (float)(tPad+height), (float)(sPad+width), (float)(tPad+height), coordPaint);
-		canvas.drawLine((float)(sPad+width), (float)(tPad+height), (float)(sPad+width), (float)tPad, coordPaint);
+		// line for average
+		canvas.drawLine(0, height / 2, width, height / 2, avgLinePaint);
 		// miles or km and mph or km/h
-		distLabelPaint.setTextSize(sPad * 0.45f);
-		speedLabelPaint.setTextSize(sPad * 0.45f);
-		canvas.drawText(dUnit, sPad * 1.2f, 			tPad * 2.75f, 	distLabelPaint);
-		canvas.drawText(sUnit, width - sPad * 0.278f, 	tPad * 2.75f, 	speedLabelPaint);
-		// distance indicators
-		distLabelPaint.setTextSize(sPad * 0.35f);
-		canvas.drawText(form(distMax), 				sPad * 0.22f, tPad + height*0.1f, distLabelPaint);
-		canvas.drawText(form((distMin+distMax)/2), 	sPad * 0.22f, tPad + height*0.5f, distLabelPaint);
-		canvas.drawText(form(distMin), 				sPad * 0.22f, tPad + height*0.9f, distLabelPaint);
-		// speed indicators
-		speedLabelPaint.setTextSize(sPad * 0.35f);
-		canvas.drawText(form(speedMax), 			width + sPad * 1.15f, tPad + height*0.2f, speedLabelPaint);
-		canvas.drawText(form((speedMin+speedMax)/2),width + sPad * 1.15f, tPad + height*0.5f, speedLabelPaint);
-		canvas.drawText(form(speedMin), 			width + sPad * 1.15f, tPad + height*0.8f, speedLabelPaint);
-		// how many runs are shown
-		coordPaint.setTextSize(bPad * 0.5f);
-        coordPaint.setStrokeWidth(1);
-        coordPaint.setTextAlign(Paint.Align.CENTER);
-		canvas.drawText("Last " + dataPlotSize + " runs shown", canvas.getWidth() / 2, tPad + height + bPad * 0.6f, coordPaint);
+		distLabelPaint.setTextSize(height * 0.1f);
+		speedLabelPaint.setTextSize(height * 0.1f);
+		canvas.drawText("distance", 0, 0 + height * 0.1f, distLabelPaint);
+		canvas.drawText("speed", width - height * 0.3f, 0 + height * 0.1f, speedLabelPaint);
 	}
 	
 	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {
@@ -184,15 +155,15 @@ public class GraphView extends View {
 		float wUnit = width / (plots - 1);  //divide horizontally
 		float dHeight = height * 0.8f;			//distance range will be 80% of chart
 		float sHeight = height * 0.5f;			//speed range will be 50%
-		float dTop = tPad + height * 0.1f;
-		float sTop = tPad + height * 0.25f;
+		float dTop = 0 + height * 0.1f;
+		float sTop = 0 + height * 0.25f;
 		float dRange = distMax - distMin;
 		float sRange = speedMax - speedMin;
 		for (int i = 0; i < plots; i++) {
-			dX[i] = sPad + wUnit * i;
+			dX[i] = 0 + wUnit * i;
 			dY[i] = dTop + dHeight * (distMax - dists[i]) / dRange;
 			if (dRange == 0)	dY[i] = dTop + dHeight / 2;
-			sX[i] = sPad + wUnit * i;
+			sX[i] = 0 + wUnit * i;
 			sY[i] = sTop + sHeight * (speedMax - speeds[i]) / sRange;
 			if (sRange == 0)	sY[i] = sTop + sHeight / 2;
 		}

@@ -5,16 +5,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <net.takoli.simpleruntracker.GraphView
+    <net.takoli.simpleruntracker.GraphViewFull
         android:id="@+id/chart_full_screen"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="6dp" />
 
-    <SeekBar
-        android:id="@+id/seekBar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center" />
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center">
+	    <SeekBar
+	        android:id="@+id/seekBar"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" />
+    </RelativeLayout>
     
 </LinearLayout>
