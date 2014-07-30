@@ -5,14 +5,37 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <net.takoli.simpleruntracker.GraphViewFull
-        android:id="@+id/chart_full_screen"
+    <Frame
+        android:id="@+id/chart_frame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp"
-        android:layout_marginTop="6dp" />
+        android:layout_marginTop="6dp"
+        <net.takoli.simpleruntracker.GraphViewFull
+        	android:id="@+id/chart_full_screen"
+	        android:layout_width="match_parent"
+	        android:layout_height="match parent" />
+	<TextView
+		android:id="@+id/chart_avg_label"
+	        android:layout_width="match_parent"
+	        android:layout_height="match parent"
+	        android:layout_gravity="center"
+	        android:textSize:="10sp"
+	        android:text:="avg"
+	        android:visibility="gone" />
+	<TextView
+		android:id="@+id/chart_run_number"
+	        android:layout_width="match_parent"
+	        android:layout_height="match parent"
+	        android:layout_gravity="center"
+	        android:allign_top="true"
+	        android:layout_marginTop="30dp"
+	        android:textSize:="30sp"
+	        android:text:="num"
+	        android:visibility="gone" />
+    <Frame/>
 
     <RelativeLayout
         android:layout_width="match_parent"
