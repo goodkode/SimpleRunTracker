@@ -14,12 +14,8 @@
         android:layout_marginRight="14dp"
         android:layout_marginTop="6dp" >
         
-        <net.takoli.simpleruntracker.GraphViewFull
-        	android:id="@+id/chart_full_screen"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent" />
-		<TextView
-			android:id="@+id/chart_avg_label"
+        <TextView
+		android:id="@+id/chart_avg_label"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_centerInParent="true"
@@ -27,8 +23,12 @@
 	        android:textColor="#77000000"
 	        android:text="average distance &amp; speed"
 	        android:visibility="invisible" />
-		<TextView
-			android:id="@+id/chart_run_number"
+        <net.takoli.simpleruntracker.GraphViewFull
+        	android:id="@+id/chart_full_screen"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent" />
+	    <TextView
+	    	android:id="@+id/chart_run_number"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_centerHorizontal="true"
