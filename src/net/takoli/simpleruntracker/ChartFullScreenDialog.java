@@ -19,6 +19,7 @@ public class ChartFullScreenDialog extends DialogFragment {
 	private AlertDialog chartFullScreenView;
 	private RunDB runDB;
 	private String unit;
+	private TextView currentNumber;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class ChartFullScreenDialog extends DialogFragment {
         	height = (int) (height * 1.8);
     	getDialog().getWindow().setLayout(width, height);
     	// get resources and listeners
+    	currentNumber = (TextView) findViewById(R.id.chart_run_number);
     	final GraphViewFull graph = (GraphViewFull) chartFullScreenView.findViewById(R.id.chart_full_screen);
     	SeekBar seekbar = (SeekBar) chartFullScreenView.findViewById(R.id.seekBar);
     	seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -52,12 +54,22 @@ public class ChartFullScreenDialog extends DialogFragment {
 			public void onStartTrackingTouch(SeekBar seekBar) { }
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				Log.i("run", "progress: " + progress);
-				graph.updateData(progress / 3 + 7);
+				int n = progress / 3 + 7
+				Log.i("run", "progress: " + n);
+				showCurrentNumber(n);
+				graph.updateData(n);
 				graph.invalidate();
 			}
 		});
     	MainActivity main = (MainActivity) getActivity();
     	graph.setRunList(main.getRunDB(), main.getUnit());
+    }
+    
+    private void showCurrentNumber(int n) {
+    	if (currentNumber == null)
+    	    return;
+    	currentNumber.setText("" + n);
+    	currentNumber.setVisibility(VISIBLE);
+    	currentNumber.animate().setAlpha(0).setDuration(700);
     }
 }
