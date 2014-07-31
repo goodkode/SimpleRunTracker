@@ -43,8 +43,7 @@ public class GraphViewFull extends View {
 	        speedLabelPaint = new Paint();
 	        avgLinePaint.setStyle(Style.STROKE);
 	        avgLinePaint.setColor(Color.BLACK);
-	        avgLinePaint.setStrokeWidth(1);
-	        avgLinePaint.setPathEffect(new DashPathEffect(new float[] {100, 200}, 0));
+	        avgLinePaint.setPathEffect(new DashPathEffect(new float[] {10, 5}, 0));
 	        distPaint.setStyle(Style.STROKE);
 	        distPaint.setStrokeWidth(4);
 	        distPaint.setAntiAlias(true);
@@ -131,7 +130,10 @@ public class GraphViewFull extends View {
 		long speedMin, long speedMax) {
 		int dataPlotSize = plots - 1;
 		// line for average
-		canvas.drawLine(0, height / 2, width, height / 2, avgLinePaint);
+		Path mPath = new Path();
+	    mPath.moveTo(0, height / 2);
+	    mPath.lineTo(width, height / 2);
+		canvas.drawPath(mPath, avgLinePaint);
 		avgText = (TextView) getRootView().findViewById(R.id.chart_avg_label);
 		avgText.setVisibility(VISIBLE);
 		// miles or km and mph or km/h

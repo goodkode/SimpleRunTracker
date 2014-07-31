@@ -24,6 +24,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_centerInParent="true"
 	        android:textSize="10sp"
+	        android:textColor="#AA000000"
 	        android:text="average distance &amp; speed"
 	        android:visibility="invisible" />
 		<TextView
