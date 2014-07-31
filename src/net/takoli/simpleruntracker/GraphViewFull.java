@@ -23,6 +23,7 @@ public class GraphViewFull extends View {
 	private long[] dists, speeds;
 	private long distMin, distMax, speedMin, speedMax;
 	private float[] dX, dY, sX, sY;
+	private float fingerAt;
 	private boolean inMiles;
 	private String dUnit, sUnit;
 	private final int MY_RED = 0xFFFFA4A4;
@@ -65,12 +66,16 @@ public class GraphViewFull extends View {
 		inMiles = (unit.compareTo("mi") == 0);
 		if (inMiles)	{ dUnit = "mi"; sUnit = "mph";}
 		else			{ dUnit = "km"; sUnit = "km/h"; }
+		width = this.getWidth();
+		height = this.getHeight();
+		fingerAt = width;
 		updateData(15);
 		this.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-					showDetailsAtFinger(event.getX());
+					Log.i("run", "finger: " + x);
+					fingerAt = x;
 					return true; 
 				}
 				return false; }
@@ -115,15 +120,16 @@ public class GraphViewFull extends View {
 	
 	@Override
     protected void onDraw(Canvas canvas) {
-		width = this.getWidth();
-		height = this.getHeight();
 		if (plots <= 1) {
-			// too few data
+			runNumText = (TextView) getRootView().findViewById(R.id.chart_run_number);
+			runNumText.setText("graph will show after 3 runs");
+			runNumText.setVisibility(VISIBLE);
 			return; }
 		drawCoordSystem(canvas, distMin, distMax, speedMin, speedMax);
 		setPlotCoordinates();
 		drawPath(canvas, speedPaint, sX, sY);
 		drawPath(canvas, distPaint, dX, dY);
+		showDetailsAtFinger(canvas);
 	}
 
 	private void drawCoordSystem(Canvas canvas, long distMin, long distMax,
@@ -169,6 +175,10 @@ public class GraphViewFull extends View {
         canvas.drawPath(path, pathPaint);
 	}
 	
+	private void showDetailsAtFinger(Canvas canvas) {
+		canvas.drawLine(fingerAt, 0, fingerAt, height, avgLinePaint);
+	}
+	
 	private void setPlotCoordinates() {
 		float wUnit = width / (plots - 1);  //divide horizontally
 		float dHeight = height * 0.8f;			//distance range will be 80% of chart
@@ -185,10 +195,6 @@ public class GraphViewFull extends View {
 			sY[i] = sTop + sHeight * (speedMax - speeds[i]) / sRange;
 			if (sRange == 0)	sY[i] = sTop + sHeight / 2;
 		}
-	}
-	
-	private void showDetailsAtFinger(float x) {
-		
 	}
 	
 	public int getMaxPlots() {
