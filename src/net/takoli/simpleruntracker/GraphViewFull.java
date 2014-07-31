@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 public class GraphViewFull extends View {
 	
@@ -41,6 +44,7 @@ public class GraphViewFull extends View {
 	        avgLinePaint.setStyle(Style.STROKE);
 	        avgLinePaint.setColor(Color.BLACK);
 	        avgLinePaint.setStrokeWidth(1);
+	        avgLinePaint.setPathEffect(new DashPathEffect(new float[] {100, 200}, 0));
 	        distPaint.setStyle(Style.STROKE);
 	        distPaint.setStrokeWidth(4);
 	        distPaint.setAntiAlias(true);
@@ -128,8 +132,8 @@ public class GraphViewFull extends View {
 		int dataPlotSize = plots - 1;
 		// line for average
 		canvas.drawLine(0, height / 2, width, height / 2, avgLinePaint);
-		avgText = (TextView) findViewById(R.id.chart_avg_label);
-		avgText.setVisibility();
+		avgText = (TextView) getRootView().findViewById(R.id.chart_avg_label);
+		avgText.setVisibility(VISIBLE);
 		// miles or km and mph or km/h
 		distLabelPaint.setTextSize(height * 0.1f);
 		speedLabelPaint.setTextSize(height * 0.1f);
@@ -181,7 +185,7 @@ public class GraphViewFull extends View {
 		}
 	}
 	
-	private void showDetailsAtFinger(int x) {
+	private void showDetailsAtFinger(float x) {
 		
 	}
 	
