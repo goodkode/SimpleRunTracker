@@ -7,5 +7,6 @@
     <string name="delete_db">Delete all runs</string>
     <string name="statistics">Statistics</string>
     <string name="stats">Stats</string>
+    <string name="graph_it">Graph Runs</string>
 
 </resources>
