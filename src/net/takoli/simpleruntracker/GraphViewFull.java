@@ -131,6 +131,7 @@ public class GraphViewFull extends View {
 		setPlotCoordinates();
 		drawPath(canvas, speedPath, speedPaint, sX, sY);
 		drawPath(canvas, distPath, distPaint, dX, dY);
+		fingetAt = width * 0.8;
 		showDetailsAtFinger(canvas);
 	}
 
