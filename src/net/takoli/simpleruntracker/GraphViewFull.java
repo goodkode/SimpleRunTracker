@@ -19,6 +19,7 @@ public class GraphViewFull extends View {
 	
 	private RunDB runListDB;
 	private ArrayList<Run> runList;
+	private Path distPath, speedPath;
 	private final int MAX_PLOTS = 50;
 	private int plots;
 	private long[] dists, speeds;
@@ -123,18 +124,17 @@ public class GraphViewFull extends View {
 		height = this.getHeight();
 		if (plots <= 1) {
 			runNumText = (TextView) getRootView().findViewById(R.id.chart_run_number);
-			runNumText.setText("graph will show after 3 runs");
+			runNumText.setText("graph needs more data");
 			runNumText.setVisibility(VISIBLE);
 			return; }
-		drawCoordSystem(canvas, distMin, distMax, speedMin, speedMax);
+		drawCoordSystem(canvas);
 		setPlotCoordinates();
-		drawPath(canvas, speedPaint, sX, sY);
-		drawPath(canvas, distPaint, dX, dY);
+		drawPath(canvas, speedPath, speedPaint, sX, sY);
+		drawPath(canvas, distPath, distPaint, dX, dY);
 		showDetailsAtFinger(canvas);
 	}
 
-	private void drawCoordSystem(Canvas canvas, long distMin, long distMax,
-		long speedMin, long speedMax) {
+	private void drawCoordSystem(Canvas canvas) {
 		int dataPlotSize = plots - 1;
 		// line for average
 		Path mPath = new Path();
@@ -150,9 +150,9 @@ public class GraphViewFull extends View {
 		canvas.drawText("speed", width - height * 0.3f, 0 + height * 0.1f, speedPaint);
 	}
 	
-	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {
+	private void drawPath(Canvas canvas, Path path, Paint pathPaint, float[] X, float[] Y) {
 		float SMOOTH = 0.1f;
-		Path path = new Path();
+		path = new Path();
         path.moveTo(X[0], Y[0]);
         int dataPlotSize = plots - 1;
         if (dataPlotSize == 1) {
@@ -167,7 +167,6 @@ public class GraphViewFull extends View {
             float firstControlY = Y[i] + (SMOOTH * startdiffY);
             float secondControlX = X[i(i + 1)] - (SMOOTH * endDiffX);
             float secondControlY = Y[i(i + 1)] - (SMOOTH * endDiffY);
-            //Log.i("run", "graph: " + i);
             path.cubicTo(firstControlX, firstControlY, secondControlX, secondControlY, X[i(i + 1)], Y[i(i + 1)]);
         } }
         canvas.drawPath(path, pathPaint);
@@ -180,6 +179,13 @@ public class GraphViewFull extends View {
 			element = plots - 1;
 		// draw line and dots
 		canvas.drawLine(fingerAt, height * 0.1f, fingerAt, height - height * 0.05f, avgLinePaint);
+		PathMeasure pm = new PathMeasure(speedPath, false);
+	    float pathCoord[] = {0f, 0f};
+	    pm.getPosTan(fingerAt, pathCoord, null);
+	    canvas.drawCircle(fingerAt, pathCoord[1], height / 100, speedLabelPaint);
+	    pm = new PathMeasure(distPath, false);
+	    pm.getPosTan(fingerAt, pathCoord, null);
+	    canvas.drawCircle(pathCoord[0], pathCoord[1], height / 100, distLabelPaint);
 		// print date and distance/speed measures
 		Run currentRun = runList.get(runList.size() - plots + element);
 		TextView dateLabel = (TextView) getRootView().findViewById(R.id.chart_date_label);
