@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -66,20 +67,13 @@ public class GraphViewFull extends View {
 		inMiles = (unit.compareTo("mi") == 0);
 		if (inMiles)	{ dUnit = "mi"; sUnit = "mph";}
 		else			{ dUnit = "km"; sUnit = "km/h"; }
-		width = this.getWidth();
-		height = this.getHeight();
-		fingerAt = width;
 		updateData(15);
 		this.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-					Log.i("run", "finger: " + x);
-					fingerAt = x;
-					return true; 
-				}
-				return false; }
-		});
+				fingerAt = event.getX();
+				GraphViewFull.this.invalidate();
+				return true; } } );
 	}
 	
 	public void updateData(int plotSize) {
@@ -120,6 +114,8 @@ public class GraphViewFull extends View {
 	
 	@Override
     protected void onDraw(Canvas canvas) {
+		width = this.getWidth();
+		height = this.getHeight();
 		if (plots <= 1) {
 			runNumText = (TextView) getRootView().findViewById(R.id.chart_run_number);
 			runNumText.setText("graph will show after 3 runs");
@@ -150,14 +146,11 @@ public class GraphViewFull extends View {
 	}
 	
 	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {
-		float SMOOTH = 0.15f;
+		float SMOOTH = 0.01f;
 		Path path = new Path();
         path.moveTo(X[0], Y[0]);
         int dataPlotSize = plots - 1;
         if (dataPlotSize == 1) {
-        	//Log.i("run", "graph single");
-        	//Log.i("run", "X: " + X[0] + ", " + X[1]);
-        	//Log.i("run", "Y: " + Y[0] + ", " + Y[1]);
         	path.lineTo(X[1], Y[1]);
         } else {
         for (int i = 0; i < plots; i++) {
@@ -176,7 +169,13 @@ public class GraphViewFull extends View {
 	}
 	
 	private void showDetailsAtFinger(Canvas canvas) {
-		canvas.drawLine(fingerAt, 0, fingerAt, height, avgLinePaint);
+		float unit = (float) width / plots;
+		int element = (int) (fingerAt / unit);
+		if (element >= plots)
+			element = plots;
+		canvas.drawLine(fingerAt, 0 + height * 0.1f, fingerAt, height - height * 0.05f, avgLinePaint);
+		TextView dateLabel = (TextView) getRootView().findViewById(R.id.chart_date_label);
+		dateLabel.setText(runList.get(runList.size() - plots + element - 1).getDateString());
 	}
 	
 	private void setPlotCoordinates() {

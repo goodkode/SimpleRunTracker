@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 public class ChartFullScreenDialog extends DialogFragment {
 	
@@ -19,7 +21,9 @@ public class ChartFullScreenDialog extends DialogFragment {
 	private AlertDialog chartFullScreenView;
 	private RunDB runDB;
 	private String unit;
-	private TextView currentNumber;
+	private GraphViewFull graph;
+	private int height;
+	private int width;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -37,16 +41,16 @@ public class ChartFullScreenDialog extends DialogFragment {
     	super.onResume();
     	// set sizes based on orientation
     	DisplayMetrics dm = getResources().getDisplayMetrics();
-    	int width = (int) (dm.widthPixels * 0.98);
-    	int height = (int) (dm.heightPixels * 0.4);
+    	width = (int) (dm.widthPixels * 0.98);
+    	height = (int) (dm.heightPixels * 0.4);
     	Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         if (display.getRotation() == Configuration.ORIENTATION_PORTRAIT)
         	height = (int) (height * 1.8);
     	getDialog().getWindow().setLayout(width, height);
     	// get resources and listeners
-    	currentNumber = (TextView) findViewById(R.id.chart_run_number);
-    	final GraphViewFull graph = (GraphViewFull) chartFullScreenView.findViewById(R.id.chart_full_screen);
+    	graph = (GraphViewFull) chartFullScreenView.findViewById(R.id.chart_full_screen);
     	SeekBar seekbar = (SeekBar) chartFullScreenView.findViewById(R.id.seekBar);
+    	seekbar.setMax(45);
     	seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) { }
@@ -54,8 +58,7 @@ public class ChartFullScreenDialog extends DialogFragment {
 			public void onStartTrackingTouch(SeekBar seekBar) { }
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				int n = progress / 3 + 7
-				Log.i("run", "progress: " + n);
+				int n = 5 + progress;
 				showCurrentNumber(n);
 				graph.updateData(n);
 				graph.invalidate();
@@ -66,10 +69,13 @@ public class ChartFullScreenDialog extends DialogFragment {
     }
     
     private void showCurrentNumber(int n) {
+    	TextView currentNumber = (TextView) chartFullScreenView.findViewById(R.id.chart_run_number);
     	if (currentNumber == null)
     	    return;
-    	currentNumber.setText("" + n);
-    	currentNumber.setVisibility(VISIBLE);
-    	currentNumber.animate().setAlpha(0).setDuration(700);
+    	currentNumber.setTextSize(height / 20);
+    	currentNumber.setText(n + " workouts");
+    	currentNumber.setVisibility(View.VISIBLE);
+    	currentNumber.setAlpha(1);
+    	currentNumber.animate().alpha(0).setDuration(1000);
     }
 }

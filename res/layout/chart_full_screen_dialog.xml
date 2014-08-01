@@ -14,7 +14,42 @@
         android:layout_marginRight="14dp"
         android:layout_marginTop="6dp" >
         
-        <TextView
+        <!-- GRAPH -->
+	    <net.takoli.simpleruntracker.GraphViewFull
+	        android:id="@+id/chart_full_screen"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent" />
+	    
+	    <!-- LABELS ON GRAPH -->
+	    <TextView 
+            android:id="@+id/chart_date_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_alignParentTop="true"
+	        android:textSize="15sp"
+	        android:textColor="#FF000000"
+	        android:text="date" />
+	    <TextView 
+            android:id="@+id/chart_dist_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@id/chart_date_label"
+	        android:textSize="15sp"
+	        android:textColor="#FFFFA4A4"
+	        android:text="dist" />
+	    <TextView 
+            android:id="@+id/chart_speed_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@id/chart_date_label"
+	        android:layout_toLeftOf="@id/chart_dist_label"
+	        android:textSize="15sp"
+	        android:textColor="#FF9FC6FF"
+	        android:text="speed" />
+		<TextView 
             android:id="@+id/chart_avg_label"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -23,18 +58,13 @@
 	        android:textColor="#77000000"
 	        android:text="average distance &amp; speed"
 	        android:visibility="invisible" />
-	    <net.takoli.simpleruntracker.GraphViewFull
-	        android:id="@+id/chart_full_screen"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent" />
 	    <TextView
 	    	android:id="@+id/chart_run_number"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_centerHorizontal="true"
-	        android:layout_alignParentTop="true"
-	        android:layout_marginTop="30dp"
-	        android:textSize="30sp"
+	        android:layout_alignParentBottom="true"
+	        android:textSize="45sp"
 	        android:textColor="#77000000"
 	        android:text="num"
 	        android:visibility="invisible" />
