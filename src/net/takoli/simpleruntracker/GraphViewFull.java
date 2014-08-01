@@ -28,7 +28,9 @@ public class GraphViewFull extends View {
 	private boolean inMiles;
 	private String dUnit, sUnit;
 	private final int MY_RED = 0xFFFFA4A4;
+	private final int MY_DARKRED = 0xFFCF3C3C;
 	private final int MY_BLUE = 0xFF9FC6FF;
+	private final int MY_DARKBLUE = 0xFF3174D6;
 	private final int MY_SHADOW = 0x88000000;
 	private int width, height;
 	private Paint avgLinePaint, distPaint, speedPaint, distLabelPaint, speedLabelPaint;
@@ -56,8 +58,11 @@ public class GraphViewFull extends View {
 	        speedPaint.setAntiAlias(true);
 	        speedPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
 	        speedPaint.setColor(MY_BLUE);
-	        distLabelPaint.setColor(MY_RED);
-	        speedLabelPaint.setColor(MY_BLUE);
+	        distLabelPaint.setColor(MY_DARKRED);
+	        distLabelPaint.setStyle(Style.FILL);  
+			distLabelPaint.setAntiAlias(true);
+			distLabelPaint.setTypeface(Typeface.SERIF);
+	        speedLabelPaint.setColor(MY_DARKBLUE);
 	}
 
 		
@@ -133,16 +138,16 @@ public class GraphViewFull extends View {
 		int dataPlotSize = plots - 1;
 		// line for average
 		Path mPath = new Path();
-	    mPath.moveTo(0, height / 2);
-	    mPath.lineTo(width, height / 2);
+	    	mPath.moveTo(0, height / 2);
+	    	mPath.lineTo(width, height / 2);
 		canvas.drawPath(mPath, avgLinePaint);
 		avgText = (TextView) getRootView().findViewById(R.id.chart_avg_label);
 		avgText.setVisibility(VISIBLE);
 		// miles or km and mph or km/h
-		distLabelPaint.setTextSize(height * 0.1f);
-		speedLabelPaint.setTextSize(height * 0.1f);
-		canvas.drawText("distance", 0, 0 + height * 0.1f, distLabelPaint);
-		canvas.drawText("speed", width - height * 0.3f, 0 + height * 0.1f, speedLabelPaint);
+		distPaint.setTextSize(height * 0.1f);
+		speedPaint.setTextSize(height * 0.1f);
+		canvas.drawText("distance", 0, 0 + height * 0.1f, distPaint);
+		canvas.drawText("speed", width - height * 0.3f, 0 + height * 0.1f, speedPaint);
 	}
 	
 	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {
@@ -173,13 +178,32 @@ public class GraphViewFull extends View {
 		int element = (int) (fingerAt / unit);
 		if (element >= plots)
 			element = plots - 1;
-		canvas.drawLine(fingerAt, 0 + height * 0.1f, fingerAt, height - height * 0.05f, avgLinePaint);
+		// draw line and dots
+		canvas.drawLine(fingerAt, height * 0.1f, fingerAt, height - height * 0.05f, avgLinePaint);
+		// print date and distance/speed measures
+		Run currentRun = runList.get(runList.size() - plots + element);
 		TextView dateLabel = (TextView) getRootView().findViewById(R.id.chart_date_label);
-		TextView distLabel = (TextView) getRootView().findViewById(R.id.chart_dist_label);
-		TextView speedLabel = (TextView) getRootView().findViewById(R.id.chart_speed_label);
-		dateLabel.setText(runList.get(runList.size() - plots + element).getDateString());
-		distLabel.setText(runList.get(runList.size() - plots + element).getDistanceString());
-		speedLabel.setText(runList.get(runList.size() - plots + element).getSpeedString());
+		dateLabel.setText(currentRun.getDateString());
+		String distText = currentRun.getDistString();
+		String speedText = currentRun.getSpeedString();
+		float textSize = height * 0.1f;
+		Rect textBounds = new Rect();
+		distLabelPaint.setTextSize(textSize);
+   		distLabelPaint.getTextBounds(distText, 0, distText.length(), textBounds);
+   		float x = fingerAt - textBounds.width() - textSize / 2;
+   		float y = textSize + textBounds.height();
+   		if (x < 0) {
+   			x = fingerAt + textSize / 2;
+   			y += textBounds.height() + textSize / 2; }
+   		canvas.drawText(distText, x, y, distLabelPaint);  // write distance
+   		speedLabelPaint.setTextSize(textSize);
+   		speedLabelPaint.getTextBounds(speedText, 0, speedText.length(), textBounds);
+   		float x = fingerAt + textSize / 2;
+   		float y = textSize + textBounds.height();
+   		if (x > width) {
+   			x = fingerAt + textSize / 2;
+   			y += textBounds.height() + textSize / 2; }
+   		canvas.drawText(distText, x, y, distLabelPaint);  // write speed
 	}
 	
 	private void setPlotCoordinates() {
