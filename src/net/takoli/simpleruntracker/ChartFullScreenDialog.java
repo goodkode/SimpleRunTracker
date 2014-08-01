@@ -72,8 +72,8 @@ public class ChartFullScreenDialog extends DialogFragment {
     	TextView currentNumber = (TextView) chartFullScreenView.findViewById(R.id.chart_run_number);
     	if (currentNumber == null)
     	    return;
-    	currentNumber.setTextSize(height / 20);
-    	currentNumber.setText(n + " workouts");
+    	currentNumber.setTextSize(width / 55);
+    	currentNumber.setText("last " + n + " workouts");
     	currentNumber.setVisibility(View.VISIBLE);
     	currentNumber.setAlpha(1);
     	currentNumber.animate().alpha(0).setDuration(1000);

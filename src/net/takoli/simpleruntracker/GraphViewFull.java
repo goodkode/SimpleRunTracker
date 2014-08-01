@@ -146,7 +146,7 @@ public class GraphViewFull extends View {
 	}
 	
 	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {
-		float SMOOTH = 0.01f;
+		float SMOOTH = 0.1f;
 		Path path = new Path();
         path.moveTo(X[0], Y[0]);
         int dataPlotSize = plots - 1;
@@ -172,10 +172,14 @@ public class GraphViewFull extends View {
 		float unit = (float) width / plots;
 		int element = (int) (fingerAt / unit);
 		if (element >= plots)
-			element = plots;
+			element = plots - 1;
 		canvas.drawLine(fingerAt, 0 + height * 0.1f, fingerAt, height - height * 0.05f, avgLinePaint);
 		TextView dateLabel = (TextView) getRootView().findViewById(R.id.chart_date_label);
-		dateLabel.setText(runList.get(runList.size() - plots + element - 1).getDateString());
+		TextView distLabel = (TextView) getRootView().findViewById(R.id.chart_dist_label);
+		TextView speedLabel = (TextView) getRootView().findViewById(R.id.chart_speed_label);
+		dateLabel.setText(runList.get(runList.size() - plots + element).getDateString());
+		distLabel.setText(runList.get(runList.size() - plots + element).getDistanceString());
+		speedLabel.setText(runList.get(runList.size() - plots + element).getSpeedString());
 	}
 	
 	private void setPlotCoordinates() {

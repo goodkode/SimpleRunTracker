@@ -30,25 +30,29 @@
 	        android:textSize="15sp"
 	        android:textColor="#FF000000"
 	        android:text="date" />
-	    <TextView 
-            android:id="@+id/chart_dist_label"
+	    <LinearLayout 
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_centerHorizontal="true"
-	        android:layout_below="@id/chart_date_label"
-	        android:textSize="15sp"
-	        android:textColor="#FFFFA4A4"
-	        android:text="dist" />
-	    <TextView 
-            android:id="@+id/chart_speed_label"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerHorizontal="true"
-	        android:layout_below="@id/chart_date_label"
-	        android:layout_toLeftOf="@id/chart_dist_label"
-	        android:textSize="15sp"
-	        android:textColor="#FF9FC6FF"
-	        android:text="speed" />
+		    android:layout_below="@id/chart_date_label"
+	        android:padding="3dp" >
+		    <TextView 
+	            android:id="@+id/chart_dist_label"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:textSize="15sp"
+		        android:textColor="#FFFFA4A4"
+		        android:text="dist" />
+		    <TextView 
+	            android:id="@+id/chart_speed_label"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:textSize="15sp"
+		        android:textColor="#FF9FC6FF"
+		        android:text="speed" />
+	    </LinearLayout>
 		<TextView 
             android:id="@+id/chart_avg_label"
 	        android:layout_width="wrap_content"
