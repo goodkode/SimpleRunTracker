@@ -64,6 +64,7 @@ public class ChartFullScreenDialog extends DialogFragment {
 				graph.invalidate();
 			}
 		});
+	seekbar.setProgress(20);
     	MainActivity main = (MainActivity) getActivity();
     	graph.setRunList(main.getRunDB(), main.getUnit());
     }
