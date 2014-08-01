@@ -173,6 +173,13 @@ public class MainActivity extends Activity {
 	    	case R.id.settings:
 	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
 	            return true; 
+	        case R.id.graph_it:
+	    		graphFullFragment = (ChartFullScreenDialog) getFragmentManager().findFragmentByTag("ChartFullScreen");
+			if (graphFullFragment == null) {
+				graphFullFragment = new ChartFullScreenDialog();
+				graphFullFragment.show(fragMngr, "ChartFullScreen");	
+			}
+	            return true; 
 	    	case R.id.export_list_of_runs:
 	        	runDB.saveToExternalMemory(this);
 	        	Intent emailIntent = runDB.emailIntent(this);
