@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 public class RunDB {
@@ -199,6 +200,13 @@ public class RunDB {
 		if (unit.equals("km")) 
 			return Run.dec2string(Run.mi2km(getDailyAvgUNIT())); 
 		else return "-";
+	}
+	public String getRunFrequencyString() {
+		long daysPassed = (Calendar.getInstance().getTimeInMillis() - 
+				runList.get(0).date.getTimeInMillis()) / 1000 / 60 / 60 / 24 + 1;
+		Log.i("run", "days passed: " + daysPassed);
+		long freq10 = (daysPassed * 10) / runList.size();
+		return freq10 / 10 + "." + freq10 % 10;
 	}
 	public String getWeeklyAvgString(String unit) {
 		if (unit.equals("mi")) 

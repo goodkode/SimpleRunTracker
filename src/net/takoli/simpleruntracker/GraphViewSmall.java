@@ -160,7 +160,7 @@ public class GraphViewSmall extends View {
 		coordPaint.setTextSize(bPad * 0.5f);
         coordPaint.setStrokeWidth(1);
         coordPaint.setTextAlign(Paint.Align.CENTER);
-		canvas.drawText("Last " + dataPlotSize + " runs shown", canvas.getWidth() / 2, tPad + height + bPad * 0.6f, coordPaint);
+		canvas.drawText("Last " + dataPlotSize + " workouts", canvas.getWidth() / 2, tPad + height + bPad * 0.6f, coordPaint);
 	}
 	
 	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {

@@ -127,8 +127,9 @@ public class StatsFragment extends Fragment {
 		paceSpeedMax.setText("Fastest: " + runDB.getMaxPaceString("mi") + " min/mi" +
 									" (" + runDB.getMaxSpeedString("mi") + " mph)");
 		if (dailyAvg != null)
-			dailyAvg.setText("Your daily average is " + runDB.getDailyAvgString("mi") + " miles." + 
-								"\nThat's " + runDB.getWeeklyAvgString("mi") + " miles weekly.");
+			dailyAvg.setText("Your average is " + runDB.getWeeklyAvgString("mi") + " miles weekly." + 
+								"\nThat's " + runDB.getDailyAvgString("mi") + " miles daily." +
+								"\n\nYou run every " + runDB.getRunFrequencyString() + " days.");
 	}
 	public void onStatsInKm() {
 		mileChB.setChecked(false);
@@ -145,8 +146,9 @@ public class StatsFragment extends Fragment {
 		paceSpeedMax.setText("Fastest: " + runDB.getMaxPaceString("km") + " min/km" +
 									" (" + runDB.getMaxSpeedString("km") + " km/h)");
 		if (dailyAvg != null)
-			dailyAvg.setText("Your daily average is " + runDB.getDailyAvgString("km") + " km." + 
-								"\nThat's " + runDB.getWeeklyAvgString("km") + " km weekly.");
+			dailyAvg.setText("Your average is " + runDB.getWeeklyAvgString("km") + " km weekly." + 
+									"\nThat's " + runDB.getDailyAvgString("km") + " km daily." +
+									"\n\nYou run every " + runDB.getRunFrequencyString() + " days.");
 	}
 	
 	public boolean noStats() {

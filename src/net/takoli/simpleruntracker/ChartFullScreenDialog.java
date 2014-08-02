@@ -24,6 +24,7 @@ public class ChartFullScreenDialog extends DialogFragment {
 	private GraphViewFull graph;
 	private int height;
 	private int width;
+	private TextView currentNumber;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -48,9 +49,24 @@ public class ChartFullScreenDialog extends DialogFragment {
         	height = (int) (height * 1.8);
     	getDialog().getWindow().setLayout(width, height);
     	// get resources and listeners
+    	MainActivity main = (MainActivity) getActivity();
+    	int listSize = main.getRunDB().getRunList().size();
+    	if (listSize < GraphViewFull.MIN_PLOTS) {
+    		currentNumber = (TextView) chartFullScreenView.findViewById(R.id.chart_run_number);
+    		currentNumber.setText("need more data first");
+    		currentNumber.setVisibility(View.VISIBLE);
+    		return;		// not enough data
+    	}
     	graph = (GraphViewFull) chartFullScreenView.findViewById(R.id.chart_full_screen);
-    	SeekBar seekbar = (SeekBar) chartFullScreenView.findViewById(R.id.seekBar);
-    	seekbar.setMax(45);
+    	graph.setRunList(main.getRunDB(), main.getUnit());
+    	int listStart = listSize < GraphViewFull.START_PLOTS ? listSize : GraphViewFull.START_PLOTS;
+    	int listMax = graph.getMaxPlots();
+    	graph.updateData(listStart);
+		graph.invalidate();
+	    SeekBar seekbar = (SeekBar) chartFullScreenView.findViewById(R.id.seekBar);
+    	seekbar.setMax(listMax - GraphViewFull.MIN_PLOTS);
+    	seekbar.setProgress(listStart - GraphViewFull.MIN_PLOTS);
+    	showCurrentNumber(listStart);
     	seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) { }
@@ -58,19 +74,16 @@ public class ChartFullScreenDialog extends DialogFragment {
 			public void onStartTrackingTouch(SeekBar seekBar) { }
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				int n = 5 + progress;
+				int n = GraphViewFull.MIN_PLOTS + progress;
 				showCurrentNumber(n);
 				graph.updateData(n);
 				graph.invalidate();
 			}
 		});
-	seekbar.setProgress(20);
-    	MainActivity main = (MainActivity) getActivity();
-    	graph.setRunList(main.getRunDB(), main.getUnit());
     }
     
     private void showCurrentNumber(int n) {
-    	TextView currentNumber = (TextView) chartFullScreenView.findViewById(R.id.chart_run_number);
+    	currentNumber = (TextView) chartFullScreenView.findViewById(R.id.chart_run_number);
     	if (currentNumber == null)
     	    return;
     	currentNumber.setTextSize(width / 55);

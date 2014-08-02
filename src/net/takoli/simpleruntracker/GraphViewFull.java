@@ -3,12 +3,17 @@ package net.takoli.simpleruntracker;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
+import android.graphics.PathMeasure;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -20,7 +25,10 @@ public class GraphViewFull extends View {
 	private RunDB runListDB;
 	private ArrayList<Run> runList;
 	private Path distPath, speedPath;
-	private final int MAX_PLOTS = 50;
+	static final int MAX_PLOTS = 50;
+	static final int MIN_PLOTS = 3;
+	static final int START_PLOTS = 15;
+	private boolean initial = true;
 	private int plots;
 	private long[] dists, speeds;
 	private long distMin, distMax, speedMin, speedMax;
@@ -34,8 +42,8 @@ public class GraphViewFull extends View {
 	private final int MY_DARKBLUE = 0xFF3174D6;
 	private final int MY_SHADOW = 0x88000000;
 	private int width, height;
-	private Paint avgLinePaint, distPaint, speedPaint, distLabelPaint, speedLabelPaint;
-	private TextView avgText, runNumText;
+	private Paint avgLinePaint, distPaint, speedPaint, cornerLabelPaint, distLabelPaint, speedLabelPaint;
+	private TextView avgText;
 	
 	// set up the view
 	public GraphViewFull(Context context, AttributeSet attrs) {
@@ -44,6 +52,7 @@ public class GraphViewFull extends View {
 	        avgLinePaint = new Paint();
 	        distPaint = new Paint();
 	        speedPaint = new Paint();
+	        cornerLabelPaint = new Paint();
 	        distLabelPaint = new Paint();
 	        speedLabelPaint = new Paint();
 	        avgLinePaint.setStyle(Style.STROKE);
@@ -64,6 +73,9 @@ public class GraphViewFull extends View {
 			distLabelPaint.setAntiAlias(true);
 			distLabelPaint.setTypeface(Typeface.SERIF);
 	        speedLabelPaint.setColor(MY_DARKBLUE);
+	        speedLabelPaint.setStyle(Style.FILL);  
+	        speedLabelPaint.setAntiAlias(true);
+	        speedLabelPaint.setTypeface(Typeface.SERIF);
 	}
 
 		
@@ -73,13 +85,15 @@ public class GraphViewFull extends View {
 		inMiles = (unit.compareTo("mi") == 0);
 		if (inMiles)	{ dUnit = "mi"; sUnit = "mph";}
 		else			{ dUnit = "km"; sUnit = "km/h"; }
-		updateData(15);
 		this.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
+				initial = false;
 				fingerAt = event.getX();
+				//	```````1					`1Log.i("run", "fingerAt: " + fingerAt);
 				GraphViewFull.this.invalidate();
 				return true; } } );
+		fingerAt = this.getWidth() * 0.8f;
 	}
 	
 	public void updateData(int plotSize) {
@@ -120,40 +134,44 @@ public class GraphViewFull extends View {
 	
 	@Override
     protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
+		if (plots <= MIN_PLOTS)
+			return;
 		width = this.getWidth();
 		height = this.getHeight();
-		if (plots <= 1) {
-			runNumText = (TextView) getRootView().findViewById(R.id.chart_run_number);
-			runNumText.setText("graph needs more data");
-			runNumText.setVisibility(VISIBLE);
-			return; }
 		drawCoordSystem(canvas);
 		setPlotCoordinates();
+		speedPath = new Path();
 		drawPath(canvas, speedPath, speedPaint, sX, sY);
+		distPath = new Path();
 		drawPath(canvas, distPath, distPaint, dX, dY);
-		fingetAt = width * 0.8;
+		if (initial)
+			fingerAt = width * 0.8f;
+		if (fingerAt < 0)
+			fingerAt = 0;
+		if (fingerAt >= width)
+			fingerAt = width - 1;
 		showDetailsAtFinger(canvas);
 	}
 
 	private void drawCoordSystem(Canvas canvas) {
-		int dataPlotSize = plots - 1;
 		// line for average
 		Path mPath = new Path();
-	    	mPath.moveTo(0, height / 2);
-	    	mPath.lineTo(width, height / 2);
+		mPath.moveTo(0, height / 2);
+		mPath.lineTo(width, height / 2);
 		canvas.drawPath(mPath, avgLinePaint);
 		avgText = (TextView) getRootView().findViewById(R.id.chart_avg_label);
 		avgText.setVisibility(VISIBLE);
 		// miles or km and mph or km/h
-		distPaint.setTextSize(height * 0.1f);
-		speedPaint.setTextSize(height * 0.1f);
-		canvas.drawText("distance", 0, 0 + height * 0.1f, distPaint);
-		canvas.drawText("speed", width - height * 0.3f, 0 + height * 0.1f, speedPaint);
+		cornerLabelPaint.setTextSize(height * 0.1f);
+		cornerLabelPaint.setColor(MY_RED);
+		canvas.drawText("distance", 0, 0 + height * 0.1f, cornerLabelPaint);
+		cornerLabelPaint.setColor(MY_BLUE);
+		canvas.drawText("speed", width - height * 0.3f, 0 + height * 0.1f, cornerLabelPaint);
 	}
 	
 	private void drawPath(Canvas canvas, Path path, Paint pathPaint, float[] X, float[] Y) {
 		float SMOOTH = 0.1f;
-		path = new Path();
         path.moveTo(X[0], Y[0]);
         int dataPlotSize = plots - 1;
         if (dataPlotSize == 1) {
@@ -180,41 +198,55 @@ public class GraphViewFull extends View {
 			element = plots - 1;
 		// draw line and dots
 		canvas.drawLine(fingerAt, height * 0.1f, fingerAt, height - height * 0.05f, avgLinePaint);
-		PathMeasure pm = new PathMeasure(speedPath, false);
-	    float pathCoord[] = {0f, 0f};
-	    pm.getPosTan(fingerAt, pathCoord, null);
-	    canvas.drawCircle(fingerAt, pathCoord[1], height / 100, speedLabelPaint);
-	    pm = new PathMeasure(distPath, false);
-	    pm.getPosTan(fingerAt, pathCoord, null);
-	    canvas.drawCircle(pathCoord[0], pathCoord[1], height / 100, distLabelPaint);
+		float sPathCoords[] = findPathCoords(speedPath);
+		float dPathCoords[] = findPathCoords(distPath);
+	    canvas.drawCircle(fingerAt, sPathCoords[1], height / 45, speedLabelPaint);
+	    canvas.drawCircle(fingerAt, dPathCoords[1], height / 45, distLabelPaint);
 		// print date and distance/speed measures
-		Run currentRun = runList.get(runList.size() - plots + element);
+		float textSize = height * 0.08f;
+		int runIndex = runList.size() - plots + element;
+		if (runIndex < 0)	runIndex = 0;
+		if (runIndex >= runList.size()) runIndex = runList.size() - 1;
+		Run currentRun = runList.get(runIndex);
 		TextView dateLabel = (TextView) getRootView().findViewById(R.id.chart_date_label);
 		dateLabel.setText(currentRun.getDateString());
-		String distText = currentRun.getDistString();
+		String distText = currentRun.getDistanceString();
 		String speedText = currentRun.getSpeedString();
-		float textSize = height * 0.1f;
-		Rect textBounds = new Rect();
+		Rect distTextBounds = new Rect();
+		Rect speedTextBounds = new Rect();
 		distLabelPaint.setTextSize(textSize);
-   		distLabelPaint.getTextBounds(distText, 0, distText.length(), textBounds);
-   		float x = fingerAt - textBounds.width() - textSize / 2;
-   		float y = textSize + textBounds.height();
-   		if (x < 0) {
-   			x = fingerAt + textSize / 2;
-   			y += textBounds.height() + textSize / 2; }
-   		canvas.drawText(distText, x, y, distLabelPaint);  // write distance
    		speedLabelPaint.setTextSize(textSize);
-   		speedLabelPaint.getTextBounds(speedText, 0, speedText.length(), textBounds);
-   		float x = fingerAt + textSize / 2;
-   		float y = textSize + textBounds.height();
-   		if (x > width) {
-   			x = fingerAt + textSize / 2;
-   			y += textBounds.height() + textSize / 2; }
-   		canvas.drawText(distText, x, y, distLabelPaint);  // write speed
+   		distLabelPaint.getTextBounds(distText, 0, distText.length(), distTextBounds);
+   		speedLabelPaint.getTextBounds(speedText, 0, speedText.length(), speedTextBounds);
+   		float xD = fingerAt - distTextBounds.width() - textSize;
+   		float yD = height * 0.15f + distTextBounds.height();
+   		float xS = fingerAt + textSize / 2f;
+   		float yS = yD;
+   		if (xD < 0) {
+   			xD = xS;
+   			yS += distTextBounds.height() + textSize / 2f; }
+   		if (xS + speedTextBounds.width() > width) {
+   			xS = fingerAt - distTextBounds.width() - textSize;
+   			yS += speedTextBounds.height() + textSize / 2f; }
+   		canvas.drawText(distText, xD, yD, distLabelPaint);  // write distance
+   		canvas.drawText(speedText, xS, yS, speedLabelPaint);  // write speed
+   		// if initial, arrow animation
+   		int rMid = (int) fingerAt;
+   		int rTop = (int) (height * 0.3f);
+   		if (!initial)	return;
+   		int rLength = distTextBounds.width();
+   		int rHeight = (int) textSize;
+   		int rGap = (int) (textSize * 0.1f);
+   		Rect left = new Rect(rMid - rLength - rGap, rTop, rMid - rGap, rTop + rHeight);
+   		Rect right = new Rect(rMid + rGap, rTop, rMid + rLength + rGap, rTop + rHeight);
+   		Bitmap leftArrow = BitmapFactory.decodeResource(getResources(), R.drawable.left_arrow); 
+   		Bitmap rightArrow = BitmapFactory.decodeResource(getResources(), R.drawable.right_arrow);
+   		canvas.drawBitmap(leftArrow, null, left, null);
+   		canvas.drawBitmap(rightArrow, null, right, null);
 	}
 	
 	private void setPlotCoordinates() {
-		float wUnit = width / (plots - 1);  //divide horizontally
+		float wUnit = width / (plots - 1);  	//divide horizontally
 		float dHeight = height * 0.8f;			//distance range will be 80% of chart
 		float sHeight = height * 0.5f;			//speed range will be 50%
 		float dTop = 0 + height * 0.1f;
@@ -229,6 +261,24 @@ public class GraphViewFull extends View {
 			sY[i] = sTop + sHeight * (speedMax - speeds[i]) / sRange;
 			if (sRange == 0)	sY[i] = sTop + sHeight / 2;
 		}
+	}
+	
+	private float[] findPathCoords(Path path) {
+		float[] coords = new float[2];
+		PathMeasure pm = new PathMeasure(path, false);
+	    float estX = pm.getLength() * fingerAt / width;
+	    pm.getPosTan(estX, coords, null);
+	    float diff = fingerAt - coords[0];
+	    int tries = 0;
+	    while (Math.abs(diff) > 10 && tries < 12) {
+	    	estX += diff / 2;
+	    	if (estX < 0) 				estX = 5;
+	    	if (estX > pm.getLength())	estX = pm.getLength() - 5;
+	    	pm.getPosTan(estX, coords, null);
+	    	diff = fingerAt - coords[0];
+	    	tries++;
+	    }
+		return coords;
 	}
 	
 	public int getMaxPlots() {
