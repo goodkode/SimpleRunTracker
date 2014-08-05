@@ -24,7 +24,7 @@ public class ChartFullScreenDialog extends DialogFragment {
 	private GraphViewFull graph;
 	private int height;
 	private int width;
-	private TextView currentNumber;
+	private TextView currentNumber, needMoreData;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -52,9 +52,12 @@ public class ChartFullScreenDialog extends DialogFragment {
     	MainActivity main = (MainActivity) getActivity();
     	int listSize = main.getRunDB().getRunList().size();
     	if (listSize < GraphViewFull.MIN_PLOTS) {
-    		currentNumber = (TextView) chartFullScreenView.findViewById(R.id.chart_run_number);
-    		currentNumber.setText("need more data first");
-    		currentNumber.setVisibility(View.VISIBLE);
+    		needMoreData = (TextView) chartFullScreenView.findViewById(R.id.chart_avg_label);
+    		needMoreData.setTextSize(width / 50);
+    		needMoreData.setTextColor(0xAA000000);
+    		needMoreData.setText("graph will show after\n3+ workouts");
+    		needMoreData.setVisibility(View.VISIBLE);
+    		chartFullScreenView.findViewById(R.id.seekBar).setVisibility(View.GONE);
     		return;		// not enough data
     	}
     	graph = (GraphViewFull) chartFullScreenView.findViewById(R.id.chart_full_screen);

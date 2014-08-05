@@ -204,7 +204,6 @@ public class RunDB {
 	public String getRunFrequencyString() {
 		long daysPassed = (Calendar.getInstance().getTimeInMillis() - 
 				runList.get(0).date.getTimeInMillis()) / 1000 / 60 / 60 / 24 + 1;
-		Log.i("run", "days passed: " + daysPassed);
 		long freq10 = (daysPassed * 10) / runList.size();
 		return freq10 / 10 + "." + freq10 % 10;
 	}

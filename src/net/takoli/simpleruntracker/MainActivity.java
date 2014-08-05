@@ -242,7 +242,7 @@ public class MainActivity extends Activity {
 		runDB.ensureDBLimit();
 	}
 	public String getDBLimit() {
-		return settings.getString("limit", "100");
+		return settings.getString("limit", "300");
 	}
 	public void updateGraph() {
 		if (graphSmall != null) {

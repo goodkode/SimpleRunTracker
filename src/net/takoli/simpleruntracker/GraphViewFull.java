@@ -43,7 +43,7 @@ public class GraphViewFull extends View {
 	private final int MY_SHADOW = 0x88000000;
 	private int width, height;
 	private Paint avgLinePaint, distPaint, speedPaint, cornerLabelPaint, distLabelPaint, speedLabelPaint;
-	private TextView avgText;
+	//private TextView avgText;
 	
 	// set up the view
 	public GraphViewFull(Context context, AttributeSet attrs) {
@@ -160,8 +160,8 @@ public class GraphViewFull extends View {
 		mPath.moveTo(0, height / 2);
 		mPath.lineTo(width, height / 2);
 		canvas.drawPath(mPath, avgLinePaint);
-		avgText = (TextView) getRootView().findViewById(R.id.chart_avg_label);
-		avgText.setVisibility(VISIBLE);
+//		avgText = (TextView) getRootView().findViewById(R.id.chart_avg_label);
+//		avgText.setVisibility(VISIBLE);
 		// miles or km and mph or km/h
 		cornerLabelPaint.setTextSize(height * 0.1f);
 		cornerLabelPaint.setColor(MY_RED);
@@ -270,7 +270,7 @@ public class GraphViewFull extends View {
 	    pm.getPosTan(estX, coords, null);
 	    float diff = fingerAt - coords[0];
 	    int tries = 0;
-	    while (Math.abs(diff) > 10 && tries < 12) {
+	    while (Math.abs(diff) > 5 && tries < 10) {
 	    	estX += diff / 2;
 	    	if (estX < 0) 				estX = 5;
 	    	if (estX > pm.getLength())	estX = pm.getLength() - 5;
