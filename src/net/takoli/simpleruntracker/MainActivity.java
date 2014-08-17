@@ -300,6 +300,8 @@ public class MainActivity extends Activity {
 		
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			if (e1 == null || e2 == null)
+				return false;
 			float deltaY = e2.getY() - e1.getY();
 			float deltaX = e2.getX() - e1.getX();
 			if ((e1.getX() / screenWidth > 0.15 &&  e1.getX() / screenWidth < 0.85) 

@@ -192,10 +192,6 @@ public class GraphViewFull extends View {
 	}
 	
 	private void showDetailsAtFinger(Canvas canvas) {
-		float unit = (float) width / plots;
-		int element = (int) (fingerAt / unit);
-		if (element >= plots)
-			element = plots - 1;
 		// draw line and dots
 		canvas.drawLine(fingerAt, height * 0.1f, fingerAt, height - height * 0.05f, avgLinePaint);
 		float sPathCoords[] = findPathCoords(speedPath);
@@ -204,9 +200,13 @@ public class GraphViewFull extends View {
 	    canvas.drawCircle(fingerAt, dPathCoords[1], height / 45, distLabelPaint);
 		// print date and distance/speed measures
 		float textSize = height * 0.08f;
-		int runIndex = runList.size() - plots + element;
-		if (runIndex < 0)	runIndex = 0;
-		if (runIndex >= runList.size()) runIndex = runList.size() - 1;
+		int sections = (plots - 1) * 2;
+		float unit = (float) width / sections;
+		int element = (int) (fingerAt / unit);
+		int runIndex = (runList.size() - 1) - (sections  - element) / 2;
+		if (runIndex <= runList.size() - plots)	runIndex = runList.size() - plots + 1;
+		if (runIndex >= runList.size()) 		runIndex = runList.size() - 1;
+		if (runIndex < 0)						runIndex = 0;
 		Run currentRun = runList.get(runIndex);
 		TextView dateLabel = (TextView) getRootView().findViewById(R.id.chart_date_label);
 		dateLabel.setText(currentRun.getDateString());
@@ -264,18 +264,20 @@ public class GraphViewFull extends View {
 	}
 	
 	private float[] findPathCoords(Path path) {
+		final int PROXIMITY = 1;
 		float[] coords = new float[2];
 		PathMeasure pm = new PathMeasure(path, false);
 	    float estX = pm.getLength() * fingerAt / width;
 	    pm.getPosTan(estX, coords, null);
 	    float diff = fingerAt - coords[0];
 	    int tries = 0;
-	    while (Math.abs(diff) > 5 && tries < 10) {
+	    while (Math.abs(diff) > PROXIMITY && tries < 25) {
 	    	estX += diff / 2;
-	    	if (estX < 0) 				estX = 5;
-	    	if (estX > pm.getLength())	estX = pm.getLength() - 5;
+	    	if (estX < 0) 				estX = PROXIMITY;
+	    	if (estX > pm.getLength())	estX = pm.getLength() - PROXIMITY;
 	    	pm.getPosTan(estX, coords, null);
 	    	diff = fingerAt - coords[0];
+	    	//Log.i("run", "tries: " + tries + "; coord c[0]/estX/diff: " + coords[0] + " / " + estX + " / " + diff);
 	    	tries++;
 	    }
 		return coords;
@@ -290,10 +292,4 @@ public class GraphViewFull extends View {
 	        else if (i < 0)		return 0;
 	        return i;
 	    }
-	
-	private String form(long XXxx) {
-		String formatted = "" + ++XXxx / 100;
-		formatted += "." + (XXxx % 100) / 10;
-		return formatted;
-	}
 }
