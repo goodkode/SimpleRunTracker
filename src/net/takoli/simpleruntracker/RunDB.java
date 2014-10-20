@@ -314,7 +314,7 @@ public class RunDB {
 	    	emailIntent.setType("text/plain"); 
 	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "RunTracker runlist for Excel"); 
 	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "RunTracker-runlist.csv is attached.\n\n" +
-	    		"The file can be opened with any spreadsheet application, like Excel, or with any text editior"); 
+	    		"The file can be opened with any spreadsheet application, like MS Excel, or with a simple text editor"); 
 	    	emailIntent.putExtra(Intent.EXTRA_STREAM, fileUri); 
 	    	return emailIntent;
 		} catch(Exception e) {

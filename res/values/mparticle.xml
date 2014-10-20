@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>   
+    <string name="mp_key">8558b653b4e9a34da418aec1f32c39d7</string>   
+    <string name="mp_secret">rlCRUQwYQ3n-Fnj8Op2sVDT_7rJyDWM4VoTOM78nZD-C9ppaBtIaOZzmSZXSFU1N</string>
+    <bool name="mp_enableAutoTracking">true</bool>
+</resources>

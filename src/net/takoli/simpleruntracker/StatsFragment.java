@@ -1,5 +1,7 @@
 package net.takoli.simpleruntracker;
 
+import com.mparticle.MParticle;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -110,6 +112,8 @@ public class StatsFragment extends Fragment {
 			onStatsInKm();
 		else if (mileChB.isChecked())
 			onStatsInMi();
+		
+		mainActivity.getMParticle().logEvent("stats opened", MParticle.EventType.Navigation);
 	}
 	
 	public void onStatsInMi() {

@@ -254,19 +254,19 @@ public class Run {
 	}
 	public static Calendar setTodayDate() {
 		Calendar today =  Calendar.getInstance();
-		today.set(Calendar.HOUR_OF_DAY, 0);
-		today.set(Calendar.MINUTE, 0);
-		today.set(Calendar.SECOND, 0);
-		today.set(Calendar.MILLISECOND, 0);
+//		today.set(Calendar.HOUR_OF_DAY, 0);
+//		today.set(Calendar.MINUTE, 0);
+//		today.set(Calendar.SECOND, 0);
+//		today.set(Calendar.MILLISECOND, 0);
 		return today;
 	}
 	public static Calendar setYesterdayDate() {
 		Calendar yesterday =  Calendar.getInstance();
 		yesterday.add(Calendar.DAY_OF_YEAR, -1);
-		yesterday.set(Calendar.HOUR_OF_DAY, 0);
-		yesterday.set(Calendar.MINUTE, 0);
-		yesterday.set(Calendar.SECOND, 0);
-		yesterday.set(Calendar.MILLISECOND, 0);
+//		yesterday.set(Calendar.HOUR_OF_DAY, 0);
+//		yesterday.set(Calendar.MINUTE, 0);
+//		yesterday.set(Calendar.SECOND, 0);
+//		yesterday.set(Calendar.MILLISECOND, 0);
 		return yesterday;
 	}
 	public static Calendar setCustomDate(int month, int day, int year) {

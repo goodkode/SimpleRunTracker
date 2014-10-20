@@ -160,8 +160,6 @@ public class GraphViewFull extends View {
 		mPath.moveTo(0, height / 2);
 		mPath.lineTo(width, height / 2);
 		canvas.drawPath(mPath, avgLinePaint);
-//		avgText = (TextView) getRootView().findViewById(R.id.chart_avg_label);
-//		avgText.setVisibility(VISIBLE);
 		// miles or km and mph or km/h
 		cornerLabelPaint.setTextSize(height * 0.1f);
 		cornerLabelPaint.setColor(MY_RED);

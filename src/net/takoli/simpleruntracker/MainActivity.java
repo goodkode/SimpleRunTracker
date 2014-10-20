@@ -1,5 +1,10 @@
 package net.takoli.simpleruntracker;
 
+import java.util.Calendar;
+
+import com.mparticle.MParticle;
+import com.mparticle.activity.MPActivity;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -8,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -48,6 +54,9 @@ public class MainActivity extends Activity {
 	private DisplayMetrics dm;
 	private int screenHeight, screenWidth;
 	protected GestureDetector gestDect;
+	
+	private MParticle mParticle;
+	private Calendar mPTime;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +123,10 @@ public class MainActivity extends Activity {
 		// check for first run
 		if (runDB.isEmpty())
 			(new FirstRunDialog()).show(fragMngr, "FirstRunDialog");
+		
+		// initialize mParticle
+		MParticle.start(this);
+		mParticle = MParticle.getInstance();
 	}
 	
 	@Override
@@ -122,11 +135,19 @@ public class MainActivity extends Activity {
 		if (runFragLayout != null)
 			runFragLayout.setY(screenHeight * -3/10);
 		slideDown();
+		
+		mParticle.activityStarted(this);
+		mPTime = Calendar.getInstance();
+		
 	}
 	@Override
 	protected void onPause() {
 		slideUp();
 		super.onPause();
+		
+		mParticle.activityStopped(this);
+		mParticle.logEvent("activity uptime", MParticle.EventType.Navigation, 
+								Calendar.getInstance().getTimeInMillis() - mPTime.getTimeInMillis());
 		onDestroy();
 	}
 	
@@ -177,7 +198,9 @@ public class MainActivity extends Activity {
 	    		graphFullFragment = (ChartFullScreenDialog) getFragmentManager().findFragmentByTag("ChartFullScreen");
 			if (graphFullFragment == null) {
 				graphFullFragment = new ChartFullScreenDialog();
-				graphFullFragment.show(fragMngr, "ChartFullScreen");	
+				graphFullFragment.show(fragMngr, "ChartFullScreen");
+				
+				mParticle.logEvent("chart opened (menu)", MParticle.EventType.Navigation);
 			}
 	            return true; 
 	    	case R.id.export_list_of_runs:
@@ -200,7 +223,9 @@ public class MainActivity extends Activity {
 			graphFullFragment = (ChartFullScreenDialog) getFragmentManager().findFragmentByTag("ChartFullScreen");
 			if (graphFullFragment == null) {
 				graphFullFragment = new ChartFullScreenDialog();
-				graphFullFragment.show(fragMngr, "ChartFullScreen");	
+				graphFullFragment.show(fragMngr, "ChartFullScreen");
+				
+				mParticle.logEvent("chart opened (onclick)", MParticle.EventType.Navigation);
 			}
 			return true;
 		}
@@ -326,5 +351,9 @@ public class MainActivity extends Activity {
 			if (!runFragOpen)
 				slideDown();
 			return true; }
+	}
+	
+	public MParticle getMParticle() {
+		return mParticle;
 	}
 }

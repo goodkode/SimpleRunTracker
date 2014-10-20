@@ -10,6 +10,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,11 +19,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.NumberPicker.OnScrollListener;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.mparticle.MParticle;
 
 public class EnterRun extends Fragment {
 
@@ -38,12 +42,16 @@ public class EnterRun extends Fragment {
 	DisplayMetrics dm;
 	RunDB runListDB;
 	RunAdapter runAdapter;
+	
+	MParticle mParticle;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		runListDB = ((MainActivity) getActivity()).getRunDB();
 		runAdapter = ((MainActivity) getActivity()).getRunAdapter();
+		
+		mParticle = ((MainActivity) getActivity()).getMParticle();	
 	}
 	
 	@Override
@@ -97,6 +105,35 @@ public class EnterRun extends Fragment {
 		sec10.setValue(lastValues[4] / 10);
 		sec1.setValue(lastValues[4] % 10);
 		
+		// Set up listeners that change the time pickers to the runner's average (expected) time
+		OnScrollListener distScrollListener = new OnScrollListener() {
+			int secPerMile = runListDB.getAvgPaceUNIT();
+			int secs = 0;
+			int dist = 0;
+			boolean inMile = ((MainActivity) getActivity()).getUnit().compareTo("mi") == 0;
+			@Override
+			public void onScrollStateChange(NumberPicker view, int scrollState) {
+				Log.i("run", "average time: " + secPerMile);
+				dist = dist10.getValue() * 1000 + dist1.getValue() * 100 + dist_1.getValue() * 10 + dist_01.getValue();
+				if (inMile)
+					secs = dist * secPerMile / 100;
+				else
+					secs = (int) (dist * secPerMile / 100 / 1.609);
+				int h = secs / 60 / 60;
+				int mins = (secs - h * 60 * 60) / 60;
+				int sec = secs - h * 60 * 60 - mins * 60;
+				hour.setValue(h % 10);
+				min10.setValue(mins / 10 % 10);
+				min1.setValue(mins % 10);
+				sec10.setValue(sec / 10 % 10);
+				sec1.setValue(sec % 10);
+			}
+		};
+		dist10.setOnScrollListener(distScrollListener);
+		dist1.setOnScrollListener(distScrollListener);
+		dist_1.setOnScrollListener(distScrollListener);
+		dist_01.setOnScrollListener(distScrollListener);
+		
 		// "Distance" and "Time"; divider line width
 		distance = (VerticalTextView) getActivity().findViewById(R.id.distance);
 		distance.setTextColor(0xaaFF0000);
@@ -127,6 +164,7 @@ public class EnterRun extends Fragment {
 					break;
 				}
 			}});
+		((RadioButton) getActivity().findViewById(R.id.date_today)).setChecked(true);
 		dateRadioButton = (RadioButton) getActivity().findViewById(R.id.date_picker);
 		dateRadioButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -164,6 +202,9 @@ public class EnterRun extends Fragment {
 				ListView myListView = (ListView) getActivity().findViewById(R.id.my_runs);
 				myListView.setSelection(runAdapter.getCount() - 1);
 				((MainActivity) getActivity()).updateGraph();
+				
+				mParticle.logEvent("new run entered", MParticle.EventType.Navigation);
+				mParticle.logEvent("entered distance", MParticle.EventType.UserContent, dd * 100 + _dd);
 			}
 		});
 	}
