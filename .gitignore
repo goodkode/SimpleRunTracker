@@ -1,0 +1,32 @@
+#built application files
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+*bin/
+*gen/
+*gen-external-apklibs/
+
+# Local configuration file (sdk path, etc)
+*local.properties
+*project.properties
+*gradle.properties
+
+# Android Studio / IDE
+*.classpath
+*.project
+*.iml
+*.iws
+*.idea
+*.gradle/
+*gradlew.bat
+*build/
+
+# OS files
+*Thumbs.db
+*.DS_Store
