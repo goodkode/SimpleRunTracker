@@ -19,7 +19,20 @@
 	        android:layout_height="0dp"
 	        android:layout_weight="17" />
 
+		<android.support.v7.widget.RecyclerView
+            android:id="@+id/my_runs2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="65"
+            android:layout_margin="10dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:stackFromBottom="true"
+            android:divider="#00FFFFFF"
+            android:dividerHeight="3dp" />
+
 	    <ListView
+            android:visibility="gone"
 	        android:id="@+id/my_runs"
 	        android:layout_width="match_parent"
 	        android:layout_height="0dp"
@@ -31,7 +44,7 @@
 	        android:divider="#00FFFFFF"
     		android:dividerHeight="3dp" />
 	    
-	    <net.takoli.simpleruntracker.GraphViewSmall
+	    <net.takoli.simpleruntracker.graph.GraphViewSmall
 	    	android:id="@+id/graph"
 	        android:layout_width="match_parent"
 	        android:layout_height="0dp"

@@ -4,16 +4,17 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
+import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
+import net.takoli.simpleruntracker.graph.GraphViewFull;
 
 public class ChartFullScreenDialog extends DialogFragment {
 	
@@ -45,7 +46,7 @@ public class ChartFullScreenDialog extends DialogFragment {
     	width = (int) (dm.widthPixels * 0.98);
     	height = (int) (dm.heightPixels * 0.4);
     	Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        if (display.getRotation() == Configuration.ORIENTATION_PORTRAIT)
+        if (display.getRotation() == Surface.ROTATION_0)
         	height = (int) (height * 1.8);
     	getDialog().getWindow().setLayout(width, height);
     	// get resources and listeners

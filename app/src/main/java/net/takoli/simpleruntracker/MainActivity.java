@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -25,7 +27,9 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
-import java.util.Calendar;
+import net.takoli.simpleruntracker.adapter.RunAdapter2;
+import net.takoli.simpleruntracker.graph.GraphViewFull;
+import net.takoli.simpleruntracker.graph.GraphViewSmall;
 
 public class MainActivity extends Activity {
 	
@@ -33,6 +37,7 @@ public class MainActivity extends Activity {
 	
 	private RelativeLayout mainLayout;
 	private ListView runListLayout;
+	private RecyclerView runListLayout2;
 	private FrameLayout runFragLayout;
 	protected Fragment enterRun;
 	private StatsFragment statsFragment;
@@ -50,9 +55,8 @@ public class MainActivity extends Activity {
 	private DisplayMetrics dm;
 	private int screenHeight, screenWidth;
 	protected GestureDetector gestDect;
-	
-	private Calendar mPTime;
-	
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,11 +85,11 @@ public class MainActivity extends Activity {
 		// enable fling up and down to open/close the top panel
 		gestDect = new GestureDetector(this, new MainGestureListener());
 		runFragLayout.setOnTouchListener(new OnTouchListener() {
-		    @Override
-			public boolean onTouch(View v, MotionEvent event) {
-		        return gestDect.onTouchEvent(event);
-		    }
-		});
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestDect.onTouchEvent(event);
+            }
+        });
 			
 		// List of Runs setup:
 		runListLayout = (ListView) findViewById(R.id.my_runs);
@@ -95,22 +99,30 @@ public class MainActivity extends Activity {
 		myAdapter.addHeader(mainLayout);
 		runListLayout.setAdapter(myAdapter);
 		runListLayout.setOnItemClickListener(new OnItemClickListener() {  // open items in two lines with details
-			@Override
-			public void onItemClick(AdapterView<?> parent, View runView, int pos, long id) {
-				pos--;  // to compensate for header
-				//Log.i("run","onclick pos: " +pos);
-				myAdapter.getRunItem(pos).switchExpanded();
-				myAdapter.notifyDataSetChanged(); }
-		});
+            @Override
+            public void onItemClick(AdapterView<?> parent, View runView, int pos, long id) {
+                pos--;  // to compensate for header
+                //Log.i("run","onclick pos: " +pos);
+                myAdapter.getRunItem(pos).switchExpanded();
+                myAdapter.notifyDataSetChanged();
+            }
+        });
 		runListLayout.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View arg0, MotionEvent event) {
-				if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-					slideUp(); return true; }
-				return false; }
-		});
+            @Override
+            public boolean onTouch(View arg0, MotionEvent event) {
+                if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                    slideUp();
+                    return true;
+                }
+                return false;
+            }
+        });
 		myAdapter.notifyDataSetChanged();
-		
+
+		runListLayout2 = (RecyclerView) findViewById(R.id.my_runs2);
+        runListLayout2.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        runListLayout2.setAdapter(new RunAdapter2(runDB));
+
 		// Graph initial setup
 		graphSmall = (GraphViewSmall) findViewById(R.id.graph);
 		graphSmall.setRunList(runDB, getUnit());

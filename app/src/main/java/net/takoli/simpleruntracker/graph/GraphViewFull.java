@@ -1,6 +1,4 @@
-package net.takoli.simpleruntracker;
-
-import java.util.ArrayList;
+package net.takoli.simpleruntracker.graph;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,19 +13,24 @@ import android.graphics.PathMeasure;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.Run;
+import net.takoli.simpleruntracker.RunDB;
+
+import java.util.ArrayList;
 
 public class GraphViewFull extends View {
 	
 	private RunDB runListDB;
 	private ArrayList<Run> runList;
 	private Path distPath, speedPath;
-	static final int MAX_PLOTS = 50;
-	static final int MIN_PLOTS = 3;
-	static final int START_PLOTS = 15;
+	public static final int MAX_PLOTS = 50;
+	public static final int MIN_PLOTS = 3;
+	public static final int START_PLOTS = 15;
 	private boolean initial = true;
 	private int plots;
 	private long[] dists, speeds;
