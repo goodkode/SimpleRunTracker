@@ -1,16 +1,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity">
+
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/toolbar"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:minHeight="?attr/actionBarSize"
+		android:background="?attr/colorPrimary"
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
     
     <!-- FRAGMENT WILL BE LOADED HERE DYNAMICALLY -->
     
 	<LinearLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
+		android:layout_below="@id/toolbar"
+		android:layout_marginTop="30dp"
 	    android:orientation="vertical" >
 	    
 	    <FrameLayout
@@ -30,19 +41,6 @@
             android:stackFromBottom="true"
             android:divider="#00FFFFFF"
             android:dividerHeight="3dp" />
-
-	    <ListView
-            android:visibility="gone"
-	        android:id="@+id/my_runs"
-	        android:layout_width="match_parent"
-	        android:layout_height="0dp"
-	        android:layout_weight="65"
-	        android:layout_margin="10dp"
-	        android:paddingLeft="6dp"
-    		android:paddingRight="6dp" 
-	        android:stackFromBottom="true"
-	        android:divider="#00FFFFFF"
-    		android:dividerHeight="3dp" />
 	    
 	    <net.takoli.simpleruntracker.graph.GraphViewSmall
 	    	android:id="@+id/graph"

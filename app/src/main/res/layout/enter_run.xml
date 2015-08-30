@@ -121,20 +121,17 @@
                 android:id="@+id/date_today"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@drawable/red_radio_button"
                 android:checked="true"
                 android:text="Today  " />
             <RadioButton
                 android:id="@+id/date_yesterday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@drawable/red_radio_button"
                 android:text="Yesterday  " />
             <RadioButton
                 android:id="@+id/date_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@drawable/red_radio_button"
                 android:text="Date...  " />
         </RadioGroup>
     </RelativeLayout>
@@ -153,7 +150,7 @@
 		        android:paddingLeft="15dp"
 		        android:paddingRight="15dp"
 		        android:textSize="20sp"
-		        android:background="@drawable/enter_run_button" />	    
+		        android:background="@drawable/enter_run_button" />
 	</RelativeLayout>
 	
     <!-- SPACE ON BOTTOM with a line-->

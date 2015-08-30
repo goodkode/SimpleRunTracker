@@ -1,6 +1,5 @@
 package net.takoli.simpleruntracker;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -8,8 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -19,11 +20,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
@@ -31,12 +29,11 @@ import net.takoli.simpleruntracker.adapter.RunAdapter2;
 import net.takoli.simpleruntracker.graph.GraphViewFull;
 import net.takoli.simpleruntracker.graph.GraphViewSmall;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 	
 	private SharedPreferences settings;
 	
 	private RelativeLayout mainLayout;
-	private ListView runListLayout;
 	private RecyclerView runListLayout2;
 	private FrameLayout runFragLayout;
 	protected Fragment enterRun;
@@ -46,8 +43,7 @@ public class MainActivity extends Activity {
 	private boolean runFragOpen;
 
 	private RunDB runDB;       // ArrayList<Run> abstraction and file IO functions
-	private RunAdapter myAdapter;  // Activity's ListView adapter - uses ArrayList<Run> received from runDB
-	
+
 	private GraphViewSmall graphSmall;
 	private GraphViewFull graphFull;
 	private ChartFullScreenDialog graphFullFragment;
@@ -60,11 +56,15 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActionBar().setDisplayShowTitleEnabled(false);
+        setContentView(R.layout.activity_main);
+        //requestWindowFeature(Window.FEATURE_ACTION_BAR);
+		Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(tb);
+
+		//getActionBar().setDisplayShowTitleEnabled(false);
 		settings = getPreferences(MODE_PRIVATE);
 		
 		// Set up variables and fields
-		setContentView(R.layout.activity_main);
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		dm = getResources().getDisplayMetrics();
 		screenHeight = (dm.heightPixels);
@@ -92,32 +92,8 @@ public class MainActivity extends Activity {
         });
 			
 		// List of Runs setup:
-		runListLayout = (ListView) findViewById(R.id.my_runs);
 		runDB = new RunDB(this);
 		runDB.setDBLimit(getDBLimit());
-		myAdapter = new RunAdapter(this, R.layout.one_run, runDB, fragMngr);
-		myAdapter.addHeader(mainLayout);
-		runListLayout.setAdapter(myAdapter);
-		runListLayout.setOnItemClickListener(new OnItemClickListener() {  // open items in two lines with details
-            @Override
-            public void onItemClick(AdapterView<?> parent, View runView, int pos, long id) {
-                pos--;  // to compensate for header
-                //Log.i("run","onclick pos: " +pos);
-                myAdapter.getRunItem(pos).switchExpanded();
-                myAdapter.notifyDataSetChanged();
-            }
-        });
-		runListLayout.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View arg0, MotionEvent event) {
-                if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                    slideUp();
-                    return true;
-                }
-                return false;
-            }
-        });
-		myAdapter.notifyDataSetChanged();
 
 		runListLayout2 = (RecyclerView) findViewById(R.id.my_runs2);
         runListLayout2.setLayoutManager(new LinearLayoutManager(MainActivity.this));
@@ -233,7 +209,7 @@ public class MainActivity extends Activity {
 		return runDB; }
 	
 	public RunAdapter getRunAdapter() {
-		return myAdapter; }
+		return null; }
 	
 	public void setUnit(String unit) {
 		SharedPreferences.Editor editor = settings.edit();

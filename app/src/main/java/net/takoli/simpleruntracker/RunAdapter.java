@@ -1,7 +1,5 @@
 package net.takoli.simpleruntracker;
 
-import java.util.ArrayList;
-
 import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -14,8 +12,9 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class RunAdapter extends BaseAdapter {
 
@@ -36,15 +35,6 @@ public class RunAdapter extends BaseAdapter {
 		this.runListDB = runListDB;
 		this.fragMngr = fragMngr;
 		this.toAnimate = false;
-	}
-	
-	public void addHeader(ViewGroup parent) {
-		this.parent = parent;
-		listView = (ListView) parent.findViewById(R.id.my_runs);
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		RelativeLayout header = (RelativeLayout) inflater.inflate(R.layout.run_header, listView, false);
-		listView.addHeaderView(header, null, false);
-		notifyDataSetChanged();
 	}
 	
 	@Override
@@ -147,8 +137,9 @@ public class RunAdapter extends BaseAdapter {
 				}
 			});
 			if (pos >= runList.size() - 2) {
-				listView = (ListView) parent.findViewById(R.id.my_runs);
-				listView.smoothScrollToPosition(pos + 1); }
+				//listView = (ListView) parent.findViewById(R.id.my_runs);
+				//listView.smoothScrollToPosition(pos + 1);
+			}
 			return oneRun;
 		}
 	}
