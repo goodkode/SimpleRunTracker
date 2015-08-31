@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="20dp"
     android:background="@color/one_run_color" >
     
     <TextView android:id="@+id/run_date"
@@ -31,4 +31,5 @@
 	    android:paddingRight="12dp"
         android:textSize="12sp" />
     
-</LinearLayout>
+</android.support.v7.widget.CardView>
+

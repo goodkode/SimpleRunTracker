@@ -25,7 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
-import net.takoli.simpleruntracker.adapter.RunAdapter2;
+import net.takoli.simpleruntracker.adapter.RunAdapter;
 import net.takoli.simpleruntracker.graph.GraphViewFull;
 import net.takoli.simpleruntracker.graph.GraphViewSmall;
 
@@ -33,9 +33,8 @@ public class MainActivity extends AppCompatActivity {
 	
 	private SharedPreferences settings;
 	
-	private RelativeLayout mainLayout;
-	private RecyclerView runListLayout2;
-	private FrameLayout runFragLayout;
+	private RecyclerView runListLayout;
+    private FrameLayout runFragLayout;
 	protected Fragment enterRun;
 	private StatsFragment statsFragment;
 	private FragmentTransaction fragTrans;
@@ -56,32 +55,29 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_main);
-        //requestWindowFeature(Window.FEATURE_ACTION_BAR);
 		Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(tb);
+        setSupportActionBar(tb);
 
 		//getActionBar().setDisplayShowTitleEnabled(false);
 		settings = getPreferences(MODE_PRIVATE);
 		
 		// Set up variables and fields
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		dm = getResources().getDisplayMetrics();
 		screenHeight = (dm.heightPixels);
 		screenWidth = (dm.widthPixels);
-		mainLayout = (RelativeLayout) findViewById(R.id.main);
-		runFragLayout = new FrameLayout(this);
 		enterRun = new EnterRun();
 		
 		// "Enter Run" top fragment setup:
-		runFragLayout.setLayoutParams(new FrameLayout.LayoutParams(screenWidth, screenHeight / 2));
+        runFragLayout = (FrameLayout) findViewById(R.id.enter_run_fragment_frame);
+		runFragLayout.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth, screenHeight / 2));
 		runFragLayout.setId(R.id.enter_run_frame);
 		runFragLayout.setBackgroundColor(Color.WHITE);
 		fragMngr = getFragmentManager();
 		fragTrans = fragMngr.beginTransaction();
 		fragTrans.replace(R.id.enter_run_frame, enterRun);
 		fragTrans.commit();
-		mainLayout.addView(runFragLayout);
 		// enable fling up and down to open/close the top panel
 		gestDect = new GestureDetector(this, new MainGestureListener());
 		runFragLayout.setOnTouchListener(new OnTouchListener() {
@@ -95,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
 		runDB = new RunDB(this);
 		runDB.setDBLimit(getDBLimit());
 
-		runListLayout2 = (RecyclerView) findViewById(R.id.my_runs2);
-        runListLayout2.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        runListLayout2.setAdapter(new RunAdapter2(runDB));
+		runListLayout = (RecyclerView) findViewById(R.id.my_runs);
+        runListLayout.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        runListLayout.setAdapter(new RunAdapter(runDB));
 
 		// Graph initial setup
 		graphSmall = (GraphViewSmall) findViewById(R.id.graph);
@@ -120,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
 	protected void onPause() {
 		slideUp();
 		super.onPause();
-		onDestroy();
 	}
 	
 	@Override
@@ -208,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
 	public RunDB getRunDB() {
 		return runDB; }
 	
-	public RunAdapter getRunAdapter() {
+	public net.takoli.simpleruntracker.RunAdapter getRunAdapter() {
 		return null; }
 	
 	public void setUnit(String unit) {

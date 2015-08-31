@@ -14,12 +14,12 @@ import net.takoli.simpleruntracker.RunDB;
 import java.util.ArrayList;
 
 
-public class RunAdapter2 extends RecyclerView.Adapter<RunAdapter2.RunViewHolder> {
+public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
 
     private RunDB runListDB;
     private ArrayList<Run> runList;
 
-    public RunAdapter2(RunDB runListDB) {
+    public RunAdapter(RunDB runListDB) {
         this.runListDB = runListDB;
         this.runList = runListDB.getRunList();
     }
