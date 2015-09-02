@@ -2,22 +2,24 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar" >
         <!--<item name="android:windowActionBar">false</item>-->
+        <item name="colorButtonNormal">@color/green_light</item>
     </style>
 
-    <!--  Theme customizations colors -->
-    <color name="primary_material_light">#76BF78</color>
-    <color name="primary_dark_material_light">#0E6611</color>
-    <color name="accent_material_light">#60B563</color>
+    <!--<style name="ButtonStyle" parent="Widget.AppCompat.Button" >-->
+        <!--&lt;!&ndash;<item name="android:windowActionBar">false</item>&ndash;&gt;-->
+    <!--</style>-->
 
-    <item name="enter_run_frame" type="id"/>
+    <!--  Theme customizations colors -->
+    <color name="primary_material_light">@color/green_light</color>
+    <color name="primary_dark_material_light">@color/green_dark</color>
+    <color name="accent_material_light">@color/green_medium</color>
+    <color name="button_material_dark">@color/green_medium</color>
+    <!--<color name="tertiary_text_dark">@color/green_medium</color>-->
+    <!--<color name="tertiary_text_light">@color/green_medium</color>-->
 
     <style name="distance" >
         <item name="android:textColor">#FF444444</item>
         <item name="android:textStyle">italic</item>
     </style>
-
-    <color name="one_run_color">#AACCE5FF</color>
-    <color name="one_run_details_color">#FFCCE5FF</color>
-    <color name="after_run_dialog_color">#ffEDF6FF</color>
 
 </resources>

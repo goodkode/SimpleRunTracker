@@ -1,15 +1,14 @@
 package net.takoli.simpleruntracker;
 
-import java.lang.reflect.Field;
-
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
-import net.takoli.simpleruntracker.R;
+import java.lang.reflect.Field;
 
 public class BigNumberPicker extends NumberPicker {
 	
@@ -20,6 +19,7 @@ public class BigNumberPicker extends NumberPicker {
 	
 	public BigNumberPicker(Context context, AttributeSet attrs) {
 		super(context, attrs);
+        final ColorDrawable greenDrawable = new ColorDrawable(getResources().getColor(R.color.green_light));
 		dm = getResources().getDisplayMetrics();
 		setMinValue(0);
 		setMaxValue(9);
@@ -39,7 +39,7 @@ public class BigNumberPicker extends NumberPicker {
 			if (pf.getName().equals("mSelectionDivider")) {
 				pf.setAccessible(true);
 				try {
-					pf.set(this, getResources().getDrawable(R.drawable.div));
+					pf.set(this, greenDrawable);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

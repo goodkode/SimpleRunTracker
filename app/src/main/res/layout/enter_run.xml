@@ -140,28 +140,29 @@
     <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="5" />
 	    
     <!-- BUTTON -->
-    <RelativeLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="10">
-	    <Button android:id="@+id/enter_run_button"
-	        	android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_alignParentBottom="true"
-		        android:layout_centerHorizontal="true"
-		        android:text="Enter run"
-		        android:paddingLeft="15dp"
-		        android:paddingRight="15dp"
-		        android:textSize="20sp"
-		        android:background="@drawable/enter_run_button" />
-	</RelativeLayout>
+    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="10" android:layout_gravity="center" >
+
+        <Button android:id="@+id/enter_run_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="0dp"
+                android:layout_gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="Enter run"
+                android:textSize="20sp" />
+    </FrameLayout>
 	
     <!-- SPACE ON BOTTOM with a line-->
     <RelativeLayout android:id="@+id/divider_line" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="7" >
 	   <View  
 	       android:layout_width="wrap_content"
-	       android:layout_height="6dp"
+	       android:layout_height="1.3dp"
 	       android:layout_alignParentBottom="true"
 	       android:layout_centerHorizontal="true"
 	       android:layout_marginBottom="4dp"
-	       android:background="@drawable/red_divider" />
+	       android:background="@color/green_light" />
 
 	</RelativeLayout>
 

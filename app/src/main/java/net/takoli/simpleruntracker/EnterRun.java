@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -213,6 +214,7 @@ public class EnterRun extends Fragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			// Use the current date as the default date in the picker
+			final ColorDrawable greenDrawable = new ColorDrawable(getResources().getColor(R.color.green_light));
 			final Calendar c = Calendar.getInstance();
 			c.roll(Calendar.DAY_OF_YEAR, -2);
 			int year = c.get(Calendar.YEAR);
@@ -232,7 +234,7 @@ public class EnterRun extends Fragment {
 				try {
 					Field numberPickerField = NumberPicker.class.getDeclaredField("mSelectionDivider");
 					numberPickerField.setAccessible(true);
-					numberPickerField.set(np, getResources().getDrawable(R.drawable.div));
+					numberPickerField.set(np, greenDrawable);
 				} catch (Exception e) { e.printStackTrace(); }
 			} catch (Exception e) { e.printStackTrace(); }
 			try {
@@ -242,7 +244,7 @@ public class EnterRun extends Fragment {
 				try {
 					Field numberPickerField = NumberPicker.class.getDeclaredField("mSelectionDivider");
 					numberPickerField.setAccessible(true);
-					numberPickerField.set(np, getResources().getDrawable(R.drawable.div));
+					numberPickerField.set(np, greenDrawable);
 				} catch (Exception e) { e.printStackTrace(); }
 			} catch (Exception e) { e.printStackTrace(); }
 			try {
@@ -252,7 +254,7 @@ public class EnterRun extends Fragment {
 				try {
 					Field numberPickerField = NumberPicker.class.getDeclaredField("mSelectionDivider");
 					numberPickerField.setAccessible(true);
-					numberPickerField.set(np, getResources().getDrawable(R.drawable.div));
+					numberPickerField.set(np, greenDrawable);
 				} catch (Exception e) { e.printStackTrace(); }
 			} catch (Exception e) { e.printStackTrace(); }
 			return datePickerDialog;
