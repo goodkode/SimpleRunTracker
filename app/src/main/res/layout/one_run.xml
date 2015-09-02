@@ -1,35 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="20dp"
-    android:background="@color/one_run_color" >
-    
-    <TextView android:id="@+id/run_date"
+    android:layout_height="25dp"
+    card_view:cardCornerRadius="0dp"
+    card_view:cardUseCompatPadding="true" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:layout_weight="30"
-        android:gravity="bottom"
-        android:paddingLeft="8dp"
-        android:textSize="12sp"
-        android:textStyle="italic" />
-    <TextView android:id="@+id/run_dist"
-        android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:layout_weight="25"
-        android:textSize="14sp" />
-    <TextView android:id="@+id/run_time"
-        android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:layout_weight="30"
-        android:paddingLeft="10dp"
-        android:textSize="14sp" />
-    <TextView android:id="@+id/run_pace"
-        android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:layout_weight="35"
-        android:gravity="right|bottom"
-	    android:paddingRight="12dp"
-        android:textSize="12sp" />
+        android:layout_gravity="center"
+        android:background="@color/one_run_color"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/run_date"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="30"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:text="date" />
+        <TextView
+            android:id="@+id/run_dist"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="25"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            android:text="distance"/>
+        <TextView
+            android:id="@+id/run_time"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="30"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textSize="14sp"
+            android:text="time" />
+        <TextView
+            android:id="@+id/run_pace"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="35"
+            android:gravity="center_vertical|right"
+            android:paddingRight="12dp"
+            android:textSize="12sp"
+            android:text="pace"/>
+    </LinearLayout>
     
 </android.support.v7.widget.CardView>
 
