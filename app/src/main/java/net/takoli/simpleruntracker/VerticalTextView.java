@@ -9,9 +9,11 @@ import android.widget.TextView;
 
 public class VerticalTextView extends TextView {
 	final boolean topDown;
+	final int green;
 
 	public VerticalTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		green = getResources().getColor(R.color.green_light);
 		final int gravity = getGravity();
 		if (Gravity.isVertical(gravity)
 				&& (gravity & Gravity.VERTICAL_GRAVITY_MASK) == Gravity.BOTTOM) {
@@ -31,7 +33,7 @@ public class VerticalTextView extends TextView {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		TextPaint textPaint = getPaint();
-		textPaint.setColor(getCurrentTextColor());
+		textPaint.setColor(green);
 		textPaint.drawableState = getDrawableState();
 		canvas.save();
 		if (topDown) {
