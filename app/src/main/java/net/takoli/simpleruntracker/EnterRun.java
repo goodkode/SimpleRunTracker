@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,14 +42,18 @@ public class EnterRun extends Fragment {
 	Button enterRunButton;
 	RelativeLayout dividerLine;
 	DisplayMetrics dm;
+	MainActivity main;
 	RunDB runListDB;
+	RecyclerView runListView;
 	RunAdapter runAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		runListDB = ((MainActivity) getActivity()).getRunDB();
-		runAdapter = ((MainActivity) getActivity()).getRunAdapter();
+		main = (MainActivity) getActivity();
+		runListDB = main.getRunDB();
+		runListView = main.getRunList();
+		runAdapter = main.getRunAdapter();
 	}
 	
 	@Override
@@ -71,7 +76,7 @@ public class EnterRun extends Fragment {
 		dist_1 = (BigNumberPicker) getView().findViewById(R.id.dist_1);
 		dist_01 = (BigNumberPicker) getView().findViewById(R.id.dist_01);
 		distUnit = (TextView) getView().findViewById(R.id.dist_unit);
-			distUnit.setText(((MainActivity) getActivity()).getUnit());
+			distUnit.setText(main.getUnit());
 			distUnit.setTextSize(dist1.getTextSize() * 0.8f);
 			distUnit.animate().translationYBy(4);
 			
@@ -107,7 +112,7 @@ public class EnterRun extends Fragment {
 			int secPerMile = runListDB.getAvgPaceUNIT();
 			int secs = 0;
 			int dist = 0;
-			boolean inMile = ((MainActivity) getActivity()).getUnit().compareTo("mi") == 0;
+			boolean inMile = main.getUnit().compareTo("mi") == 0;
 			@Override
 			public void onScrollStateChange(NumberPicker view, int scrollState) {
 				Log.i("run", "average time: " + secPerMile);
@@ -132,21 +137,21 @@ public class EnterRun extends Fragment {
 		dist_01.setOnScrollListener(distScrollListener);
 		
 		// "Distance" and "Time"; divider line width
-		distance = (VerticalTextView) getActivity().findViewById(R.id.distance);
+		distance = (VerticalTextView) getView().findViewById(R.id.distance);
 		distance.setTextColor(0xaaFF0000);
 		distance.setTextSize(dist1.getTextSize());
-		time = (VerticalTextView) getActivity().findViewById(R.id.time);
+		time = (VerticalTextView) getView().findViewById(R.id.time);
 		time.setTextColor(0xaaFF0000);
 		time.setTextSize(dist1.getTextSize());
-		dividerLine = (RelativeLayout) getActivity().findViewById(R.id.divider_line);
+		dividerLine = (RelativeLayout) getView().findViewById(R.id.divider_line);
 		dividerLine.setPadding(dm.widthPixels / 5, 0, dm.widthPixels / 5, 0);
 		
 		// Datepicker 
 		runDate = Run.setTodayDate();
-		((RadioButton) getActivity().findViewById(R.id.date_today)).setTextSize(hour.getTextSize() / 1.6f);
-		((RadioButton) getActivity().findViewById(R.id.date_yesterday)).setTextSize(hour.getTextSize() / 1.6f);
-		((RadioButton) getActivity().findViewById(R.id.date_picker)).setTextSize(hour.getTextSize() / 1.6f);
-		dateGroup = (RadioGroup) getActivity().findViewById(R.id.date_radiobuttons);
+		((RadioButton) getView().findViewById(R.id.date_today)).setTextSize(hour.getTextSize() / 1.6f);
+		((RadioButton) getView().findViewById(R.id.date_yesterday)).setTextSize(hour.getTextSize() / 1.6f);
+		((RadioButton) getView().findViewById(R.id.date_picker)).setTextSize(hour.getTextSize() / 1.6f);
+		dateGroup = (RadioGroup) getView().findViewById(R.id.date_radiobuttons);
 		dateGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -161,8 +166,8 @@ public class EnterRun extends Fragment {
 					break;
 				}
 			}});
-		((RadioButton) getActivity().findViewById(R.id.date_today)).setChecked(true);
-		dateRadioButton = (RadioButton) getActivity().findViewById(R.id.date_picker);
+		((RadioButton) getView().findViewById(R.id.date_today)).setChecked(true);
+		dateRadioButton = (RadioButton) getView().findViewById(R.id.date_picker);
 		dateRadioButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -170,20 +175,20 @@ public class EnterRun extends Fragment {
 		});
 		
 		// Send run details to the RunDB database
-		enterRunButton = (Button) getActivity().findViewById(R.id.enter_run_button);
+		enterRunButton = (Button) getView().findViewById(R.id.enter_run_button);
 		enterRunButton.setTextSize(dist1.getTextSize()*2/3);
 		enterRunButton.setWidth(dm.widthPixels / 3);
 		enterRunButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				enterRunButton = (Button) getActivity().findViewById(R.id.enter_run_button);
+				enterRunButton = (Button) getView().findViewById(R.id.enter_run_button);
 				enterRunButton.setEnabled(false);
 				new Handler().postDelayed(new Runnable() {
 					public void run() {
 						enterRunButton.setEnabled(true);
 					}
 				}, 700);
-				String unit = ((MainActivity) getActivity()).getUnit();
+				String unit = main.getUnit();
 				int dd = dist10.getValue() * 10 + dist1.getValue();
 				int _dd = dist_1.getValue() * 10 + dist_01.getValue();
 				int h = hour.getValue();
@@ -192,11 +197,11 @@ public class EnterRun extends Fragment {
 				// save it to runDB and update the ListView
 				if ((dd + _dd) == 0 || (h + mm + ss) == 0)
 					return; // not valid run
-				runListDB.addNewRun(getActivity(), new Run(runDate, dd, _dd, unit, h, mm, ss));
-				runListDB.saveRunDB(getActivity());
-				runAdapter.notifyDataSetChanged();
-				//runAdapter.aninmateNewRun();
-				((MainActivity) getActivity()).updateGraph();
+				runListDB.addNewRun(main, new Run(runDate, dd, _dd, unit, h, mm, ss));
+				runListDB.saveRunDB(main);
+                runAdapter.notifyItemInserted(runListDB.getRunList().size() - 1);
+                runListView.smoothScrollToPosition(runListDB.getRunList().size() - 1);
+				main.updateGraph();
 			}
 		});
 	}

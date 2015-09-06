@@ -26,6 +26,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import net.takoli.simpleruntracker.adapter.RunAdapter;
+import net.takoli.simpleruntracker.adapter.animator.FadeInUpAnimator;
 import net.takoli.simpleruntracker.graph.GraphViewFull;
 import net.takoli.simpleruntracker.graph.GraphViewSmall;
 
@@ -96,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
 		runListView = (RecyclerView) findViewById(R.id.my_runs);
         runListView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         runListView.setAdapter(runAdapter);
+        runListView.setItemAnimator(new FadeInUpAnimator());
+        runListView.getItemAnimator().setAddDuration(500);
+        runListView.getItemAnimator().setRemoveDuration(500);
 		runListView.setHasFixedSize(true);
 
 		// Graph initial setup
@@ -206,6 +210,10 @@ public class MainActivity extends AppCompatActivity {
 	public RunDB getRunDB() {
 		return runDB;
     }
+
+	public RecyclerView getRunList() {
+		return runListView;
+	}
 	
 	public RunAdapter getRunAdapter() {
 		return runAdapter;
