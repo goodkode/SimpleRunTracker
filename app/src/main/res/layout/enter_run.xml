@@ -3,112 +3,116 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
-    <!-- PLACEHOLDER for the WHOLE TOP PART except for the button and some bottom space -->
-    <LinearLayout
-        app:layout_heightPercent="65%"
-        app:layout_widthPercent="100%"
-        android:id="@+id/enter_run_main"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:baselineAligned="false">
         
-        <!-- SPACE ON LEFT: Distance -->	  
-        <RelativeLayout android:id="@+id/left" android:layout_height="match_parent" 
-	              android:layout_width="0dp" android:layout_weight="20"
-	              android:gravity="center" >
-	              <net.takoli.simpleruntracker.VerticalTextView android:id="@+id/distance" 
-	                  android:layout_width="match_parent" android:layout_height="wrap_content" 
-	                  android:gravity="bottom" android:text="Distance"  />
-	    </RelativeLayout>
-	    
-	    <!-- TOP  /  MILES & TIME SECTION  /  BOTTOM -->
-		<LinearLayout android:layout_width="0dp" android:layout_height="match_parent"
-	        		  android:layout_weight="70" android:orientation="vertical" android:gravity="center" >
-	        
-		    <!-- TOP -->
-	    	<RelativeLayout android:id="@+id/top" android:layout_width="match_parent" 
-	              android:layout_height="0dp" android:layout_weight="5" />
-	    	
-	    	<!-- MILES & TIME SECTION -->
-	    	<LinearLayout  android:id="@+id/top" android:gravity="center"  android:layout_width="match_parent" 
-	              android:layout_height="0dp" android:layout_weight="30">
-	        
-			    <net.takoli.simpleruntracker.BigNumberPicker 
-			        android:id="@+id/dist10"
-			        android:layout_height="wrap_content"
-		            android:layout_width="0dp"
-		            android:layout_weight="4" />
-			    <net.takoli.simpleruntracker.BigNumberPicker 
-			        android:id="@+id/dist1"
-			        android:layout_height="wrap_content"
-		            android:layout_width="0dp"
-		            android:layout_weight="4" />
-			    <TextView android:id="@+id/div_d"  android:layout_height="wrap_content" android:layout_width="0dp" 
-			        android:layout_weight="1"      android:text="." />
-			    <net.takoli.simpleruntracker.BigNumberPicker 
-			        android:id="@+id/dist_1"
-			        android:layout_height="wrap_content"
-		            android:layout_width="0dp"
-		            android:layout_weight="4" />
-			    <net.takoli.simpleruntracker.BigNumberPicker 
-			        android:id="@+id/dist_01"
-			        android:layout_height="wrap_content"
-		            android:layout_width="0dp"
-		            android:layout_weight="4" />
-			    
-			<LinearLayout android:id="@+id/middle" android:layout_height="match_parent" 
-		              android:layout_width="0dp" android:layout_weight="10" >
-		        <TextView android:id="@+id/dist_unit"  android:layout_height="wrap_content" android:layout_width="wrap_content" 
-			        android:layout_gravity="center_vertical|left" android:text="mi" /></LinearLayout>
-			    
-			    <net.takoli.simpleruntracker.BigNumberPicker 
-			        android:id="@+id/hour"
-			        android:layout_height="wrap_content"
-		            android:layout_width="0dp"
-		            android:layout_weight="4" />
-			    <TextView android:id="@+id/div_th"  android:layout_height="wrap_content" android:layout_width="0dp" 
-			        android:layout_weight="1"       android:text=":" />
-			    <net.takoli.simpleruntracker.BigNumberPicker 
-			        android:id="@+id/min10"
-			        android:layout_height="wrap_content"
-		            android:layout_width="0dp"
-		            android:layout_weight="4" />
-			    <net.takoli.simpleruntracker.BigNumberPicker 
-			        android:id="@+id/min1"
-			        android:layout_height="wrap_content"
-		            android:layout_width="0dp"
-		            android:layout_weight="4"/>
-			    <TextView android:id="@+id/div_tm"  android:layout_height="wrap_content" android:layout_width="0dp" 
-			        android:layout_weight="1"       android:text=":" />
-			    <net.takoli.simpleruntracker.BigNumberPicker 
-			        android:id="@+id/sec10"
-			        android:layout_height="wrap_content"
-		            android:layout_width="0dp"
-		            android:layout_weight="4" />
-			    <net.takoli.simpleruntracker.BigNumberPicker 
-			        android:id="@+id/sec1"
-			        android:layout_height="wrap_content"
-		            android:layout_width="0dp"
-		            android:layout_weight="4" />
-			    
-			</LinearLayout>
-	        
-		   	<!-- BOTTOM (above button) -->
-	    	<View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="5" />
-		    
-		</LinearLayout>
-	    
-		<!-- SPACE ON RIGHT: Time -->	  
-        <RelativeLayout android:id="@+id/right" android:layout_height="match_parent" 
-	              android:layout_width="0dp" android:layout_weight="20" 
-	              android:gravity="center" >
-	              <net.takoli.simpleruntracker.VerticalTextView android:id="@+id/time" 
-	                  android:layout_width="match_parent" android:layout_height="wrap_content" 
-	                  android:gravity="top" android:text="My Time"  />
-	    </RelativeLayout>
-	    
-	</LinearLayout>
+    <!-- SPACE ON LEFT: Distance -->
+    <RelativeLayout
+        android:id="@+id/left"
+        app:layout_heightPercent="65%"
+        app:layout_widthPercent="15%"
+        android:gravity="center" >
+        <net.takoli.simpleruntracker.VerticalTextView android:id="@+id/distance"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:gravity="bottom" android:text="Distance"  />
+    </RelativeLayout>
+
+    <!-- MILES & TIME SECTION -->
+    <LinearLayout
+        android:id="@+id/enter_run_main"
+        android:gravity="center"
+        app:layout_heightPercent="65%"
+        app:layout_widthPercent="70%"
+        android:layout_toRightOf="@id/left" >
+
+        <net.takoli.simpleruntracker.BigNumberPicker
+            android:id="@+id/dist10"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="4" />
+        <net.takoli.simpleruntracker.BigNumberPicker
+            android:id="@+id/dist1"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="4" />
+        <TextView
+            android:id="@+id/div_d"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="." />
+        <net.takoli.simpleruntracker.BigNumberPicker
+            android:id="@+id/dist_1"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="4" />
+        <net.takoli.simpleruntracker.BigNumberPicker
+            android:id="@+id/dist_01"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="4" />
+
+        <LinearLayout
+            android:id="@+id/middle"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="10" >
+            <TextView
+                android:id="@+id/dist_unit"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_vertical|left"
+                android:text="mi" />
+        </LinearLayout>
+
+        <net.takoli.simpleruntracker.BigNumberPicker
+            android:id="@+id/hour"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="4" />
+        <TextView android:id="@+id/div_th"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text=":" />
+        <net.takoli.simpleruntracker.BigNumberPicker
+            android:id="@+id/min10"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="4" />
+        <net.takoli.simpleruntracker.BigNumberPicker
+            android:id="@+id/min1"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="4"/>
+        <TextView
+            android:id="@+id/div_tm"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text=":" />
+        <net.takoli.simpleruntracker.BigNumberPicker
+            android:id="@+id/sec10"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="4" />
+        <net.takoli.simpleruntracker.BigNumberPicker
+            android:id="@+id/sec1"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="4" />
+
+    </LinearLayout>
+
+    <!-- SPACE ON RIGHT: Time -->
+    <RelativeLayout
+        android:id="@+id/right"
+        app:layout_heightPercent="65%"
+        app:layout_widthPercent="15%"
+        android:layout_toRightOf="@id/enter_run_main"
+        android:gravity="center" >
+              <net.takoli.simpleruntracker.VerticalTextView android:id="@+id/time"
+                  android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:gravity="top" android:text="My Time"  />
+    </RelativeLayout>
 	
     <!-- DATE selector -->
     <RadioGroup
