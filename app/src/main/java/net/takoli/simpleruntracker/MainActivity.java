@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
@@ -267,7 +268,10 @@ public class MainActivity extends AppCompatActivity {
 		enterRunButton.animate().setDuration(700).alpha(0.5f);
 		enterRunButton.setClickable(false);
 		// slide the fragment up
-		runFragLayout.animate().setDuration(700).translationY(screenHeight * -35/100);
+		runFragLayout.animate()
+                .setDuration(700)
+                .setInterpolator(new AnticipateOvershootInterpolator(0.8f))
+                .translationY(screenHeight * -35 / 100);
 		runFragOpen = false;
 	}
 	public void slideDown() {
@@ -287,7 +291,10 @@ public class MainActivity extends AppCompatActivity {
 		enterRunButton.animate().setDuration(700).alpha(1);
 		enterRunButton.setClickable(true);
 		// slide the fragment down
-		runFragLayout.animate().setDuration(700).translationY(0);
+		runFragLayout.animate()
+                .setDuration(700)
+                .setInterpolator(new AnticipateOvershootInterpolator(0.92f))
+                .translationY(0);
 		runFragOpen = true;
 	}
 	

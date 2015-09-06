@@ -21,7 +21,6 @@ import android.widget.NumberPicker.OnScrollListener;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.takoli.simpleruntracker.adapter.RunAdapter;
@@ -40,7 +39,6 @@ public class EnterRun extends Fragment {
 	TextView div_d, div_th, div_tm;
 	TextView distance, time, distUnit;
 	Button enterRunButton;
-	RelativeLayout dividerLine;
 	DisplayMetrics dm;
 	MainActivity main;
 	RunDB runListDB;
@@ -143,8 +141,6 @@ public class EnterRun extends Fragment {
 		time = (VerticalTextView) getView().findViewById(R.id.time);
 		time.setTextColor(0xaaFF0000);
 		time.setTextSize(dist1.getTextSize());
-		dividerLine = (RelativeLayout) getView().findViewById(R.id.divider_line);
-		dividerLine.setPadding(dm.widthPixels / 5, 0, dm.widthPixels / 5, 0);
 		
 		// Datepicker 
 		runDate = Run.setTodayDate();
