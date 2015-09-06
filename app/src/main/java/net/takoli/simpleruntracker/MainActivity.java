@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 	
 	private SharedPreferences settings;
 	
-	private RecyclerView runListLayout;
+	private RecyclerView runListView;
     private FrameLayout runFragLayout;
 	protected Fragment enterRun;
 	private StatsFragment statsFragment;
@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
 	private FragmentManager fragMngr;
 	private boolean runFragOpen;
 
-	private RunDB runDB;       // ArrayList<Run> abstraction and file IO functions
+	private RunDB runDB;
+    private RunAdapter runAdapter;
 
 	private GraphViewSmall graphSmall;
 	private GraphViewFull graphFull;
@@ -91,9 +92,11 @@ public class MainActivity extends AppCompatActivity {
 		runDB = new RunDB(this);
 		runDB.setDBLimit(getDBLimit());
 
-		runListLayout = (RecyclerView) findViewById(R.id.my_runs);
-        runListLayout.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        runListLayout.setAdapter(new RunAdapter(runDB));
+        runAdapter = new RunAdapter(runDB);
+		runListView = (RecyclerView) findViewById(R.id.my_runs);
+        runListView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        runListView.setAdapter(runAdapter);
+		runListView.setHasFixedSize(true);
 
 		// Graph initial setup
 		graphSmall = (GraphViewSmall) findViewById(R.id.graph);
@@ -201,10 +204,12 @@ public class MainActivity extends AppCompatActivity {
 	}
 	
 	public RunDB getRunDB() {
-		return runDB; }
+		return runDB;
+    }
 	
-	public net.takoli.simpleruntracker.RunAdapter getRunAdapter() {
-		return null; }
+	public RunAdapter getRunAdapter() {
+		return runAdapter;
+    }
 	
 	public void setUnit(String unit) {
 		SharedPreferences.Editor editor = settings.edit();

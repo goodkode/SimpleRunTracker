@@ -23,6 +23,8 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import net.takoli.simpleruntracker.adapter.RunAdapter;
+
 import java.lang.reflect.Field;
 import java.util.Calendar;
 
@@ -176,12 +178,11 @@ public class EnterRun extends Fragment {
 			public void onClick(View v) {
 				enterRunButton = (Button) getActivity().findViewById(R.id.enter_run_button);
 				enterRunButton.setEnabled(false);
-				Handler buttonDelay = new Handler(); 
-				buttonDelay.postDelayed(new Runnable() { 
-			         public void run() { 
-			        	 enterRunButton.setEnabled(true); 
-			         } 
-			    }, 700); 
+				new Handler().postDelayed(new Runnable() {
+					public void run() {
+						enterRunButton.setEnabled(true);
+					}
+				}, 700);
 				String unit = ((MainActivity) getActivity()).getUnit();
 				int dd = dist10.getValue() * 10 + dist1.getValue();
 				int _dd = dist_1.getValue() * 10 + dist_01.getValue();
@@ -193,9 +194,8 @@ public class EnterRun extends Fragment {
 					return; // not valid run
 				runListDB.addNewRun(getActivity(), new Run(runDate, dd, _dd, unit, h, mm, ss));
 				runListDB.saveRunDB(getActivity());
-				runAdapter.aninmateNewRun();
-				//ListView myListView = (ListView) getActivity().findViewById(R.id.my_runs);
-				//myListView.setSelection(runAdapter.getCount() - 1);
+				runAdapter.notifyDataSetChanged();
+				//runAdapter.aninmateNewRun();
 				((MainActivity) getActivity()).updateGraph();
 			}
 		});
