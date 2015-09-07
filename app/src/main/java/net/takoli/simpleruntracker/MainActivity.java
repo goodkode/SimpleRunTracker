@@ -27,6 +27,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import net.takoli.simpleruntracker.adapter.RunAdapter;
+import net.takoli.simpleruntracker.adapter.RunAdapterObserver;
 import net.takoli.simpleruntracker.adapter.animator.FadeInUpAnimator;
 import net.takoli.simpleruntracker.graph.GraphViewFull;
 import net.takoli.simpleruntracker.graph.GraphViewSmall;
@@ -94,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
 		runDB = new RunDB(this);
 		runDB.setDBLimit(getDBLimit());
 
-        runAdapter = new RunAdapter(runDB);
+        runAdapter = new RunAdapter(this, runDB);
+        runAdapter.registerAdapterDataObserver(new RunAdapterObserver(runAdapter, runDB));
 		runListView = (RecyclerView) findViewById(R.id.my_runs);
         runListView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         runListView.setAdapter(runAdapter);
@@ -118,8 +120,7 @@ public class MainActivity extends AppCompatActivity {
 		if (runFragLayout != null)
 			runFragLayout.setY(screenHeight * -3/10);
 		slideDown();
-
-	}
+    }
 	@Override
 	protected void onPause() {
 		slideUp();
