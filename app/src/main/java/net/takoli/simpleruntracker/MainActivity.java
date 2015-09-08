@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
@@ -33,27 +34,41 @@ import net.takoli.simpleruntracker.graph.GraphViewFull;
 import net.takoli.simpleruntracker.graph.GraphViewSmall;
 
 public class MainActivity extends AppCompatActivity {
-	
-	private SharedPreferences settings;
-	
-	private RecyclerView runListView;
+
+    private SharedPreferences settings;
+    private FragmentTransaction fragTrans;
+    private FragmentManager fragMngr;
+    private DisplayMetrics dm;
+    private int screenHeight, screenWidth;
+    protected GestureDetector gestDect;
+
+    // Enter run and stats fragment
     private FrameLayout runFragLayout;
 	protected Fragment enterRun;
 	private StatsFragment statsFragment;
-	private FragmentTransaction fragTrans;
-	private FragmentManager fragMngr;
-	private boolean runFragOpen;
+    private VerticalTextView distance, time;
+    private RadioGroup dateRadioGroup;
+    private Button enterRunButton;
+    private boolean runFragOpen;
+    private static final AnticipateOvershootInterpolator slideUpInterpolator =
+                                                new AnticipateOvershootInterpolator(0.8f);
+    private static final AnticipateOvershootInterpolator slideDownInterpolator =
+                                                new AnticipateOvershootInterpolator(0.92f);
 
-	private RunDB runDB;
+    // Run list view
+    private RunDB runDB;
+    private RecyclerView runListView;
     private RunAdapter runAdapter;
+    private RecyclerView.LayoutManager runListLM;
+    private int listTop;
+    private int listBottom;
 
+
+    // Graphs
 	private GraphViewSmall graphSmall;
 	private GraphViewFull graphFull;
 	private ChartFullScreenDialog graphFullFragment;
-	
-	private DisplayMetrics dm;
-	private int screenHeight, screenWidth;
-	protected GestureDetector gestDect;
+
 
 
 	@Override
@@ -61,14 +76,14 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_main);
-		Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(tb);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
 		//getActionBar().setDisplayShowTitleEnabled(false);
 		settings = getPreferences(MODE_PRIVATE);
 		
 		// Set up variables and fields
-		dm = getResources().getDisplayMetrics();
+        dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
 		screenHeight = (dm.heightPixels);
 		screenWidth = (dm.widthPixels);
 		enterRun = new EnterRun();
@@ -97,40 +112,47 @@ public class MainActivity extends AppCompatActivity {
 
         runAdapter = new RunAdapter(this, runDB);
         runAdapter.registerAdapterDataObserver(new RunAdapterObserver(runAdapter, runDB));
+        runListLM = new LinearLayoutManager(MainActivity.this);
 		runListView = (RecyclerView) findViewById(R.id.my_runs);
-        runListView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        runListView.setLayoutManager(runListLM);
         runListView.setAdapter(runAdapter);
         runListView.setItemAnimator(new FadeInUpAnimator());
         runListView.getItemAnimator().setAddDuration(500);
         runListView.getItemAnimator().setRemoveDuration(500);
 		runListView.setHasFixedSize(true);
 
-		// Graph initial setup
+        // Graph initial setup
 		graphSmall = (GraphViewSmall) findViewById(R.id.graph);
 		graphSmall.setRunList(runDB, getUnit());
 		
 		// check for first run
 		if (runDB.isEmpty())
 			(new FirstRunDialog()).show(fragMngr, "FirstRunDialog");
-	}
+    }
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		if (runFragLayout != null)
 			runFragLayout.setY(screenHeight * -3/10);
+        distance = (VerticalTextView) findViewById(R.id.distance);
+        time = (VerticalTextView) findViewById(R.id.time);
+        dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
+        enterRunButton = (Button) findViewById(R.id.enter_run_button);
+        listTop = runListView.getTop();
+        listBottom = runListView.getBottom();
 		slideDown();
     }
 	@Override
 	protected void onPause() {
+        super.onPause();
 		slideUp();
-		super.onPause();
 	}
 	
 	@Override
 	protected void onStop() {
-		runDB.saveRunDB(this);
-		super.onStop();
+        super.onStop();
+        runDB.saveRunDB(this);
 	}
 	
 	@Override
@@ -252,18 +274,13 @@ public class MainActivity extends AppCompatActivity {
 			graphSmall.updateData();
 			graphSmall.invalidate(); }
 	}
-	
-	public void slideUp() {
-		// move Distance and Time texts out
-		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
-		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);
+
+    private void slideUp() {
 		distance.animate().translationX(0).setDuration(1000);
 		time.animate().translationX(0).setDuration(1000);
 		// make the date radio buttons disappear
-		RadioGroup dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
 		dateRadioGroup.animate().setDuration(700).alpha(0);
 		// change the button text
-		Button enterRunButton = (Button) findViewById(R.id.enter_run_button);
 		enterRunButton.setText("Open");
 		enterRunButton.setTextColor(0xFFFFFFFF);
 		enterRunButton.animate().setDuration(700).alpha(0.5f);
@@ -271,22 +288,19 @@ public class MainActivity extends AppCompatActivity {
 		// slide the fragment up
 		runFragLayout.animate()
                 .setDuration(700)
-                .setInterpolator(new AnticipateOvershootInterpolator(0.8f))
+                .setInterpolator(slideUpInterpolator)
                 .translationY(screenHeight * -35 / 100);
 		runFragOpen = false;
+        // adjust runList visibility
+        shiftBackRunList();
 	}
-	public void slideDown() {
-		// move Distance and Time texts in
-		VerticalTextView distance = (VerticalTextView) findViewById(R.id.distance);
-		VerticalTextView time = (VerticalTextView) findViewById(R.id.time);		
+    private void slideDown() {
 		float moveTextBy = dm.widthPixels / 5.5f - ((BigNumberPicker) findViewById(R.id.dist10)).getTextSize()*dm.density*2;
 		distance.animate().translationXBy(moveTextBy).setDuration(1000);
-		time.animate().translationXBy(- moveTextBy).setDuration(1000);
+		time.animate().translationXBy(-moveTextBy).setDuration(1000);
 		// make the date radio buttons reappear
-		RadioGroup dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
 		dateRadioGroup.animate().setDuration(700).alpha(1);
 		// change the button text
-		Button enterRunButton = (Button) findViewById(R.id.enter_run_button);
 		enterRunButton.setText("Enter Run");
 		enterRunButton.setTextColor(0xFF000000);
 		enterRunButton.animate().setDuration(700).alpha(1);
@@ -294,10 +308,58 @@ public class MainActivity extends AppCompatActivity {
 		// slide the fragment down
 		runFragLayout.animate()
                 .setDuration(700)
-                .setInterpolator(new AnticipateOvershootInterpolator(0.92f))
+                .setInterpolator(slideDownInterpolator)
                 .translationY(0);
 		runFragOpen = true;
+        // adjust runList visibility
+        shiftDownRunListIfNeeded();
 	}
+
+    private void shiftBackRunList() {
+        runListView.animate().translationY(0).setDuration(700);
+    }
+
+    public void shiftBackRunListByOneIfNeeded() {
+        final int noOfCards = runListLM.getChildCount();
+        if (noOfCards < 2)
+            return;
+        final View lastRunCard = runListLM.getChildAt(noOfCards - 1);
+        final View beforeLastRunCard = runListLM.getChildAt(noOfCards - 2);
+        if (lastRunCard.getBottom() + runListView.getTop() == runListView.getBottom()) {
+            Log.i("run", "matching bottoms");
+            final int cardHeight = lastRunCard.getBottom() - beforeLastRunCard.getBottom();
+            if (runListView.getTop() - cardHeight > findViewById(R.id.main_space).getBottom()) {
+                Log.i("run", "translate");
+                runListView.animate().translationYBy(-cardHeight).setDuration(10);
+            }
+        }
+    }
+
+    private void shiftDownRunListIfNeeded() {
+        final int TOLERATE = 100;
+        runListView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final int noOfCards = runListLM.getChildCount();
+                if (noOfCards < 1)
+                    return;
+                final View lastRunCard = runListLM.getChildAt(noOfCards - 1);
+                final int enterRunBottom = screenHeight / 2;
+                final int listCurrentCard = listTop + lastRunCard.getBottom();
+                Log.i("run", "measures: " + listTop + ", " + listCurrentCard + ", " + listBottom + "; " + enterRunBottom);
+                if ((listCurrentCard - listTop) < (listBottom - enterRunBottom)) {
+                    //Log.i("run", "fits in window, move by: " + (enterRunBottom - listTop));
+                    runListView.animate().translationY(enterRunBottom - listTop).setDuration(700);
+                } else if (listBottom - listCurrentCard > TOLERATE) {
+                    //Log.i("run", "bigger than window, move by: " + (listBottom - listCurrentCard));
+                    runListView.animate().translationY(listBottom - listCurrentCard).setDuration(700);
+                } else {
+                    //Log.i("run", "no move, reset");
+                    runListView.animate().translationY(0).setDuration(700);
+                }
+            }
+        }, 300);
+    }
 	
 	
 	

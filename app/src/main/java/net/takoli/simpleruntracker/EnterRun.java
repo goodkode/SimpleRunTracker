@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -113,7 +112,6 @@ public class EnterRun extends Fragment {
 			boolean inMile = main.getUnit().compareTo("mi") == 0;
 			@Override
 			public void onScrollStateChange(NumberPicker view, int scrollState) {
-				Log.i("run", "average time: " + secPerMile);
 				dist = dist10.getValue() * 1000 + dist1.getValue() * 100 + dist_1.getValue() * 10 + dist_01.getValue();
 				if (inMile)
 					secs = dist * secPerMile / 100;
@@ -195,8 +193,9 @@ public class EnterRun extends Fragment {
 					return; // not valid run
 				runListDB.addNewRun(main, new Run(runDate, dd, _dd, unit, h, mm, ss));
 				runListDB.saveRunDB(main);
-                runAdapter.notifyItemInserted(runListDB.getRunList().size() - 1);
-                runListView.smoothScrollToPosition(runListDB.getRunList().size() - 1);
+                runAdapter.notifyItemInserted(runListDB.getRunList().size());
+                main.shiftBackRunListByOneIfNeeded();
+                runListView.smoothScrollToPosition(runListDB.getRunList().size());
 				main.updateGraph();
 			}
 		});
