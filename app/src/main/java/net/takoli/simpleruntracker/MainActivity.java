@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup dateRadioGroup;
     private Button enterRunButton;
     private boolean runFragOpen;
+    private int enterRunBottom;
     private static final AnticipateOvershootInterpolator slideUpInterpolator =
                                                 new AnticipateOvershootInterpolator(0.8f);
     private static final AnticipateOvershootInterpolator slideDownInterpolator =
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager runListLM;
     private int listTop;
     private int listBottom;
+    private int shiftedDown = 0;
+    private LinearLayout.LayoutParams runListParams;
 
 
     // Graphs
@@ -87,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 		screenHeight = (dm.heightPixels);
 		screenWidth = (dm.widthPixels);
 		enterRun = new EnterRun();
-		
+
 		// "Enter Run" top fragment setup:
         runFragLayout = (FrameLayout) findViewById(R.id.enter_run_fragment_frame);
 		runFragLayout.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth, screenHeight / 2));
@@ -129,8 +133,20 @@ public class MainActivity extends AppCompatActivity {
 		if (runDB.isEmpty())
 			(new FirstRunDialog()).show(fragMngr, "FirstRunDialog");
     }
-	
-	@Override
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            listTop = runListView.getTop();
+            listBottom = runListView.getBottom();
+            enterRunBottom = screenHeight / 2;
+            runListParams = (LinearLayout.LayoutParams) runListView.getLayoutParams();
+            Log.i("run", "M: " + findViewById(R.id.main_space).getBottom() + ", " + listTop + ", " + listBottom + "; " + graphSmall.getTop());
+        }
+    }
+
+    @Override
 	protected void onResume() {
 		super.onResume();
 		if (runFragLayout != null)
@@ -139,17 +155,16 @@ public class MainActivity extends AppCompatActivity {
         time = (VerticalTextView) findViewById(R.id.time);
         dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
         enterRunButton = (Button) findViewById(R.id.enter_run_button);
-        listTop = runListView.getTop();
-        listBottom = runListView.getBottom();
 		slideDown();
     }
-	@Override
-	protected void onPause() {
+
+    @Override
+    protected void onPause() {
         super.onPause();
-		slideUp();
-	}
-	
-	@Override
+        slideUp();
+    }
+
+    @Override
 	protected void onStop() {
         super.onStop();
         runDB.saveRunDB(this);
@@ -316,22 +331,23 @@ public class MainActivity extends AppCompatActivity {
 	}
 
     private void shiftBackRunList() {
+        shiftedDown = 0;
         runListView.animate().translationY(0).setDuration(700);
     }
 
     public void shiftBackRunListByOneIfNeeded() {
         final int noOfCards = runListLM.getChildCount();
-        if (noOfCards < 2)
+        if (shiftedDown == 0 || noOfCards < 2)
             return;
-        final View lastRunCard = runListLM.getChildAt(noOfCards - 1);
-        final View beforeLastRunCard = runListLM.getChildAt(noOfCards - 2);
-        if (lastRunCard.getBottom() + runListView.getTop() == runListView.getBottom()) {
-            Log.i("run", "matching bottoms");
-            final int cardHeight = lastRunCard.getBottom() - beforeLastRunCard.getBottom();
-            if (runListView.getTop() - cardHeight > findViewById(R.id.main_space).getBottom()) {
-                Log.i("run", "translate");
-                runListView.animate().translationYBy(-cardHeight).setDuration(10);
-            }
+        final int lastCardBottom = listTop + shiftedDown + runListLM.getChildAt(noOfCards - 1).getBottom();
+        Log.i("run", "shift? " + listTop + "; " + shiftedDown + ", " + lastCardBottom + ";" + listBottom);
+        int overLap = lastCardBottom - listBottom;
+        Log.i("run", "overlap: " + overLap);
+        if (overLap > 0) {
+            Log.i("run", "overlapping bottoms");
+            int shiftUp = overLap < shiftedDown ? overLap : shiftedDown;
+            Log.i("run", "translate");
+            runListView.animate().translationYBy(-shiftUp).setDuration(10);
         }
     }
 
@@ -343,18 +359,19 @@ public class MainActivity extends AppCompatActivity {
                 final int noOfCards = runListLM.getChildCount();
                 if (noOfCards < 1)
                     return;
-                final View lastRunCard = runListLM.getChildAt(noOfCards - 1);
-                final int enterRunBottom = screenHeight / 2;
-                final int listCurrentCard = listTop + lastRunCard.getBottom();
-                Log.i("run", "measures: " + listTop + ", " + listCurrentCard + ", " + listBottom + "; " + enterRunBottom);
-                if ((listCurrentCard - listTop) < (listBottom - enterRunBottom)) {
+                final int lastCardBottom = listTop + runListLM.getChildAt(noOfCards - 1).getBottom();
+                Log.i("run", "measures: " + listTop + ", " + lastCardBottom + ", " + listBottom + "; " + enterRunBottom);
+                if ((lastCardBottom - listTop) < (listBottom - enterRunBottom)) {
                     //Log.i("run", "fits in window, move by: " + (enterRunBottom - listTop));
-                    runListView.animate().translationY(enterRunBottom - listTop).setDuration(700);
-                } else if (listBottom - listCurrentCard > TOLERATE) {
+                    shiftedDown = enterRunBottom - listTop;
+                    runListView.animate().translationY(shiftedDown).setDuration(700);
+                } else if (listBottom - lastCardBottom > TOLERATE) {
                     //Log.i("run", "bigger than window, move by: " + (listBottom - listCurrentCard));
-                    runListView.animate().translationY(listBottom - listCurrentCard).setDuration(700);
+                    shiftedDown = listBottom - lastCardBottom;
+                    runListView.animate().translationY(shiftedDown).setDuration(700);
                 } else {
                     //Log.i("run", "no move, reset");
+                    shiftedDown = 0;
                     runListView.animate().translationY(0).setDuration(700);
                 }
             }
