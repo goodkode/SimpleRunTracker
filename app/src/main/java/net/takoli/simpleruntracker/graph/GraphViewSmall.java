@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,7 +29,7 @@ public class GraphViewSmall extends View {
 	private boolean inMiles;
 	private String dUnit, sUnit;
 	private final double KM_TO_M = 1.60934;
-	private final int MY_RED = 0xFFFFA4A4;
+	private final int MY_GREEN = 0xFF76BF78;
 	private final int MY_BLUE = 0xFF9FC6FF;
 	private final int MY_SHADOW = 0x88000000;
 
@@ -66,13 +65,13 @@ public class GraphViewSmall extends View {
 	        distPaint.setStrokeWidth(4);
 	        distPaint.setAntiAlias(true);
 	        distPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
-	        distPaint.setColor(MY_RED);
+	        distPaint.setColor(MY_GREEN);
 	        speedPaint.setStyle(Style.STROKE);
 	        speedPaint.setStrokeWidth(4);
 	        speedPaint.setAntiAlias(true);
 	        speedPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
 	        speedPaint.setColor(MY_BLUE);
-	        distLabelPaint.setColor(MY_RED);
+	        distLabelPaint.setColor(MY_GREEN);
 	        speedLabelPaint.setColor(MY_BLUE);
 	}
 

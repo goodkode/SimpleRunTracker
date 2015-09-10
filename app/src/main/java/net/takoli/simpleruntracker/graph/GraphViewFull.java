@@ -39,8 +39,8 @@ public class GraphViewFull extends View {
 	private float fingerAt;
 	private boolean inMiles;
 	private String dUnit, sUnit;
-	private final int MY_RED = 0xFFFFA4A4;
-	private final int MY_DARKRED = 0xFFCF3C3C;
+	private final int MY_GREEN = 0xFF76BF78;
+	private final int MY_DARKGREEN = 0xFF60B563;
 	private final int MY_BLUE = 0xFF9FC6FF;
 	private final int MY_DARKBLUE = 0xFF3174D6;
 	private final int MY_SHADOW = 0x88000000;
@@ -65,13 +65,13 @@ public class GraphViewFull extends View {
 	        distPaint.setStrokeWidth(4);
 	        distPaint.setAntiAlias(true);
 	        distPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
-	        distPaint.setColor(MY_RED);
+	        distPaint.setColor(MY_GREEN);
 	        speedPaint.setStyle(Style.STROKE);
 	        speedPaint.setStrokeWidth(4);
 	        speedPaint.setAntiAlias(true);
 	        speedPaint.setShadowLayer(5, 3, 3, MY_SHADOW);
 	        speedPaint.setColor(MY_BLUE);
-	        distLabelPaint.setColor(MY_DARKRED);
+	        distLabelPaint.setColor(MY_DARKGREEN);
 	        distLabelPaint.setStyle(Style.FILL);  
 			distLabelPaint.setAntiAlias(true);
 			distLabelPaint.setTypeface(Typeface.SERIF);
@@ -165,7 +165,7 @@ public class GraphViewFull extends View {
 		canvas.drawPath(mPath, avgLinePaint);
 		// miles or km and mph or km/h
 		cornerLabelPaint.setTextSize(height * 0.1f);
-		cornerLabelPaint.setColor(MY_RED);
+		cornerLabelPaint.setColor(MY_GREEN);
 		canvas.drawText("distance", 0, 0 + height * 0.1f, cornerLabelPaint);
 		cornerLabelPaint.setColor(MY_BLUE);
 		canvas.drawText("speed", width - height * 0.3f, 0 + height * 0.1f, cornerLabelPaint);
