@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private int listTop;
     private int listBottom;
     private int shiftedDown = 0;
+    private int cardHeight = 0;
     private LinearLayout.LayoutParams runListParams;
 
 
@@ -339,14 +340,17 @@ public class MainActivity extends AppCompatActivity {
         final int noOfCards = runListLM.getChildCount();
         if (shiftedDown == 0 || noOfCards < 2)
             return;
-        final int lastCardBottom = listTop + shiftedDown + runListLM.getChildAt(noOfCards - 1).getBottom();
-        Log.i("run", "shift? " + listTop + "; " + shiftedDown + ", " + lastCardBottom + ";" + listBottom);
-        int overLap = lastCardBottom - listBottom;
+        if (cardHeight == 0)
+            cardHeight = runListLM.getChildAt(1).getBottom() - runListLM.getChildAt(0).getBottom();
+        final int listCurrentBottom = listTop + shiftedDown + (int)((noOfCards + 1.2) * cardHeight);
+        Log.i("run", "shift0? " + listTop + "; " + shiftedDown + " :: " + listCurrentBottom + ";" + listBottom);
+        int overLap = listCurrentBottom - listBottom;
         Log.i("run", "overlap: " + overLap);
         if (overLap > 0) {
             Log.i("run", "overlapping bottoms");
             int shiftUp = overLap < shiftedDown ? overLap : shiftedDown;
             Log.i("run", "translate");
+            shiftedDown -= shiftUp;
             runListView.animate().translationYBy(-shiftUp).setDuration(10);
         }
     }
@@ -362,11 +366,11 @@ public class MainActivity extends AppCompatActivity {
                 final int lastCardBottom = listTop + runListLM.getChildAt(noOfCards - 1).getBottom();
                 Log.i("run", "measures: " + listTop + ", " + lastCardBottom + ", " + listBottom + "; " + enterRunBottom);
                 if ((lastCardBottom - listTop) < (listBottom - enterRunBottom)) {
-                    //Log.i("run", "fits in window, move by: " + (enterRunBottom - listTop));
+                    Log.i("run", "fits in window, move by: " + (enterRunBottom - listTop));
                     shiftedDown = enterRunBottom - listTop;
                     runListView.animate().translationY(shiftedDown).setDuration(700);
                 } else if (listBottom - lastCardBottom > TOLERATE) {
-                    //Log.i("run", "bigger than window, move by: " + (listBottom - listCurrentCard));
+                    Log.i("run", "bigger than window, move by: " + (listBottom - lastCardBottom));
                     shiftedDown = listBottom - lastCardBottom;
                     runListView.animate().translationY(shiftedDown).setDuration(700);
                 } else {
