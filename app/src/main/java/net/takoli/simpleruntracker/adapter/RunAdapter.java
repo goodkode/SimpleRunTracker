@@ -19,10 +19,12 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
 
     private static final int HEADER = 0;
     private static final int RUN = 1;
+    private static final int EXPANDED = 2;
     private final MainActivity main;
     private final RunDB runListDB;
     private final ArrayList<Run> runList;
     private HeaderViewHolder header;
+    private int expanded = -1;
 
     public RunAdapter(MainActivity main, RunDB runListDB) {
         this.main = main;
@@ -32,15 +34,21 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
 
     @Override
     public RunViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+       RunViewHolder viewHolder = null;
         if (viewType == HEADER) {
-            View v = LayoutInflater.from(viewGroup.getContext())
+            View cardView = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.run_header, viewGroup, false);
-            header = new HeaderViewHolder(v);
-            return header;
+            viewHolder = new HeaderViewHolder(cardView);
+        } else if (viewType == EXPANDED) {
+            View cardView = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.one_run_expanded, viewGroup, false);
+            viewHolder = new ExtendedRunViewHolder(cardView, this);
+        } else {
+            View cardView = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.one_run, viewGroup, false);
+            viewHolder = new RunViewHolder(cardView, this);
         }
-        View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.one_run, viewGroup, false);
-        return new RunViewHolder(v);
+        return viewHolder;
     }
 
     @Override
@@ -48,29 +56,49 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         if (getItemViewType(position) == HEADER) {
             updateHeader();
         } else {
-            int avgDistU = runListDB.getAvgDistUNIT();
-            int avgPaceU = runListDB.getAvgPaceUNIT();
             Run run = runList.get(position - 1);
             runViewHolder.rDist.setText(run.getDistanceString());
             runViewHolder.rDate.setText(run.getDateString());
             runViewHolder.rDist.setText(run.getDistanceString());
             runViewHolder.rTime.setText(run.getTimeString() + "s ");
             runViewHolder.rPace.setText(run.getPaceString());
-//        runViewHolder.rSpeed.setText("(" + run.getSpeedString() + ")");
-//        runViewHolder.rPerformScore.setText(run.getPerfScore(avgDistU, avgPaceU));
-//        runViewHolder.rPerfDist.setText(run.getPerfDist(avgDistU) + " of average distance,  ");
-//        runViewHolder.rPerfPace.setText(run.getPerfPace(avgPaceU) + " of average speed");
+            if (runViewHolder instanceof ExtendedRunViewHolder) {
+                ExtendedRunViewHolder expRunViewHolder = (ExtendedRunViewHolder) runViewHolder;
+                int avgDistU = runListDB.getAvgDistUNIT();
+                int avgPaceU = runListDB.getAvgPaceUNIT();
+                expRunViewHolder.rSpeed.setText(run.getSpeedString());
+                expRunViewHolder.rPerformScore.setText(run.getPerfScore(avgDistU, avgPaceU));
+                expRunViewHolder.rPerfDist.setText(run.getPerfDist(avgDistU) + " of average distance,  ");
+                expRunViewHolder.rPerfPace.setText(run.getPerfPace(avgPaceU) + " of average speed");
+            }
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position == 0 ?  HEADER : RUN;
+        if (position == 0)
+            return HEADER;
+        else if (position == expanded)
+            return EXPANDED;
+        else
+            return RUN;
     }
 
     @Override
     public int getItemCount() {
         return runList.size() + 1;
+    }
+
+    public void expandItem(int position) {
+        if (expanded == position) {
+            expanded = -1;
+            notifyItemChanged(position);
+        } else {
+            int prevExpanded = expanded;
+            expanded = position;
+            notifyItemChanged(prevExpanded);
+            notifyItemChanged(expanded);
+        }
     }
 
     public void updateHeader() {
@@ -100,30 +128,49 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
 
 
     public static class RunViewHolder extends RecyclerView.ViewHolder {
+
         TextView rDate;
         TextView rDist;
         TextView rTime;
         TextView rPace;
-        TextView rSpeed;
-        TextView rPerformScore;
-        TextView rPerfDist;
-        TextView rPerfPace;
 
         public RunViewHolder(View runView) {
+            super(runView);
+        }
+
+        public RunViewHolder(View runView, final RunAdapter adapter) {
             super(runView);
             rDate = (TextView) runView.findViewById(R.id.run_date);
             rDist = (TextView) runView.findViewById(R.id.run_dist);
             rTime = (TextView) runView.findViewById(R.id.run_time);
             rPace = (TextView) runView.findViewById(R.id.run_pace);
-            rSpeed = (TextView) runView.findViewById(R.id.run_speed);
-            rPerformScore = (TextView) runView.findViewById(R.id.perform_score);
-            rPerfDist = (TextView) runView.findViewById(R.id.perf_dist);
-            rPerfPace = (TextView) runView.findViewById(R.id.perf_pace);
 
             runView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("run", "Element clicked.");
+                    adapter.expandItem(getAdapterPosition());
+                }
+            });
+        }
+    }
+
+    public static class ExtendedRunViewHolder extends RunViewHolder {
+
+        TextView rSpeed;
+        TextView rPerformScore;
+        TextView rPerfDist;
+        TextView rPerfPace;
+
+        public ExtendedRunViewHolder(View runView, RunAdapter adapter) {
+            super(runView, adapter);
+            rSpeed = (TextView) runView.findViewById(R.id.run_speed);
+            rPerformScore = (TextView) runView.findViewById(R.id.perform_score);
+            rPerfDist = (TextView) runView.findViewById(R.id.perf_dist);
+            rPerfPace = (TextView) runView.findViewById(R.id.perf_pace);
+            runView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    return false;
                 }
             });
         }

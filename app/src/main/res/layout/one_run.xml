@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@color/one_run_color"
-        android:orientation="horizontal">
+        android:background="@color/one_run_color" >
 
         <TextView
             android:id="@+id/run_date"
