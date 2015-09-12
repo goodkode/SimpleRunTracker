@@ -1,5 +1,11 @@
 package net.takoli.simpleruntracker;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.widget.Toast;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,19 +18,13 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
-
 public class RunDB {
 
 	private ArrayList<Run> runList;
-	private long sumDistU, sumTimeU;	
-	private final String FILE_NAME = "RunTracker-runlist.csv";
 	private int MAXSIZE;
+	private int indexOfLastInsert;
+	private long sumDistU, sumTimeU;
+	private final String FILE_NAME = "RunTracker-runlist.csv";
 	private Calendar FROMDATE;
 	private boolean MAXSIZEisUsed;
 	private File intDir, extDownloadsDir;
@@ -107,6 +107,7 @@ public class RunDB {
 		
 	public void addNewRun(Context context, Run newRun) {
 		runList.add(newRun);
+		indexOfLastInsert = runList.indexOf(newRun);
 		sumDistU += newRun.getDistUNIT();
 		sumTimeU += newRun.getTimeUNIT();
 	}
@@ -136,6 +137,10 @@ public class RunDB {
 		if (lastIndex == -1)
 			return null;
 		return runList.get(lastIndex);
+	}
+
+	public int getIndexOfLastInsert() {
+		return indexOfLastInsert;
 	}
 	
 	public int[] getLastValues() {

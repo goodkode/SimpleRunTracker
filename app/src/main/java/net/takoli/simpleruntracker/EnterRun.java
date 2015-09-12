@@ -194,7 +194,9 @@ public class EnterRun extends Fragment {
 					return; // not valid run
 				runListDB.addNewRun(main, new Run(runDate, dd, _dd, unit, h, mm, ss));
 				runListDB.saveRunDB(main);
-                runAdapter.notifyItemInserted(runListDB.getRunList().size());
+                runAdapter.notifyDataSetChanged();
+//                runAdapter.notifyItemInserted(runListDB.getIndexOfLastInsert() + 1);
+                //todo: revise above, get animation right
                 main.shiftBackRunListByOneIfNeeded();
                 runListView.smoothScrollToPosition(runListDB.getRunList().size());
 				main.updateGraph();
@@ -264,8 +266,7 @@ public class EnterRun extends Fragment {
 		}
 
 		public void onDateSet(DatePicker view, int year, int month, int day) {
-			MainActivity mainActivity = (MainActivity) getActivity();
-			EnterRun enterRun = (EnterRun) mainActivity.enterRun;
+			EnterRun enterRun = (EnterRun) ((MainActivity) getActivity()).enterRun;
 			enterRun.runDate = Run.setCustomDate(month, day, year);
 			String m;
 			switch (month) {

@@ -29,7 +29,6 @@ import android.widget.RelativeLayout;
 
 import net.takoli.simpleruntracker.adapter.RunAdapter;
 import net.takoli.simpleruntracker.adapter.RunAdapterObserver;
-import net.takoli.simpleruntracker.adapter.animator.FadeInUpAnimator;
 import net.takoli.simpleruntracker.graph.GraphViewFull;
 import net.takoli.simpleruntracker.graph.GraphViewSmall;
 import net.takoli.simpleruntracker.model.SettingsManager;
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 		runListView = (RecyclerView) findViewById(R.id.my_runs);
         runListView.setLayoutManager(runListLM);
         runListView.setAdapter(runAdapter);
-        runListView.setItemAnimator(new FadeInUpAnimator());
+        //runListView.setItemAnimator(new FadeInUpAnimator());
         runListView.getItemAnimator().setAddDuration(500);
         runListView.getItemAnimator().setRemoveDuration(500);
 		runListView.setHasFixedSize(true);
