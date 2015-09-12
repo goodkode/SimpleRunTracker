@@ -62,7 +62,7 @@ public class ChartFullScreenDialog extends DialogFragment {
     		return;		// not enough data
     	}
     	graph = (GraphViewFull) chartFullScreenView.findViewById(R.id.chart_full_screen);
-    	graph.setRunList(main.getRunDB(), main.getUnit());
+    	graph.setRunList(main.getRunDB(), main.settingsManager.getUnit());
     	int listStart = listSize < GraphViewFull.START_PLOTS ? listSize : GraphViewFull.START_PLOTS;
     	int listMax = graph.getMaxPlots();
     	graph.updateData(listStart);

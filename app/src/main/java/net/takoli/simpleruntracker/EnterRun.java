@@ -23,6 +23,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import net.takoli.simpleruntracker.adapter.RunAdapter;
+import net.takoli.simpleruntracker.model.SettingsManager;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
@@ -73,7 +74,7 @@ public class EnterRun extends Fragment {
 		dist_1 = (BigNumberPicker) getView().findViewById(R.id.dist_1);
 		dist_01 = (BigNumberPicker) getView().findViewById(R.id.dist_01);
 		distUnit = (TextView) getView().findViewById(R.id.dist_unit);
-			distUnit.setText(main.getUnit());
+			distUnit.setText(main.settingsManager.getUnit());
 			distUnit.setTextSize(dist1.getTextSize() * 0.8f);
 			distUnit.animate().translationYBy(4);
 			
@@ -109,7 +110,7 @@ public class EnterRun extends Fragment {
 			int secPerMile = runListDB.getAvgPaceUNIT();
 			int secs = 0;
 			int dist = 0;
-			boolean inMile = main.getUnit().compareTo("mi") == 0;
+			boolean inMile = main.settingsManager.getUnit().compareTo("mi") == 0;
 			@Override
 			public void onScrollStateChange(NumberPicker view, int scrollState) {
 				dist = dist10.getValue() * 1000 + dist1.getValue() * 100 + dist_1.getValue() * 10 + dist_01.getValue();
@@ -182,7 +183,7 @@ public class EnterRun extends Fragment {
 						enterRunButton.setEnabled(true);
 					}
 				}, 700);
-				String unit = main.getUnit();
+				String unit = main.settingsManager.getUnit();
 				int dd = dist10.getValue() * 10 + dist1.getValue();
 				int _dd = dist_1.getValue() * 10 + dist_01.getValue();
 				int h = hour.getValue();
@@ -204,29 +205,31 @@ public class EnterRun extends Fragment {
 	
 	// this and the RedDatePickerFragment support picking a date
 	public void pickDate() {
-		DialogFragment datePickerFragment = new RedDatePickerFragment();
+		DialogFragment datePickerFragment = new GreenDatePickerFragment();
 		datePickerFragment.show(getFragmentManager(), "datePicker");
 	}
 	
-	public static class RedDatePickerFragment extends DialogFragment implements
+	public static class GreenDatePickerFragment extends DialogFragment implements
 			DatePickerDialog.OnDateSetListener {
+
+        private SettingsManager settingsManager;
 
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			// Use the current date as the default date in the picker
 			final ColorDrawable greenDrawable = new ColorDrawable(getResources().getColor(R.color.green_light));
-			final Calendar c = Calendar.getInstance();
-			c.roll(Calendar.DAY_OF_YEAR, -2);
-			int year = c.get(Calendar.YEAR);
-			int month = c.get(Calendar.MONTH);
-			int day = c.get(Calendar.DAY_OF_MONTH);
+            settingsManager = ((MainActivity) getActivity()).settingsManager;
+            int[] lastDatePickedOrDefault = settingsManager.getLastRunDatePicked();
+			int year = lastDatePickedOrDefault[2];
+			int month = lastDatePickedOrDefault[1];
+			int day = lastDatePickedOrDefault[0];
 
 			// Create a new instance of DatePickerDialog and return it
 			DatePickerDialog datePickerDialog =  new DatePickerDialog(getActivity(), this, year, month, day);
-			// Change all dividers to red
+			// Change all dividers to green
 			DatePicker datePicker = datePickerDialog.getDatePicker();
 			datePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
-			datePickerDialog.setTitle("");
+			datePickerDialog.setTitle(null);
 			try {
 				Field datePickerField = DatePicker.class.getDeclaredField("mDaySpinner");
 				datePickerField.setAccessible(true);
@@ -235,8 +238,8 @@ public class EnterRun extends Fragment {
 					Field numberPickerField = NumberPicker.class.getDeclaredField("mSelectionDivider");
 					numberPickerField.setAccessible(true);
 					numberPickerField.set(np, greenDrawable);
-				} catch (Exception e) { e.printStackTrace(); }
-			} catch (Exception e) { e.printStackTrace(); }
+				} catch (Exception e) { }
+			} catch (Exception e) { }
 			try {
 				Field datePickerField = DatePicker.class.getDeclaredField("mMonthSpinner");
 				datePickerField.setAccessible(true);
@@ -245,8 +248,8 @@ public class EnterRun extends Fragment {
 					Field numberPickerField = NumberPicker.class.getDeclaredField("mSelectionDivider");
 					numberPickerField.setAccessible(true);
 					numberPickerField.set(np, greenDrawable);
-				} catch (Exception e) { e.printStackTrace(); }
-			} catch (Exception e) { e.printStackTrace(); }
+				} catch (Exception e) { }
+			} catch (Exception e) { }
 			try {
 				Field datePickerField = DatePicker.class.getDeclaredField("mYearSpinner");
 				datePickerField.setAccessible(true);
@@ -255,8 +258,8 @@ public class EnterRun extends Fragment {
 					Field numberPickerField = NumberPicker.class.getDeclaredField("mSelectionDivider");
 					numberPickerField.setAccessible(true);
 					numberPickerField.set(np, greenDrawable);
-				} catch (Exception e) { e.printStackTrace(); }
-			} catch (Exception e) { e.printStackTrace(); }
+				} catch (Exception e) { }
+			} catch (Exception e) { }
 			return datePickerDialog;
 		}
 
@@ -281,6 +284,7 @@ public class EnterRun extends Fragment {
 				default: m = ""; break; }
 			String y = year%100 < 10 ? ("'0"+year%100) : ("'"+year%100);
 			enterRun.dateRadioButton.setText(m+" "+day+", "+y);
+            settingsManager.setLastRunDatePicked(day, month, year);
 		}
 	}
 }

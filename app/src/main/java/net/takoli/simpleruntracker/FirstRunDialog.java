@@ -18,7 +18,7 @@ public class FirstRunDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
     	main = (MainActivity) getActivity();
-    	unit = main.getUnit();
+    	unit = main.settingsManager.getUnit();
         return new AlertDialog.Builder(getActivity())
         		.setTitle("Choose unit of distance")
         		.setMessage("Do you want to enter distance in miles or kilometers")
@@ -42,11 +42,11 @@ public class FirstRunDialog extends DialogFragment {
     public void onStop() {
     	super.onStop();
     	if (updated) {
-    	main.setUnit(unit);
-	    	Toast.makeText(main, "New runs will be entered in " + main.getUnitInFull(), Toast.LENGTH_SHORT).show();
+    	main.settingsManager.setUnit(unit);
+	    	Toast.makeText(main, "New runs will be entered in " + main.settingsManager.getUnitInFull(), Toast.LENGTH_SHORT).show();
 	    	unitTV = ((TextView) main.findViewById(R.id.dist_unit));
 	    	unitTV.setText(unit);
-	    	main.getGraphView().setRunList(main.getRunDB(), main.getUnit());
+	    	main.getGraphView().setRunList(main.getRunDB(), main.settingsManager.getUnit());
 	    	main.updateGraph();}
     }
 }

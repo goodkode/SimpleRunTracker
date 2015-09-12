@@ -107,7 +107,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         if (runList.size() == 0)
             header.info.setText("Empty list");
         else {
-            String limit = main.getDBLimit();
+            String limit = main.settingsManager.getDBLimit();
             boolean numberLimitUsed = true;
             try {
                 Integer.parseInt(limit);

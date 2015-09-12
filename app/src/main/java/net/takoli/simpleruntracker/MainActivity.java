@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,10 +32,11 @@ import net.takoli.simpleruntracker.adapter.RunAdapterObserver;
 import net.takoli.simpleruntracker.adapter.animator.FadeInUpAnimator;
 import net.takoli.simpleruntracker.graph.GraphViewFull;
 import net.takoli.simpleruntracker.graph.GraphViewSmall;
+import net.takoli.simpleruntracker.model.SettingsManager;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SharedPreferences settings;
+	public SettingsManager settingsManager;
     private FragmentTransaction fragTrans;
     private FragmentManager fragMngr;
     private DisplayMetrics dm;
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
 		//getActionBar().setDisplayShowTitleEnabled(false);
-		settings = getPreferences(MODE_PRIVATE);
+		settingsManager = new SettingsManager(this);
 		
 		// Set up variables and fields
         dm = new DisplayMetrics();
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 			
 		// List of Runs setup:
 		runDB = new RunDB(this);
-		runDB.setDBLimit(getDBLimit());
+		runDB.setDBLimit(settingsManager.getDBLimit());
 
         runAdapter = new RunAdapter(this, runDB);
         runAdapter.registerAdapterDataObserver(new RunAdapterObserver(runAdapter, runDB));
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Graph initial setup
 		graphSmall = (GraphViewSmall) findViewById(R.id.graph);
-		graphSmall.setRunList(runDB, getUnit());
+		graphSmall.setRunList(runDB, settingsManager.getUnit());
 		
 		// check for first run
 		if (runDB.isEmpty())
@@ -258,33 +258,7 @@ public class MainActivity extends AppCompatActivity {
 	public RunAdapter getRunAdapter() {
 		return runAdapter;
     }
-	
-	public void setUnit(String unit) {
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("unit", unit);
-		editor.commit();
-	}
-	public String getUnit() {
-		return settings.getString("unit", "mi");
-	}
-	public String getUnitInFull() {
-		String u = settings.getString("unit", "mi");
-		if (u.compareTo("mi") == 0)
-			return "miles";
-		else if (u.compareTo("km") == 0)
-			return "kilometers";
-		else return "";
-	}
-	public void setDBLimit(String limit) {
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("limit", limit);
-		editor.commit();
-		runDB.setDBLimit(limit);
-		runDB.ensureDBLimit();
-	}
-	public String getDBLimit() {
-		return settings.getString("limit", "300");
-	}
+
 	public void updateGraph() {
 		if (graphSmall != null) {
 			graphSmall.updateData();

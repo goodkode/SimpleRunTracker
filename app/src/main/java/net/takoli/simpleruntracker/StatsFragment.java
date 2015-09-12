@@ -82,7 +82,7 @@ public class StatsFragment extends Fragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked) 
 					onStatsInKm(); } });
-		unit = ((MainActivity) getActivity()).getUnit();
+		unit = mainActivity.settingsManager.getUnit();
 		if (unit.compareTo("km") == 0)   
 			kmChB.setChecked(true);
 		else 							

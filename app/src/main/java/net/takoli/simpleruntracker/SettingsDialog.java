@@ -1,7 +1,5 @@
 package net.takoli.simpleruntracker;
 
-import java.util.Calendar;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -14,6 +12,8 @@ import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class SettingsDialog extends DialogFragment {
 	
@@ -51,8 +51,8 @@ public class SettingsDialog extends DialogFragment {
     	r300 = (RadioButton) settingsView.findViewById(R.id.settings_300);
     	r500 = (RadioButton) settingsView.findViewById(R.id.settings_500);
     	rDate = (RadioButton) settingsView.findViewById(R.id.settings_starting_date);
-    	origUnit = main.getUnit();
-    	origLimit = main.getDBLimit();
+    	origUnit = main.settingsManager.getUnit();
+    	origLimit = main.settingsManager.getDBLimit();
     	// origUnit set-up
     	if (origUnit.compareTo("km") == 0)
     		rKm.setChecked(true);
@@ -99,8 +99,8 @@ public class SettingsDialog extends DialogFragment {
     	else
     		newUnit = "km";
     	if (newUnit.compareTo(origUnit) != 0) {
-    		main.setUnit(newUnit);
-    		Toast.makeText(main, "New runs will be entered in " + main.getUnitInFull(), Toast.LENGTH_SHORT).show();
+    		main.settingsManager.setUnit(newUnit);
+    		Toast.makeText(main, "New runs will be entered in " + main.settingsManager.getUnitInFull(), Toast.LENGTH_SHORT).show();
 	    	((TextView) main.findViewById(R.id.dist_unit)).setText(newUnit);
 	    	main.getGraphView().setRunList(main.getRunDB(), newUnit);
 	    	main.updateGraph();
@@ -117,7 +117,7 @@ public class SettingsDialog extends DialogFragment {
     	else 
     		newLimit = origLimit;
     	if (newLimit.compareTo(origLimit) != 0) {
-    		main.setDBLimit(newLimit);
+    		main.settingsManager.setDBLimit(main.getRunDB(), newLimit);
     		main.getRunDB().ensureDBLimit();
     		if (rDate.isChecked())
     			Toast.makeText(main, "Workouts after " + Run.getFullStringDate(newLimitDate) + " will be recorded", 
