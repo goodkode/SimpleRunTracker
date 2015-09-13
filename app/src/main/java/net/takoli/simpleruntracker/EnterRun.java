@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,21 +50,24 @@ public class EnterRun extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		main = (MainActivity) getActivity();
-		runListDB = main.getRunDB();
-		runListView = main.getRunList();
-		runAdapter = main.getRunAdapter();
+        Log.i("run", "frag onCreate()");
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+        Log.i("run", "frag onCreateView()");
 		return inflater.inflate(R.layout.enter_run, container, false);
 	}
 	
 	@Override
 	public void onStart() {
 		super.onStart();
-		
+        Log.i("run", "frag onStart()");
+
+        runListDB = main.getRunDB();
+        runListView = main.getRunList();
+        runAdapter = main.getRunAdapter();
 		dm = getResources().getDisplayMetrics();
 		
 		// Set up DISTANCE fields
@@ -190,9 +194,9 @@ public class EnterRun extends Fragment {
 				int mm = min10.getValue() * 10 + min1.getValue();
 				int ss = sec10.getValue() * 10 + sec1.getValue();
 				// save it to runDB and update the ListView
-				if ((dd + _dd) == 0 || (h + mm + ss) == 0)
-					return; // not valid run
-				runListDB.addNewRun(main, new Run(runDate, dd, _dd, unit, h, mm, ss));
+                if ((dd + _dd) == 0 || (h + mm + ss) == 0)
+                    return; // not valid run
+                runListDB.addNewRun(main, new Run(runDate, dd, _dd, unit, h, mm, ss));
 				runListDB.saveRunDB(main);
                 runAdapter.notifyDataSetChanged();
 //                runAdapter.notifyItemInserted(runListDB.getIndexOfLastInsert() + 1);

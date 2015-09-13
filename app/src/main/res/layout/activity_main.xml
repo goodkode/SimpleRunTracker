@@ -1,10 +1,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/main"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	tools:context=".MainActivity">
 
 	<android.support.v7.widget.Toolbar
 		android:id="@+id/toolbar"
@@ -13,51 +14,45 @@
 		android:minHeight="?attr/actionBarSize"
 		android:background="?attr/colorPrimary"/>
 
-	<RelativeLayout
+	<android.support.percent.PercentRelativeLayout
+        android:id="@+id/main_layout"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:orientation="vertical" >
+		<android.support.v7.widget.RecyclerView
+			android:id="@+id/my_runs"
+            app:layout_marginTopPercent="18%"
+			app:layout_heightPercent="62%"
+			app:layout_widthPercent="100%"
+            android:background="@color/one_run_color"
+			android:paddingLeft="6dp"
+			android:paddingRight="6dp"
+			android:stackFromBottom="true" />
 
-			<Space
-                android:id="@+id/main_space"
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="17" />
-
-			<android.support.v7.widget.RecyclerView
-				android:id="@+id/my_runs"
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="65"
-				android:layout_margin="10dp"
-				android:paddingLeft="6dp"
-				android:paddingRight="6dp"
-				android:stackFromBottom="true"
-				android:divider="#00FFFFFF"
-				android:dividerHeight="3dp" />
-
-			<net.takoli.simpleruntracker.graph.GraphViewSmall
-				android:id="@+id/graph"
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="20"
-				android:paddingLeft="24dp"
-				android:paddingRight="24dp"
-				android:paddingBottom="15dp"
-				android:paddingTop="5dp"  />
-
-		</LinearLayout>
+		<net.takoli.simpleruntracker.graph.GraphViewSmall
+			android:id="@+id/graph"
+            app:layout_heightPercent="20%"
+            app:layout_widthPercent="100%"
+            android:background="@color/green_dark"
+            android:layout_alignParentBottom="true"
+			android:paddingLeft="24dp"
+			android:paddingRight="24dp"
+			android:paddingBottom="15dp"
+			android:paddingTop="5dp"  />
 
 		<!--Enter Run Fragment-->
-		<FrameLayout
-			android:id="@+id/enter_run_fragment_frame"
-			android:layout_width="match_parent"
-			android:layout_height="0dp" />
+        <FrameLayout
+            android:id="@+id/enter_run_frame"
+            app:layout_heightPercent="58%"
+            app:layout_widthPercent="100%"
+            android:layout_alignParentTop="true" >
+            <fragment
+                android:name="net.takoli.simpleruntracker.EnterRun"
+                android:tag="@string/enter_run_tag"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
 
-	</RelativeLayout>
+	</android.support.percent.PercentRelativeLayout>
 
 </LinearLayout>

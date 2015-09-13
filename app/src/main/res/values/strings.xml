@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Simple Run Tracker</string>
+    <string name="enter_run_tag">enterRunTag</string>
     <string name="settings">Settings</string>
     <string name="export_list_of_runs">Export list of runs</string>
     <string name="delete_db">Delete all runs</string>
