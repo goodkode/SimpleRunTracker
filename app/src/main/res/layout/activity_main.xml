@@ -24,7 +24,7 @@
             app:layout_marginTopPercent="18%"
 			app:layout_heightPercent="62%"
 			app:layout_widthPercent="100%"
-            android:background="@color/one_run_color"
+            android:background="#F8F8F8"
 			android:paddingLeft="6dp"
 			android:paddingRight="6dp"
 			android:stackFromBottom="true" />
@@ -33,24 +33,27 @@
 			android:id="@+id/graph"
             app:layout_heightPercent="20%"
             app:layout_widthPercent="100%"
-            android:background="@color/green_dark"
+            android:background="#FFFFFF"
             android:layout_alignParentBottom="true"
 			android:paddingLeft="24dp"
 			android:paddingRight="24dp"
 			android:paddingBottom="15dp"
-			android:paddingTop="5dp"  />
+			android:paddingTop="10dp"  />
+
 
 		<!--Enter Run Fragment-->
         <FrameLayout
             android:id="@+id/enter_run_frame"
             app:layout_heightPercent="58%"
             app:layout_widthPercent="100%"
-            android:layout_alignParentTop="true" >
+			android:background="#FFFFFF" >
+
             <fragment
                 android:name="net.takoli.simpleruntracker.EnterRun"
                 android:tag="@string/enter_run_tag"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
         </FrameLayout>
 
 	</android.support.percent.PercentRelativeLayout>
