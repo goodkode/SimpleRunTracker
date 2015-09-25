@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private int enterRunSlideDistance;
     private int listTop;
     private int listBottom;
+	private int listGap;
     private int shiftedDown;
 
 
@@ -131,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         // runList
         listTop = (int) (screenHeight * 0.18); // 18% margin
         listBottom = (int) (screenHeight * (0.18 + 0.62)); // 62% height
+		listGap = listBottom - enterRunBottom;
         shiftedDown = 0;
         Log.i("run", "M: " + screenHeight + "|| " + enterRunBottom + ", " + enterRunSlideDistance + "| " +
                                                     listTop + ", " + listBottom + ", " + shiftedDown);
@@ -275,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
 		enterRunFrame.animate()
                 .setDuration(700)
                 .setInterpolator(slideUpInterpolator)
-                .translationY(screenHeight * -35 / 100);
+                .translationY(listTop - enterRunBottom);
 		enterRunIsOpen = false;
         // adjust runList visibility
         shiftBackRunList();
@@ -307,53 +309,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void shiftBackRunListByOneIfNeeded() {
-//        final int noOfCards = runListLM.getChildCount();
-//        if (shiftedDown == 0 || noOfCards < 2)
-//            return;
-//        if (cardHeight == 0)
-//            cardHeight = runListLM.getChildAt(1).getBottom() - runListLM.getChildAt(0).getBottom();
-//        final int listCurrentBottom = listTop + shiftedDown + (int)((noOfCards + 1.2) * cardHeight);
-//        Log.i("run", "shift0? " + listTop + "; " + shiftedDown + " :: " + listCurrentBottom + ";" + listBottom);
-//        int overLap = listCurrentBottom - listBottom;
-//        Log.i("run", "overlap: " + overLap);
-//        if (overLap > 0) {
-//            Log.i("run", "overlapping bottoms");
-//            int shiftUp = overLap < shiftedDown ? overLap : shiftedDown;
-//            Log.i("run", "translate");
-//            shiftedDown -= shiftUp;
-//            runListView.animate().translationYBy(-shiftUp).setDuration(10);
-//        }
     }
 
     private void shiftDownRunListIfNeeded() {
-        final int TOLERATE = 100;
         runListView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 final int noOfCards = runListLM.getChildCount();
                 if (noOfCards < 1)
                     return;
-                final int lastCardBottom = listTop + runListLM.getChildAt(noOfCards - 1).getBottom();
-                Log.i("run", "measures: " + listTop + ", " + lastCardBottom + ", " + listBottom + "; " + enterRunBottom);
-//                if ((lastCardBottom - listTop) < (listBottom - enterRunBottom)) {
-//                    Log.i("run", "fits in window, move by: " + (enterRunBottom - listTop));
-//                    shiftedDown = enterRunBottom - listTop;
-//                    runListView.animate().translationY(shiftedDown).setDuration(700);
-//                } else if (listBottom - lastCardBottom > TOLERATE) {
-//                    Log.i("run", "bigger than window, move by: " + (listBottom - lastCardBottom));
-//                    shiftedDown = listBottom - lastCardBottom;
-//                    runListView.animate().translationY(shiftedDown).setDuration(700);
-//                } else {
-//                    //Log.i("run", "no move, reset");
-//                    shiftedDown = 0;
-//                    runListView.animate().translationY(0).setDuration(700);
-//                }
-                if ((lastCardBottom + listTop) < enterRunBottom) {
-                    Log.i("run", " shift: " + (enterRunBottom - listTop));
-                    shiftedDown = enterRunBottom - listTop;
-                    runListView.animate().translationY(shiftedDown).setDuration(700);
-                } else if (shiftedDown > 0) {
-                    shiftedDown = 0;
+                final int lastCardBottom = listTop + runListLM.getChildAt(noOfCards - 1).getBottom() + shiftedDown;
+                if (lastCardBottom < enterRunBottom) {
+					// not visible, we want to shift
+					final int listLenght = lastCardBottom - listTop;
+					if (listLenght > listGap) {
+						shiftedDown = listBottom - lastCardBottom;
+						runListView.animate().translationY(shiftedDown).setDuration(700);
+						Log.i("run", " shift with longer list: " + shiftedDown);
+					} else {
+						shiftedDown = enterRunBottom - listTop;
+						runListView.animate().translationY(shiftedDown).setDuration(700);
+						Log.i("run", " shift with short list: " + shiftedDown);
+					}
                 }
             }
         }, 300);
