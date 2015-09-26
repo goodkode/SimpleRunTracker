@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout.LayoutParams originalRunListParams;
     private LinearLayout.LayoutParams shiftedRunListParams;
 
-
     // Graphs
 	private GraphViewSmall graphSmall;
 	private GraphViewFull graphFull;
@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     private int listBottom;
 	private int listGap;
     private int shiftedDown;
+    private PercentRelativeLayout.LayoutParams listLayoutParams;
+    private PercentRelativeLayout.LayoutParams listShiftedLayoutParams;
 
 
 	@Override
@@ -134,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
         listBottom = (int) (screenHeight * (0.18 + 0.62)); // 62% height
 		listGap = listBottom - enterRunBottom;
         shiftedDown = 0;
+        listLayoutParams = new PercentRelativeLayout
+                                .LayoutParams(findViewById(R.id.main_layout).getWidth(), (listBottom - listTop));
         Log.i("run", "M: " + screenHeight + "|| " + enterRunBottom + ", " + enterRunSlideDistance + "| " +
                                                     listTop + ", " + listBottom + ", " + shiftedDown);
     }
@@ -308,10 +312,7 @@ public class MainActivity extends AppCompatActivity {
         runListView.animate().translationY(0).setDuration(700);
     }
 
-    public void shiftBackRunListByOneIfNeeded() {
-    }
-
-    private void shiftDownRunListIfNeeded() {
+    public void shiftDownRunListIfNeeded() {
         runListView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -319,23 +320,26 @@ public class MainActivity extends AppCompatActivity {
                 if (noOfCards < 1)
                     return;
                 final int lastCardBottom = listTop + runListLM.getChildAt(noOfCards - 1).getBottom() + shiftedDown;
-                if (lastCardBottom < enterRunBottom) {
-					// not visible, we want to shift
-					final int listLenght = lastCardBottom - listTop;
-					if (listLenght > listGap) {
-						shiftedDown = listBottom - lastCardBottom;
-						runListView.animate().translationY(shiftedDown).setDuration(700);
-						Log.i("run", " shift with longer list: " + shiftedDown);
-					} else {
-						shiftedDown = enterRunBottom - listTop;
-						runListView.animate().translationY(shiftedDown).setDuration(700);
-						Log.i("run", " shift with short list: " + shiftedDown);
-					}
+                if ((lastCardBottom - listGap / 2) < enterRunBottom) {
+                    // barely visible, we want to shift
+                    final int listLenght = lastCardBottom - listTop;
+                    if (listLenght > listGap) {
+                        shiftedDown = listBottom - lastCardBottom;
+                        Log.i("run", " shift with longer list: " + shiftedDown);
+                    } else {
+                        shiftedDown = enterRunBottom - listTop;
+                        Log.i("run", " shift with short list: " + shiftedDown);
+                    }
+                    runListView.animate().translationY(shiftedDown).setDuration(700);
+                } else if (lastCardBottom > listBottom) {
+                    int shiftUp = lastCardBottom - listBottom;
+                    shiftedDown -= shiftUp;
+                    Log.i("run", " shift back a bit: " + shiftUp);
+                    runListView.animate().translationYBy(-shiftUp).setDuration(700);
                 }
             }
         }, 300);
     }
-	
 	
 	
 	// TO OPEN AND CLOSE TOP PANEL GestureListener

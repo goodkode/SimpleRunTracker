@@ -201,7 +201,7 @@ public class EnterRun extends Fragment {
                 runAdapter.notifyDataSetChanged();
 //                runAdapter.notifyItemInserted(runListDB.getIndexOfLastInsert() + 1);
                 //todo: revise above, get animation right
-                main.shiftBackRunListByOneIfNeeded();
+                main.shiftDownRunListIfNeeded();
                 runListView.smoothScrollToPosition(runListDB.getRunList().size());
 				main.updateGraph();
 			}
