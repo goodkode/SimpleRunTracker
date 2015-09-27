@@ -126,6 +126,11 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         }
     }
 
+    public void openRunEditDialog(int pos) {
+        Log.i("run", "openRunEditDialog: " + pos);
+
+    }
+
 
     public static class RunViewHolder extends RecyclerView.ViewHolder {
 
@@ -160,17 +165,26 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         TextView rPerformScore;
         TextView rPerfDist;
         TextView rPerfPace;
+        View rRunEdit;
 
-        public ExtendedRunViewHolder(View runView, RunAdapter adapter) {
+        public ExtendedRunViewHolder(View runView, final RunAdapter adapter) {
             super(runView, adapter);
             rSpeed = (TextView) runView.findViewById(R.id.run_speed);
             rPerformScore = (TextView) runView.findViewById(R.id.perform_score);
             rPerfDist = (TextView) runView.findViewById(R.id.perf_dist);
             rPerfPace = (TextView) runView.findViewById(R.id.perf_pace);
+            rRunEdit = runView.findViewById(R.id.run_edit);
             runView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    return false;
+                    adapter.openRunEditDialog(getAdapterPosition());
+                    return true;
+                }
+            });
+            rRunEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapter.openRunEditDialog(getAdapterPosition());
                 }
             });
         }
