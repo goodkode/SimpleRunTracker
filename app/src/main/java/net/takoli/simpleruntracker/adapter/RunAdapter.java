@@ -185,17 +185,9 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
             headerView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("run", "Element clicked.");
+                    Log.d("run", "Header clicked.");
                 }
             });
         }
     }
 }
-
-/** Missing:
- * animation onclick
- * animation on add
- * header
- * new layout after onclick
- * edit button and edit action
- */

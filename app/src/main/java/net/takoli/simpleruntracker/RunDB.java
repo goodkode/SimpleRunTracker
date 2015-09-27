@@ -22,7 +22,6 @@ public class RunDB {
 
 	private ArrayList<Run> runList;
 	private int MAXSIZE;
-	private int indexOfLastInsert;
 	private long sumDistU, sumTimeU;
 	private final String FILE_NAME = "RunTracker-runlist.csv";
 	private Calendar FROMDATE;
@@ -105,11 +104,11 @@ public class RunDB {
 		return (runList.size() == 0);
 	}
 		
-	public void addNewRun(Context context, Run newRun) {
+	public int addNewRun(Context context, Run newRun) {
 		runList.add(newRun);
-		indexOfLastInsert = runList.indexOf(newRun);
 		sumDistU += newRun.getDistUNIT();
 		sumTimeU += newRun.getTimeUNIT();
+		return runList.indexOf(newRun);
 	}
 	
 	public void updateRun(int pos, int[] updates) {
@@ -139,10 +138,6 @@ public class RunDB {
 		return runList.get(lastIndex);
 	}
 
-	public int getIndexOfLastInsert() {
-		return indexOfLastInsert;
-	}
-	
 	public int[] getLastValues() {
 		Run lastRun = this.getLastRun();
 		if (lastRun != null)

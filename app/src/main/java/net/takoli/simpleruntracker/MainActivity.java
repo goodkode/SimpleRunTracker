@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import net.takoli.simpleruntracker.adapter.RunAdapter;
-import net.takoli.simpleruntracker.adapter.RunAdapterObserver;
+import net.takoli.simpleruntracker.adapter.animator.FadeInUpAnimator;
 import net.takoli.simpleruntracker.graph.GraphViewFull;
 import net.takoli.simpleruntracker.graph.GraphViewSmall;
 import net.takoli.simpleruntracker.model.SettingsManager;
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        Log.i("run", "MAIN onCreate()");
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -106,14 +105,11 @@ public class MainActivity extends AppCompatActivity {
 
         // List of Runs setup:
         runAdapter = new RunAdapter(this, runDB);
-        runAdapter.registerAdapterDataObserver(new RunAdapterObserver(runAdapter, runDB));
         runListLM = new LinearLayoutManager(MainActivity.this);
 		runListView = (RecyclerView) findViewById(R.id.my_runs);
         runListView.setLayoutManager(runListLM);
         runListView.setAdapter(runAdapter);
-        //runListView.setItemAnimator(new FadeInUpAnimator());
-        runListView.getItemAnimator().setAddDuration(500);
-        runListView.getItemAnimator().setRemoveDuration(500);
+        runListView.setItemAnimator(new FadeInUpAnimator(getResources()));
 		runListView.setHasFixedSize(true);
 
         // Graph initial setup
@@ -123,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
 		// check for first run
 		if (runDB.isEmpty())
 			(new FirstRunDialog()).show(fragMngr, "FirstRunDialog");
-        Log.i("run", "MAIN onCreate() returned");
     }
 
     private void initScreenSizeVariables() {
@@ -145,11 +140,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        Log.i("run", "MAIN onWindowFocusChanged()");
         if (hasFocus) {
             initScreenSizeVariables();
             enterRunFrame.setY(-enterRunSlideDistance);
             slideDown();
+            runListView.smoothScrollToPosition(runDB.getRunList().size());
+            runAdapter.notifyDataSetChanged();
         } else {
             slideUp();
         }
@@ -158,13 +154,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("run", "MAIN onStart()");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("run", "MAIN onResume()");
     }
 
     @Override
@@ -304,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
                 .translationY(0);
 		enterRunIsOpen = true;
         // adjust runList visibility
-        shiftDownRunListIfNeeded();
+        shiftRunList();
 	}
 
     private void shiftBackRunList() {
@@ -312,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
         runListView.animate().translationY(0).setDuration(700);
     }
 
-    public void shiftDownRunListIfNeeded() {
+    public void shiftRunList() {
         runListView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -332,10 +326,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                     runListView.animate().translationY(shiftedDown).setDuration(700);
                 } else if (lastCardBottom > listBottom) {
+                    // new element added
                     int shiftUp = lastCardBottom - listBottom;
                     shiftedDown -= shiftUp;
+                    if (shiftedDown < 0) {
+                        shiftUp += shiftedDown;
+                        shiftedDown = 0;
+                    }
                     Log.i("run", " shift back a bit: " + shiftUp);
-                    runListView.animate().translationYBy(-shiftUp).setDuration(700);
+                    runListView.animate().translationYBy(-shiftUp).setDuration(100);
                 }
             }
         }, 300);

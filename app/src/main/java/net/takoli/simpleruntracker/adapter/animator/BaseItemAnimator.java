@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -74,6 +75,7 @@ public abstract class BaseItemAnimator extends RecyclerView.ItemAnimator {
     }
 
     @Override public void runPendingAnimations() {
+        Log.i("run", "run pending");
         boolean removalsPending = !mPendingRemovals.isEmpty();
         boolean movesPending = !mPendingMoves.isEmpty();
         boolean changesPending = !mPendingChanges.isEmpty();
@@ -201,6 +203,7 @@ public abstract class BaseItemAnimator extends RecyclerView.ItemAnimator {
     }
 
     private void doAnimateAdd(final RecyclerView.ViewHolder holder) {
+        Log.i("run", "doAnimateAdd");
         if (holder instanceof AnimateViewHolder) {
             ((AnimateViewHolder) holder).animateAddImpl(new DefaultAddVpaListener(holder));
         } else {
@@ -218,6 +221,7 @@ public abstract class BaseItemAnimator extends RecyclerView.ItemAnimator {
     }
 
     @Override public boolean animateAdd(final ViewHolder holder) {
+        Log.i("run", "animateAdd");
         endAnimation(holder);
         preAnimateAdd(holder);
         mPendingAdditions.add(holder);
