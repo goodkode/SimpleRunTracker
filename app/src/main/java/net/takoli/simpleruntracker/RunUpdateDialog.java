@@ -5,8 +5,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
@@ -22,13 +20,9 @@ public class RunUpdateDialog extends DialogFragment {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		date = getArguments().getString("date");
-		dd = getArguments().getString("dd");
-		_dd = getArguments().getString("_dd");
-		h = getArguments().getString("h");
-		mm = getArguments().getString("mm");
-		ss = getArguments().getString("ss");
 		position = getArguments().getInt("pos");
+		run = ((MainActivity) getActivity()).getRunDB().getRunList().get(position);
+		date = run.getDateString();
 	}
 	
     @Override
@@ -58,89 +52,89 @@ public class RunUpdateDialog extends DialogFragment {
                 ).create();
         return runUpdateDialog;
     }
-    
-    @Override
-    public void onStart() {
+
+	@Override
+    public void onResume() {
     	super.onStart();
       	EditText dd = (EditText) runUpdateDialog.findViewById(R.id.update_distance);
       	EditText _dd = (EditText) runUpdateDialog.findViewById(R.id.update_distance_dec);
       	EditText h = (EditText) runUpdateDialog.findViewById(R.id.update_time_h);
       	EditText mm = (EditText) runUpdateDialog.findViewById(R.id.update_time_mm);
       	EditText ss = (EditText) runUpdateDialog.findViewById(R.id.update_time_ss);
-    	dd.setText(twoDigits(this.dd));
-    	_dd.setText(twoDigits(this._dd));
-    	h.setText(this.h);
-    	mm.setText(twoDigits(this.mm));
-    	ss.setText(twoDigits(this.ss));
-    	dd.setSelection(2);
-    	_dd.setSelection(2);
-    	h.setSelection(1);
-    	mm.setSelection(2);
-    	ss.setSelection(2);
-    	dd.addTextChangedListener(new TextWatcher() {
-			@Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-			@Override public void afterTextChanged(Editable s) {
-				int length = s.length();
-				if (length < 2)
-					s.replace(0, 0, "00");
-				if (length > 2)
-					s.delete(0, length - 2);
-				RunUpdateDialog.this.dd = s.toString();
-			}
-		});
-    	_dd.addTextChangedListener(new TextWatcher() {
-			@Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-			@Override public void afterTextChanged(Editable s) {
-				int length = s.length();
-				if (length < 2)
-					s.replace(0, 0, "00");
-				if (length > 2)
-					s.delete(0, length - 2);
-				RunUpdateDialog.this._dd = s.toString();
-			}
-		});
-    	h.addTextChangedListener(new TextWatcher() {
-			@Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-			@Override public void afterTextChanged(Editable s) {
-				int length = s.length();
-				if (length < 1)
-					s.replace(0, 0, "0");
-				if (length > 1)
-					s.delete(0, length - 1);
-				RunUpdateDialog.this.h = s.toString();
-			}
-		});
-    	mm.addTextChangedListener(new TextWatcher() {
-			@Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-			@Override public void afterTextChanged(Editable s) {
-				int length = s.length();
-				if (length < 2)
-					s.replace(0, 0, "00");
-				if (length > 2)
-					s.delete(0, length - 2);
-				if (s.charAt(0) > '5')
-					s.replace(0, 1, "0");
-				RunUpdateDialog.this.mm = s.toString();
-			}
-		});
-    	ss.addTextChangedListener(new TextWatcher() {
-			@Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-			@Override public void afterTextChanged(Editable s) {
-				int length = s.length();
-				if (length < 2)
-					s.replace(0, 0, "00");
-				if (length > 2)
-					s.delete(0, length - 2);
-				if (s.charAt(0) > '5')
-					s.replace(0, 1, "0");
-				RunUpdateDialog.this.ss = s.toString();
-			}
-		});
+    	dd.setText(run.dd);
+    	_dd.setText(run._dd);
+    	h.setText(run.h);
+    	mm.setText(run.mm);
+    	ss.setText(run.ss);
+//    	dd.setSelection(2);
+//    	_dd.setSelection(2);
+//    	h.setSelection(1);
+//    	mm.setSelection(2);
+//    	ss.setSelection(2);
+//    	dd.addTextChangedListener(new TextWatcher() {
+//			@Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+//			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+//			@Override public void afterTextChanged(Editable s) {
+//				int length = s.length();
+//				if (length < 2)
+//					s.replace(0, 0, "00");
+//				if (length > 2)
+//					s.delete(0, length - 2);
+//				RunUpdateDialog.this.dd = toInt(s.toString());
+//			}
+//		});
+//    	_dd.addTextChangedListener(new TextWatcher() {
+//			@Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+//			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+//			@Override public void afterTextChanged(Editable s) {
+//				int length = s.length();
+//				if (length < 2)
+//					s.replace(0, 0, "00");
+//				if (length > 2)
+//					s.delete(0, length - 2);
+//				RunUpdateDialog.this._dd = s.toString();
+//			}
+//		});
+//    	h.addTextChangedListener(new TextWatcher() {
+//			@Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+//			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+//			@Override public void afterTextChanged(Editable s) {
+//				int length = s.length();
+//				if (length < 1)
+//					s.replace(0, 0, "0");
+//				if (length > 1)
+//					s.delete(0, length - 1);
+//				RunUpdateDialog.this.h = s.toString();
+//			}
+//		});
+//    	mm.addTextChangedListener(new TextWatcher() {
+//			@Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+//			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+//			@Override public void afterTextChanged(Editable s) {
+//				int length = s.length();
+//				if (length < 2)
+//					s.replace(0, 0, "00");
+//				if (length > 2)
+//					s.delete(0, length - 2);
+//				if (s.charAt(0) > '5')
+//					s.replace(0, 1, "0");
+//				RunUpdateDialog.this.mm = s.toString();
+//			}
+//		});
+//    	ss.addTextChangedListener(new TextWatcher() {
+//			@Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+//			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+//			@Override public void afterTextChanged(Editable s) {
+//				int length = s.length();
+//				if (length < 2)
+//					s.replace(0, 0, "00");
+//				if (length > 2)
+//					s.delete(0, length - 2);
+//				if (s.charAt(0) > '5')
+//					s.replace(0, 1, "0");
+//				RunUpdateDialog.this.ss = s.toString();
+//			}
+//		});
     }
     
     private void updateRun(int position) {

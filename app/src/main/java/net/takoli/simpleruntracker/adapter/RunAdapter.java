@@ -1,5 +1,6 @@
 package net.takoli.simpleruntracker.adapter;
 
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import net.takoli.simpleruntracker.MainActivity;
 import net.takoli.simpleruntracker.R;
 import net.takoli.simpleruntracker.Run;
 import net.takoli.simpleruntracker.RunDB;
+import net.takoli.simpleruntracker.RunUpdateDialog;
 
 import java.util.ArrayList;
 
@@ -127,8 +129,19 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
     }
 
     public void openRunEditDialog(int pos) {
-        Log.i("run", "openRunEditDialog: " + pos);
-
+        int position = pos - 1;
+        Log.i("run", "openRunEditDialog: " + position);
+        RunUpdateDialog updateRunDialog = new RunUpdateDialog();
+        Bundle bundle = new Bundle();
+        bundle.putInt("pos", pos);
+//        bundle.putString("date", editRun.getDateString());
+//        bundle.putString("dd", "0" + editRun.dd);
+//        bundle.putString("_dd", "0" + editRun._dd);
+//        bundle.putString("h", "" + editRun.h);
+//        bundle.putString("mm", "0" + editRun.mm);
+//        bundle.putString("ss", "0" + editRun.ss);
+        updateRunDialog.setArguments(bundle);
+        updateRunDialog.show(main.getFragmentManager(), "editRun");
     }
 
 
