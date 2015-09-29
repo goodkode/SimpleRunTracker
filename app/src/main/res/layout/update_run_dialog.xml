@@ -21,30 +21,36 @@
 	    
 	    <EditText
 	        android:id="@+id/update_distance"
-	        android:layout_width="42sp"  
+	        android:layout_width="38sp"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="15dp"
 	        android:layout_below="@id/update_dist_label"
+			android:gravity="center_horizontal"
 	        android:inputType="number"
-	        android:textSize="16sp"
-	        android:nextFocusDown="@+id/update_distance_dec" />
-		    <TextView
-		        android:id="@+id/update_dist_comma"
-		        android:layout_width="wrap_content" 
-		        android:layout_height="wrap_content"
-		        android:layout_alignBaseline="@id/update_distance"
-		        android:layout_toRightOf="@id/update_distance"
-		        android:text="." 
-		        android:textSize="16sp"  />
+	        android:textSize="18sp"
+			android:cursorVisible="false"
+	        android:nextFocusDown="@+id/update_distance_dec"
+			android:text="00" />
+		<TextView
+			android:id="@+id/update_dist_comma"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBaseline="@id/update_distance"
+			android:layout_toRightOf="@id/update_distance"
+			android:text="."
+			android:textSize="18sp"  />
 	    <EditText
 	        android:id="@+id/update_distance_dec"
-	        android:layout_width="42sp"  
+	        android:layout_width="38sp"
 	        android:layout_height="wrap_content"
 	        android:layout_alignBaseline="@id/update_distance"
 	        android:layout_toRightOf="@id/update_dist_comma"
-	        android:inputType="number"
-	        android:textSize="16sp"
-	        android:nextFocusDown="@+id/update_time_h" />
+			android:gravity="center_horizontal"
+			android:inputType="number"
+			android:cursorVisible="false"
+	        android:textSize="18sp"
+	        android:nextFocusDown="@+id/update_time_h"
+			android:text="00" />
     </RelativeLayout>
     
     <RelativeLayout
@@ -61,46 +67,55 @@
 	    
    	    <EditText
 	        android:id="@+id/update_time_h"
-	        android:layout_width="32sp"  
+	        android:layout_width="20sp"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="15dp"
 	        android:layout_below="@id/update_time_label"
+			android:gravity="center_horizontal"
 	        android:inputType="number"
-	        android:textSize="16sp"
+			android:cursorVisible="false"
+	        android:textSize="18sp"
+			android:text="0"
 	        android:nextFocusDown="@+id/update_time_mm" />
-	   	    <TextView
-		        android:id="@+id/update_time_colon1"
-		        android:layout_width="wrap_content" 
-		        android:layout_height="wrap_content"
-		        android:layout_alignBaseline="@id/update_time_h"
-		        android:layout_toRightOf="@id/update_time_h"
-		        android:text=":" 
-		        android:textSize="16sp"  />
+		<TextView
+			android:id="@+id/update_time_colon1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBaseline="@id/update_time_h"
+			android:layout_toRightOf="@id/update_time_h"
+			android:text=":"
+			android:textSize="18sp"  />
 	    <EditText
 	        android:id="@+id/update_time_mm"
-	        android:layout_width="42sp"  
+	        android:layout_width="38sp"
 	        android:layout_height="wrap_content"
 	        android:layout_alignBaseline="@id/update_time_h"
 	        android:layout_toRightOf="@id/update_time_colon1"
+			android:gravity="center_horizontal"
 	        android:inputType="number"
-	        android:textSize="16sp"
+			android:cursorVisible="false"
+	        android:textSize="18sp"
+			android:text="00"
 	        android:nextFocusDown="@+id/update_time_ss" />
-		    <TextView
-		        android:id="@+id/update_time_colon2"
-		        android:layout_width="wrap_content" 
-		        android:layout_height="wrap_content"
-		        android:layout_alignBaseline="@id/update_time_h"
-		        android:layout_toRightOf="@id/update_time_mm"
-		        android:text=":" 
-		        android:textSize="16sp"  />
+		<TextView
+			android:id="@+id/update_time_colon2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignBaseline="@id/update_time_h"
+			android:layout_toRightOf="@id/update_time_mm"
+			android:text=":"
+			android:textSize="18sp"  />
 	    <EditText
 	        android:id="@+id/update_time_ss"
-	        android:layout_width="42sp"  
+	        android:layout_width="38sp"
 	        android:layout_height="wrap_content"
 	        android:layout_alignBaseline="@id/update_time_h"
 	        android:layout_toRightOf="@+id/update_time_colon2"
+			android:gravity="center_horizontal"
 	        android:inputType="number"
-	        android:textSize="16sp" />
+			android:cursorVisible="false"
+	        android:textSize="18sp"
+			android:text="00"/>
     </RelativeLayout>
     
 </LinearLayout>
