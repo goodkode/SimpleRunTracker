@@ -7,11 +7,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 public class RunUpdateDialog extends DialogFragment {
 
+    public static final String POSITION = "position";
+    private MainActivity main;
     private AlertDialog runUpdateDialog;
     private int position;
     private Run run;
@@ -24,8 +27,10 @@ public class RunUpdateDialog extends DialogFragment {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		position = getArguments().getInt("pos");
-		run = ((MainActivity) getActivity()).getRunDB().getRunList().get(position);
+        main = (MainActivity) getActivity();
+		position = getArguments().getInt(POSITION);
+		run = main.getRunDB().getRunList().get(position);
+        Log.i("run", "runUpdate: " + run + " from pos: " + position);
 	}
 	
     @Override
@@ -36,21 +41,22 @@ public class RunUpdateDialog extends DialogFragment {
                 .setTitle("Update details of " + run.getDateString() + "'s run")
                 .setPositiveButton("Delete Run", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
+                            main.settingsManager.setComingFromRunUpdate(true);
                         	removeRun(position);
-                        	((MainActivity) getActivity()).updateGraph();
                         	return; }
                     }
                 )
                 .setNeutralButton("Update Run", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
+                                main.settingsManager.setComingFromRunUpdate(true);
                                 updateRun(position);
-                                ((MainActivity) getActivity()).updateGraph();
                                 return;
                             }
                         }
                 )
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
+                                main.settingsManager.setComingFromRunUpdate(true);
                                 return;
                             }
                         }
@@ -84,15 +90,18 @@ public class RunUpdateDialog extends DialogFragment {
     }
     
     private void updateRun(int position) {
-    	((MainActivity) getActivity()).getRunDB()
-			.updateRun(position, new int[] {toInt(dd), toInt(_dd), toInt(h), toInt(mm), toInt(ss)});
-    	((MainActivity) getActivity()).getRunAdapter().notifyItemChanged(position + 1);
+        main.getRunDB().updateRun(position, new int[]{toInt(dd), toInt(_dd), toInt(h), toInt(mm), toInt(ss)});
+        int adapterPosition = position + 1;
+    	main.getRunAdapter().notifyItemChanged(adapterPosition);
+        main.updateGraph();
     }
     
     private void removeRun(int position) {
-    	((MainActivity) getActivity()).getRunDB()
-			.removeRun(position);
-    	((MainActivity) getActivity()).getRunAdapter().no
+    	main.getRunDB().removeRun(position);
+        int adapterPosition = position + 1;
+        main.getRunAdapter().notifyItemRemovedHelper();
+        main.getRunAdapter().notifyItemRemoved(adapterPosition);
+        main.updateGraph();
     }
 
     private static int toInt(EditText et) {

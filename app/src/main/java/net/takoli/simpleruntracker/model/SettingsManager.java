@@ -14,10 +14,20 @@ public class SettingsManager {
 
     private Activity context;
     private SharedPreferences settings;
+    private boolean comingFromRunUpdate;
 
     public SettingsManager(Activity context) {
         this.context = context;
-        settings = context.getPreferences(Context.MODE_PRIVATE);
+        this.settings = context.getPreferences(Context.MODE_PRIVATE);
+        this.comingFromRunUpdate = false;
+    }
+
+    public void setComingFromRunUpdate(boolean comingFromRunUpdate) {
+        this.comingFromRunUpdate = comingFromRunUpdate;
+    }
+
+    public boolean isComingFromRunUpdate() {
+        return comingFromRunUpdate;
     }
 
     public void setUnit(String unit) {

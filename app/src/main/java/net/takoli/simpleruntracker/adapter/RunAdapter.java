@@ -91,6 +91,10 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         return runList.size() + 1;
     }
 
+    public void notifyItemRemovedHelper() {
+        expanded = -1;
+    }
+
     public void expandItem(int position) {
         if (expanded == position) {
             expanded = -1;
@@ -130,16 +134,9 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
 
     public void openRunEditDialog(int pos) {
         int position = pos - 1;
-        Log.i("run", "openRunEditDialog: " + position);
         RunUpdateDialog updateRunDialog = new RunUpdateDialog();
         Bundle bundle = new Bundle();
-        bundle.putInt("pos", pos);
-//        bundle.putString("date", editRun.getDateString());
-//        bundle.putString("dd", "0" + editRun.dd);
-//        bundle.putString("_dd", "0" + editRun._dd);
-//        bundle.putString("h", "" + editRun.h);
-//        bundle.putString("mm", "0" + editRun.mm);
-//        bundle.putString("ss", "0" + editRun.ss);
+        bundle.putInt(RunUpdateDialog.POSITION, position);
         updateRunDialog.setArguments(bundle);
         updateRunDialog.show(main.getFragmentManager(), "editRun");
     }

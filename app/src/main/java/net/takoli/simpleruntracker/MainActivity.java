@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.percent.PercentRelativeLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +20,6 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import net.takoli.simpleruntracker.adapter.RunAdapter;
@@ -50,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView runListView;
     private RunAdapter runAdapter;
     private RecyclerView.LayoutManager runListLM;
-    private LinearLayout.LayoutParams originalRunListParams;
-    private LinearLayout.LayoutParams shiftedRunListParams;
 
     // Graphs
 	private GraphViewSmall graphSmall;
@@ -64,14 +60,12 @@ public class MainActivity extends AppCompatActivity {
     protected GestureDetector gestDect;
     private int screenHeight;
     private int enterRunBottom;
-    private final float SLIDE_UP_RATIO = 0.7f;
     private int enterRunSlideDistance;
     private int listTop;
     private int listBottom;
 	private int listGap;
     private int shiftedDown;
-    private PercentRelativeLayout.LayoutParams listLayoutParams;
-    private PercentRelativeLayout.LayoutParams listShiftedLayoutParams;
+
 
 
 	@Override
@@ -123,16 +117,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initScreenSizeVariables() {
         screenHeight = findViewById(R.id.main_layout).getHeight();
-        // enterRun
-        enterRunBottom = (int) (screenHeight * 0.58); // 58% height
-        enterRunSlideDistance = (int) (enterRunBottom * SLIDE_UP_RATIO);
         // runList
         listTop = (int) (screenHeight * 0.18); // 18% margin
         listBottom = (int) (screenHeight * (0.18 + 0.62)); // 62% height
 		listGap = listBottom - enterRunBottom;
         shiftedDown = 0;
-        listLayoutParams = new PercentRelativeLayout
-                                .LayoutParams(findViewById(R.id.main_layout).getWidth(), (listBottom - listTop));
+        // enterRun
+        enterRunBottom = (int) (screenHeight * 0.58); // 58% height
+        enterRunSlideDistance = enterRunBottom - listTop;
         Log.i("run", "M: " + screenHeight + "|| " + enterRunBottom + ", " + enterRunSlideDistance + "| " +
                                                     listTop + ", " + listBottom + ", " + shiftedDown);
     }
@@ -140,12 +132,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
+        if (settingsManager.isComingFromRunUpdate()) {
+            settingsManager.setComingFromRunUpdate(false);
+        } else if (hasFocus) {
             initScreenSizeVariables();
             enterRunFrame.setY(-enterRunSlideDistance);
-            slideDown();
             runListView.smoothScrollToPosition(runDB.getRunList().size());
             runAdapter.notifyDataSetChanged();
+            slideDown();
         } else {
             slideUp();
         }
@@ -265,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
 		enterRunFrame.animate()
                 .setDuration(700)
                 .setInterpolator(slideUpInterpolator)
-                .translationY(listTop - enterRunBottom);
+                .translationY(-enterRunSlideDistance);
 		enterRunIsOpen = false;
         // adjust runList visibility
         shiftBackRunList();

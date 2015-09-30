@@ -47,15 +47,17 @@ public class FadeInUpAnimator extends BaseItemAnimator {
                 .setListener(new DefaultAddVpaListener(holder))
                 .start();
         final View container = holder.itemView.findViewById(R.id.one_run_container);
-        final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), green, blue);
-        colorAnimation.setDuration(2000);
-        colorAnimation.setInterpolator(interp);
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                container.setBackgroundColor((int) animator.getAnimatedValue());
-            }
-        });
-        colorAnimation.start();
+        if (container != null) {
+            final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), green, blue);
+            colorAnimation.setDuration(2000);
+            colorAnimation.setInterpolator(interp);
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    container.setBackgroundColor((int) animator.getAnimatedValue());
+                }
+            });
+            colorAnimation.start();
+        }
     }
 }
