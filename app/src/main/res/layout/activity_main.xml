@@ -7,12 +7,9 @@
 	android:orientation="vertical"
 	tools:context=".MainActivity">
 
-	<android.support.v7.widget.Toolbar
-		android:id="@+id/toolbar"
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:minHeight="?attr/actionBarSize"
-		android:background="?attr/colorPrimary"/>
+
+	<include layout="@layout/toolbar" />
+
 
 	<android.support.percent.PercentRelativeLayout
         android:id="@+id/main_layout"
