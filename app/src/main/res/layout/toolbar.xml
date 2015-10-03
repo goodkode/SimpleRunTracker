@@ -12,14 +12,21 @@
         android:layout_width="match_parent" >
 
         <ImageView
-            android:src="@drawable/runtracker_icon"
+            android:src="@drawable/runner_new"
             android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="?attr/actionBarSize"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingRight="16dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="App Name" />
+            android:gravity="center_vertical"
+            android:textColor="@color/green_dark"
+            android:textStyle="bold|italic"
+            android:textSize="20dp"
+            android:text="Run Tracker" />
 
     </LinearLayout>
 
