@@ -1,40 +1,41 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        app:showAsAction="always"
         android:id="@+id/stats_icon"
         android:orderInCategory="1"
-        android:showAsAction="always"
         android:icon="@drawable/stats_icon"
         android:title="@string/stats"/>
       
     <item
+        app:showAsAction="never"
         android:id="@+id/statistics"
         android:orderInCategory="2"
-        android:showAsAction="never"
         android:title="@string/statistics"/>
         
     <item
+        app:showAsAction="never"
         android:id="@+id/graph_it"
         android:orderInCategory="3"
-        android:showAsAction="never"
         android:title="@string/graph_it"/>
     
     <item
+        app:showAsAction="never"
         android:id="@+id/settings"
         android:orderInCategory="4"
-        android:showAsAction="never"
         android:title="@string/settings"/>
     
     <item
+        app:showAsAction="never"
         android:id="@+id/export_list_of_runs"
         android:orderInCategory="5"
-        android:showAsAction="never"
         android:title="@string/export_list_of_runs"/>
     
     <item
+        app:showAsAction="never"
         android:id="@+id/delete_db"
         android:orderInCategory="6"
-        android:showAsAction="never"
         android:title="@string/delete_db"/>
 
 </menu>

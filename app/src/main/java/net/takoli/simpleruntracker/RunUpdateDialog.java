@@ -41,14 +41,12 @@ public class RunUpdateDialog extends DialogFragment {
                 .setTitle("Update details of " + run.getDateString() + "'s run")
                 .setPositiveButton("Delete Run", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            main.settingsManager.setComingFromRunUpdate(true);
                         	removeRun(position);
                         	return; }
                     }
                 )
                 .setNeutralButton("Update Run", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                main.settingsManager.setComingFromRunUpdate(true);
                                 updateRun(position);
                                 return;
                             }
@@ -56,7 +54,6 @@ public class RunUpdateDialog extends DialogFragment {
                 )
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                main.settingsManager.setComingFromRunUpdate(true);
                                 return;
                             }
                         }

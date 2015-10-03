@@ -27,7 +27,7 @@
 	        android:layout_weight="5"
 	        android:layout_width="2dp"
 	        android:layout_height="0dp"
-	        android:background="#FFA3D0FF" />
+	        android:background="@color/green_light" />
 	</LinearLayout>
     
     <!-- and for the actual content -->

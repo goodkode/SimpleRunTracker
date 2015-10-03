@@ -132,16 +132,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (settingsManager.isComingFromRunUpdate()) {
-            settingsManager.setComingFromRunUpdate(false);
-        } else if (hasFocus) {
+        if (settingsManager.isAppStart() && hasFocus) {
             initScreenSizeVariables();
             enterRunFrame.setY(-enterRunSlideDistance);
             runListView.smoothScrollToPosition(runDB.getRunList().size());
             runAdapter.notifyDataSetChanged();
             slideDown();
-        } else {
-            slideUp();
         }
     }
 
@@ -179,10 +175,11 @@ public class MainActivity extends AppCompatActivity {
 		    		fragTrans.commit();
 		    	}
 	    		else {
-	    			if (statsFragment.isActive())
-	    				statsFragment.animateOut();
-	    			else
-	    				statsFragment.animateIn();
+	    			if (statsFragment.isActive()) {
+						statsFragment.animateOut();
+					} else {
+						statsFragment.animateIn();
+					}
 	    		}
 	            return true;
 	    	case R.id.settings:

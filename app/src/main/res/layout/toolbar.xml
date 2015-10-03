@@ -7,22 +7,20 @@
     android:minHeight="?attr/actionBarSize"
     android:background="?attr/colorPrimary" >
 
-    <FrameLayout
-        android:layout_height="?android:attr/actionBarSize"
+    <LinearLayout
+        android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent" >
+
+        <ImageView
+            android:src="@drawable/runtracker_icon"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="App Name" />
 
-        <!--<ImageButton-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="5dp"-->
-            <!--android:layout_gravity="end"-->
-            <!--android:src="@drawable/stats_icon"/>-->
-
-    </FrameLayout>
+    </LinearLayout>
 
 </android.support.v7.widget.Toolbar>
