@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -58,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     public SettingsManager settingsManager;
     private FragmentManager fragMngr;
     protected GestureDetector gestDect;
-    private int screenHeight;
     private int enterRunBottom;
     private int enterRunSlideDistance;
     private int listTop;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
 		//getActionBar().setDisplayShowTitleEnabled(false);
@@ -116,16 +116,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initScreenSizeVariables() {
-        screenHeight = findViewById(R.id.main_layout).getHeight();
-        // runList
-        listTop = (int) (screenHeight * 0.18); // 18% margin
-        listBottom = (int) (screenHeight * (0.18 + 0.62)); // 62% height
+        View screen = findViewById(R.id.main_layout);
+		settingsManager.setScreenHeight(screen.getHeight());
+		settingsManager.setScreenWidth(screen.getWidth());
+				// runList
+        listTop = (int) (settingsManager.getScreenHeight() * 0.18); // 18% margin
+        listBottom = (int) (settingsManager.getScreenHeight() * (0.18 + 0.62)); // 62% height
 		listGap = listBottom - enterRunBottom;
         shiftedDown = 0;
         // enterRun
-        enterRunBottom = (int) (screenHeight * 0.58); // 58% height
+        enterRunBottom = (int) (settingsManager.getScreenHeight() * 0.58); // 58% height
         enterRunSlideDistance = enterRunBottom - listTop;
-        Log.i("run", "M: " + screenHeight + "|| " + enterRunBottom + ", " + enterRunSlideDistance + "| " +
+        Log.i("run", "M: " + settingsManager.getScreenHeight() + "|| " + enterRunBottom + ", " + enterRunSlideDistance + "| " +
                                                     listTop + ", " + listBottom + ", " + shiftedDown);
     }
 
@@ -186,11 +188,7 @@ public class MainActivity extends AppCompatActivity {
 	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
 	            return true; 
 	        case R.id.graph_it:
-	    		graphFullFragment = (ChartFullScreenDialog) getFragmentManager().findFragmentByTag("ChartFullScreen");
-			if (graphFullFragment == null) {
-				graphFullFragment = new ChartFullScreenDialog();
-				graphFullFragment.show(fragMngr, "ChartFullScreen");
-			}
+	    		openFullGraph();
 	            return true; 
 	    	case R.id.export_list_of_runs:
 	        	runDB.saveToExternalMemory(this);
@@ -208,19 +206,15 @@ public class MainActivity extends AppCompatActivity {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (event.getY() / screenHeight > 0.8) {
-			graphFullFragment = (ChartFullScreenDialog) getFragmentManager().findFragmentByTag("ChartFullScreen");
-			if (graphFullFragment == null) {
-				graphFullFragment = new ChartFullScreenDialog();
-				graphFullFragment.show(fragMngr, "ChartFullScreen");
-			}
+		if (event.getY() / settingsManager.getScreenHeight() > 0.8) {
+			openFullGraph();
 			return true;
 		}
 		else
 			return gestDect.onTouchEvent(event);
 	}
-	
-	public GraphViewSmall getGraphView() {
+
+    public GraphViewSmall getGraphView() {
 		return graphSmall;
 	}
 	
@@ -241,6 +235,14 @@ public class MainActivity extends AppCompatActivity {
 			graphSmall.updateData();
 			graphSmall.invalidate(); }
 	}
+
+    public void openFullGraph() {
+        graphFullFragment = (ChartFullScreenDialog) getFragmentManager().findFragmentByTag("ChartFullScreen");
+        if (graphFullFragment == null) {
+            graphFullFragment = new ChartFullScreenDialog();
+            graphFullFragment.show(fragMngr, "ChartFullScreen");
+        }
+    }
 
     private void slideUp() {
 		distance.animate().translationX(0).setDuration(1000);
@@ -334,8 +336,8 @@ public class MainActivity extends AppCompatActivity {
 				return false;
 			float deltaY = e2.getY() - e1.getY();
 			float deltaX = e2.getX() - e1.getX();
-			if ((e1.getX() / screenHeight > 0.15 &&  e1.getX() / screenHeight < 0.85)
-					&&  e1.getY() / screenHeight < 0.33) {
+			if ((e1.getX() / settingsManager.getScreenHeight() > 0.15 &&  e1.getX() / settingsManager.getScreenHeight() < 0.85)
+					&&  e1.getY() / settingsManager.getScreenHeight() < 0.33) {
 				//Log.i("run", "onFling out of area");
 				return false; }
 			if (Math.abs(deltaX) > SWIPE_BAD_MAX_DIST || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {

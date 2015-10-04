@@ -15,6 +15,8 @@ public class SettingsManager {
     private Activity context;
     private SharedPreferences settings;
     private boolean isAppStart;
+    private int screenHeight;
+    private int screenWidth;
 
     public SettingsManager(Activity context) {
         this.context = context;
@@ -26,6 +28,22 @@ public class SettingsManager {
         boolean appStart = isAppStart;
         isAppStart = false;
         return appStart;
+    }
+
+    public void setScreenHeight(int height) {
+        this.screenHeight = height;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
+    public void setScreenWidth(int width) {
+        this.screenWidth = width;
+    }
+
+    public int getScreenWidth() {
+        return screenWidth;
     }
 
     public void setUnit(String unit) {
