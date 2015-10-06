@@ -29,7 +29,7 @@ public class ChartFullScreenDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
     	main = (MainActivity) getActivity();
-        view = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.chart_full_screen_dialog, null);
+        view = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.chart_full_screen, null);
         chartFullScreenView =  new AlertDialog.Builder(getActivity())
         		.setView(view)
         		.setTitle("")
@@ -49,8 +49,17 @@ public class ChartFullScreenDialog extends DialogFragment {
     @Override
     public void onResume() {
     	super.onResume();
-        view.setLayoutParams(new FrameLayout.LayoutParams(height * 95 / 100, width * 90 / 100, Gravity.CENTER));
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(1, 2);
+        Log.i("run", "Padding: " + layoutParams.leftMargin + ", " + layoutParams.rightMargin + ", " +
+                layoutParams.getMarginStart() + ", " + layoutParams.getMarginEnd());
+				view.setLayoutParams(new FrameLayout.LayoutParams(height * 95 / 100, width * 90 / 100, Gravity.CENTER));
         view.requestLayout();
+        chartFullScreenView.findViewById(R.id.chart_full_screen_done_button).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				ChartFullScreenDialog.this.dismiss();
+			}
+		});
 
     	// get resources and listeners
     	int listSize = main.getRunDB().getRunList().size();

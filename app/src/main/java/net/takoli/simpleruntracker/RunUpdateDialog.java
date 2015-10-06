@@ -35,7 +35,7 @@ public class RunUpdateDialog extends DialogFragment {
 	
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-    	View view = getActivity().getLayoutInflater().inflate(R.layout.update_run_dialog, null);
+    	View view = getActivity().getLayoutInflater().inflate(R.layout.update_run, null);
     	runUpdateDialog = new AlertDialog.Builder(getActivity())
     			.setView(view)
                 .setTitle("Update details of " + run.getDateString() + "'s run")

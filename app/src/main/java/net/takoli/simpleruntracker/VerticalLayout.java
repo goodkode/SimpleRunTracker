@@ -44,11 +44,12 @@ public class VerticalLayout extends FrameLayout {
         matrix.mapPoints(touch);
         ev.setLocation(touch[0], touch[1]);
         if (ev.getX() != orig[0] && ev.getY() != orig[1]) {
-            Log.i("run", " event: " + ev.getAction() + ": " + ev.getX() + ", " + ev.getY());
+            //Log.i("run", " event: " + ev.getAction() + ": " + ev.getX() + ", " + ev.getY());
             return super.dispatchTouchEvent(ev);
         } else {
-            Log.i("run", " event: same shit");
-            return super.dispatchTouchEvent(ev);
+            //Log.i("run", " event: same shit");
+            invalidate();
+            return true;
         }
     }
 }
