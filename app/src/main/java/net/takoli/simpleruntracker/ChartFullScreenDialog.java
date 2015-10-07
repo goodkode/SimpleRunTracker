@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -40,8 +41,8 @@ public class ChartFullScreenDialog extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        width = main.settingsManager.getScreenWidth() * 84 / 100;
-        height = main.settingsManager.getScreenHeight() * 94 / 100;
+        width = main.settingsManager.getScreenWidth() * 85 / 100;           // 85%
+        height = main.settingsManager.getMainScreenHeight() * 95 / 100;     // 95%
         Log.i("run", "Graph: " + width + " * " + height);
         getDialog().getWindow().setLayout(width, height);
     }
@@ -49,15 +50,17 @@ public class ChartFullScreenDialog extends DialogFragment {
     @Override
     public void onResume() {
     	super.onResume();
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(1, 2);
-        Log.i("run", "Padding: " + layoutParams.leftMargin + ", " + layoutParams.rightMargin + ", " +
-                layoutParams.getMarginStart() + ", " + layoutParams.getMarginEnd());
-				view.setLayoutParams(new FrameLayout.LayoutParams(height * 95 / 100, width * 90 / 100, Gravity.CENTER));
+        final int heightPadding = getDialog().getWindow().getDecorView().getPaddingBottom() +
+                                        getDialog().getWindow().getDecorView().getPaddingTop();
+        final int widthPadding = getDialog().getWindow().getDecorView().getPaddingBottom() +
+                                        getDialog().getWindow().getDecorView().getPaddingTop();
+        view.setLayoutParams(new FrameLayout.LayoutParams(height - heightPadding, width - widthPadding, Gravity.CENTER));
         view.requestLayout();
-        chartFullScreenView.findViewById(R.id.chart_full_screen_done_button).setOnClickListener(new View.OnClickListener() {
+		chartFullScreenView.findViewById(R.id.chart_full_screen_done_button).setOnTouchListener(new View.OnTouchListener() {
 			@Override
-			public void onClick(View view) {
+			public boolean onTouch(View view, MotionEvent motionEvent) {
 				ChartFullScreenDialog.this.dismiss();
+				return true;
 			}
 		});
 
@@ -96,7 +99,7 @@ public class ChartFullScreenDialog extends DialogFragment {
 			}
 		});
     }
-    
+
     private void showCurrentNumber(int n) {
         currentNumber = (TextView) chartFullScreenView.findViewById(R.id.chart_run_number);
         if (currentNumber == null)

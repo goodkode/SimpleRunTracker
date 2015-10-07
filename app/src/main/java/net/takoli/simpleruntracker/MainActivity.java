@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
     private int enterRunSlideDistance;
     private int listTop;
     private int listBottom;
+	private int listLength;
 	private int listGap;
     private int shiftedDown;
-
 
 
 	@Override
@@ -116,19 +115,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initScreenSizeVariables() {
-        View screen = findViewById(R.id.main_layout);
-		settingsManager.setScreenHeight(screen.getHeight());
-		settingsManager.setScreenWidth(screen.getWidth());
-				// runList
-        listTop = (int) (settingsManager.getScreenHeight() * 0.18); // 18% margin
-        listBottom = (int) (settingsManager.getScreenHeight() * (0.18 + 0.62)); // 62% height
-		listGap = listBottom - enterRunBottom;
+        View mainScreen = findViewById(R.id.main_layout);
+		settingsManager.setMainScreenHeight(mainScreen.getHeight());
+		settingsManager.setMainScreenWidth(mainScreen.getWidth());
+        // runList and enterRun
+        listTop = (int) (settingsManager.getMainScreenHeight() * 0.18); // 18% margin
+        listBottom = (int) (settingsManager.getMainScreenHeight() * (0.18 + 0.62)); // 62% height
+		listLength = runListView.getHeight();
         shiftedDown = 0;
-        // enterRun
-        enterRunBottom = (int) (settingsManager.getScreenHeight() * 0.58); // 58% height
+        enterRunBottom = (int) (settingsManager.getMainScreenHeight() * 0.58); // 58% height
         enterRunSlideDistance = enterRunBottom - listTop;
-        Log.i("run", "M: " + settingsManager.getScreenHeight() + "|| " + enterRunBottom + ", " + enterRunSlideDistance + "| " +
-                                                    listTop + ", " + listBottom + ", " + shiftedDown);
+        listGap = listBottom - enterRunBottom;
+        Log.i("run", "M screen: " + settingsManager.getMainScreenHeight() +
+                " || run bottom and slide: " + enterRunBottom + ", " + enterRunSlideDistance +
+                " | list top, bottom, length, shift: " + listTop + ", " + listBottom + ", " + listLength + ", " + shiftedDown);
     }
 
     @Override
@@ -175,13 +175,11 @@ public class MainActivity extends AppCompatActivity {
                     FragmentTransaction fragTrans = fragMngr.beginTransaction();
 		    		fragTrans.add(R.id.main, statsFragment, "statsFragment");
 		    		fragTrans.commit();
-		    	}
-	    		else {
-	    			if (statsFragment.isActive()) {
+		    	} else {
+	    			if (statsFragment.isActive())
 						statsFragment.animateOut();
-					} else {
+					else
 						statsFragment.animateIn();
-					}
 	    		}
 	            return true;
 	    	case R.id.settings:
@@ -206,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (event.getY() / settingsManager.getScreenHeight() > 0.8) {
+		if (event.getY() / settingsManager.getMainScreenHeight() > 0.8) {
 			openFullGraph();
 			return true;
 		}
@@ -286,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void shiftBackRunList() {
         shiftedDown = 0;
+		runListView.getLayoutParams().height = listBottom - listTop;
         runListView.animate().translationY(0).setDuration(700);
     }
 
@@ -299,12 +298,14 @@ public class MainActivity extends AppCompatActivity {
                 final int lastCardBottom = listTop + runListLM.getChildAt(noOfCards - 1).getBottom() + shiftedDown;
                 if ((lastCardBottom - listGap / 2) < enterRunBottom) {
                     // barely visible, we want to shift
-                    final int listLenght = lastCardBottom - listTop;
-                    if (listLenght > listGap) {
+                    final int currListLength = lastCardBottom - listTop;
+                    if (currListLength > listGap) {
                         shiftedDown = listBottom - lastCardBottom;
+						runListView.getLayoutParams().height = listLength - shiftedDown;
                         Log.i("run", " shift with longer list: " + shiftedDown);
                     } else {
                         shiftedDown = enterRunBottom - listTop;
+                        runListView.getLayoutParams().height = listLength - shiftedDown;
                         Log.i("run", " shift with short list: " + shiftedDown);
                     }
                     runListView.animate().translationY(shiftedDown).setDuration(700);
@@ -317,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
                         shiftedDown = 0;
                     }
                     Log.i("run", " shift back a bit: " + shiftUp);
+                    runListView.getLayoutParams().height = listLength - shiftedDown;
                     runListView.animate().translationYBy(-shiftUp).setDuration(100);
                 }
             }
@@ -336,8 +338,8 @@ public class MainActivity extends AppCompatActivity {
 				return false;
 			float deltaY = e2.getY() - e1.getY();
 			float deltaX = e2.getX() - e1.getX();
-			if ((e1.getX() / settingsManager.getScreenHeight() > 0.15 &&  e1.getX() / settingsManager.getScreenHeight() < 0.85)
-					&&  e1.getY() / settingsManager.getScreenHeight() < 0.33) {
+			if ((e1.getX() / settingsManager.getMainScreenHeight() > 0.15 &&  e1.getX() / settingsManager.getMainScreenHeight() < 0.85)
+					&&  e1.getY() / settingsManager.getMainScreenHeight() < 0.33) {
 				//Log.i("run", "onFling out of area");
 				return false; }
 			if (Math.abs(deltaX) > SWIPE_BAD_MAX_DIST || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
@@ -33,7 +32,6 @@ public class VerticalLayout extends FrameLayout {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        Log.i("run", "+event: " + ev.getAction() + ": " + ev.getX() + ", " + ev.getY());
         final float[] orig = new float[2];
         final float[] touch = new float[2];
         orig[0] = ev.getX();
@@ -44,10 +42,8 @@ public class VerticalLayout extends FrameLayout {
         matrix.mapPoints(touch);
         ev.setLocation(touch[0], touch[1]);
         if (ev.getX() != orig[0] && ev.getY() != orig[1]) {
-            //Log.i("run", " event: " + ev.getAction() + ": " + ev.getX() + ", " + ev.getY());
             return super.dispatchTouchEvent(ev);
         } else {
-            //Log.i("run", " event: same shit");
             invalidate();
             return true;
         }

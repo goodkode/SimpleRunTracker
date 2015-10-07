@@ -21,6 +21,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.takoli.simpleruntracker.adapter.RunAdapter;
 import net.takoli.simpleruntracker.model.SettingsManager;
@@ -190,15 +191,19 @@ public class EnterRun extends Fragment {
 				int mm = min10.getValue() * 10 + min1.getValue();
 				int ss = sec10.getValue() * 10 + sec1.getValue();
 				// save it to runDB and update the ListView
-                if ((dd + _dd) == 0 || (h + mm + ss) == 0)
-                    return; // not valid run
-                int lastIndex = runListDB.addNewRun(main, new Run(runDate, dd, _dd, unit, h, mm, ss));
-                runAdapter.notifyItemInserted(lastIndex + 1);
-                main.shiftRunList();
-                runListView.smoothScrollToPosition(runListDB.getRunList().size());
-				main.updateGraph();
-				// todo: off the UI thread
-				runListDB.saveRunDB(main);
+                if ((dd + _dd) == 0)  {
+					Toast.makeText(main, "You probably ran more than 0 " + main.settingsManager.getUnit(), Toast.LENGTH_SHORT).show();
+				} else if ((h + mm + ss) == 0) {
+					Toast.makeText(main, "Woah that fast, 0 seconds?", Toast.LENGTH_SHORT).show();
+				} else {
+					int lastIndex = runListDB.addNewRun(main, new Run(runDate, dd, _dd, unit, h, mm, ss));
+					runAdapter.notifyItemInserted(lastIndex + 1);
+					main.shiftRunList();
+					runListView.smoothScrollToPosition(runListDB.getRunList().size());
+					main.updateGraph();
+					// todo: off the UI thread
+					runListDB.saveRunDB(main);
+				}
 			}
 		});
 	}

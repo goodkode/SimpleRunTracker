@@ -30,15 +30,15 @@ public class SettingsManager {
         return appStart;
     }
 
-    public void setScreenHeight(int height) {
+    public void setMainScreenHeight(int height) {
         this.screenHeight = height;
     }
 
-    public int getScreenHeight() {
+    public int getMainScreenHeight() {
         return screenHeight;
     }
 
-    public void setScreenWidth(int width) {
+    public void setMainScreenWidth(int width) {
         this.screenWidth = width;
     }
 
