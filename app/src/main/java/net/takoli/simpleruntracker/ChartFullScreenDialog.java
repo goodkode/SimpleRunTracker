@@ -70,7 +70,7 @@ public class ChartFullScreenDialog extends DialogFragment {
     		needMoreData = (TextView) chartFullScreenView.findViewById(R.id.chart_avg_label);
     		needMoreData.setTextSize(width / 50);
     		needMoreData.setTextColor(0xAA000000);
-    		needMoreData.setText("graph will show after\n3+ workouts");
+    		needMoreData.setText("Get some running first!");
     		needMoreData.setVisibility(View.VISIBLE);
     		chartFullScreenView.findViewById(R.id.seekBar).setVisibility(View.GONE);
     		return;		// not enough data

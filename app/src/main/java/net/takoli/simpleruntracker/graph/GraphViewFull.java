@@ -29,7 +29,7 @@ public class GraphViewFull extends View {
 	private ArrayList<Run> runList;
 	private Path distPath, speedPath;
 	public static final int MAX_PLOTS = 50;
-	public static final int MIN_PLOTS = 3;
+	public static final int MIN_PLOTS = 1;
 	public static final int START_PLOTS = 15;
 	private boolean initial = true;
 	private int plots;
