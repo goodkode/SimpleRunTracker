@@ -42,7 +42,7 @@ public class SettingsManager {
         this.screenWidth = width;
     }
 
-    public int getScreenWidth() {
+    public int getMainScreenWidth() {
         return screenWidth;
     }
 

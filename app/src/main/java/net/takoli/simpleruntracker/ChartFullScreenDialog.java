@@ -41,7 +41,7 @@ public class ChartFullScreenDialog extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        width = main.settingsManager.getScreenWidth() * 85 / 100;           // 85%
+        width = main.settingsManager.getMainScreenWidth() * 85 / 100;           // 85%
         height = main.settingsManager.getMainScreenHeight() * 95 / 100;     // 95%
         Log.i("run", "Graph: " + width + " * " + height);
         getDialog().getWindow().setLayout(width, height);

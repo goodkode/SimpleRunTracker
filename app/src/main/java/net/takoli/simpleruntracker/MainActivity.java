@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView runListView;
     private RunAdapter runAdapter;
     private RecyclerView.LayoutManager runListLM;
+    private PercentRelativeLayout.LayoutParams runListOriginalParams;
+    private PercentRelativeLayout.LayoutParams runListShiftedParams;
+    private int layoutParamsHeight;
 
     // Graphs
 	private GraphViewSmall graphSmall;
@@ -126,9 +130,13 @@ public class MainActivity extends AppCompatActivity {
         enterRunBottom = (int) (settingsManager.getMainScreenHeight() * 0.58); // 58% height
         enterRunSlideDistance = enterRunBottom - listTop;
         listGap = listBottom - enterRunBottom;
-        Log.i("run", "M screen: " + settingsManager.getMainScreenHeight() +
+        runListOriginalParams = (PercentRelativeLayout.LayoutParams) runListView.getLayoutParams();
+        runListShiftedParams = new PercentRelativeLayout.LayoutParams(runListOriginalParams);
+        Log.i("run", "M screen: " + settingsManager.getMainScreenWidth() + " * " + settingsManager.getMainScreenHeight() +
                 " || run bottom and slide: " + enterRunBottom + ", " + enterRunSlideDistance +
                 " | list top, bottom, length, shift: " + listTop + ", " + listBottom + ", " + listLength + ", " + shiftedDown);
+        Log.i("run", "layoutparam: " + runListOriginalParams.width + " * " + runListOriginalParams.height);
+        Log.i("run", "layoutparam: " + runListOriginalParams.topMargin);
     }
 
     @Override
@@ -284,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void shiftBackRunList() {
         shiftedDown = 0;
-		runListView.getLayoutParams().height = listBottom - listTop;
+        runListView.setLayoutParams(runListOriginalParams);
         runListView.animate().translationY(0).setDuration(700);
     }
 
@@ -301,14 +309,20 @@ public class MainActivity extends AppCompatActivity {
                     final int currListLength = lastCardBottom - listTop;
                     if (currListLength > listGap) {
                         shiftedDown = listBottom - lastCardBottom;
-						runListView.getLayoutParams().height = listLength - shiftedDown;
                         Log.i("run", " shift with longer list: " + shiftedDown);
                     } else {
                         shiftedDown = enterRunBottom - listTop;
-                        runListView.getLayoutParams().height = listLength - shiftedDown;
                         Log.i("run", " shift with short list: " + shiftedDown);
                     }
-                    runListView.animate().translationY(shiftedDown).setDuration(700);
+                    runListView.animate().translationY(shiftedDown).setDuration(700).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.i("run", "layoutparam: " + runListOriginalParams.width + " * " + runListOriginalParams.height);
+                            Log.i("run", "layoutparam: " + runListOriginalParams.topMargin);
+                            runListOriginalParams.height = 1430 - shiftedDown;
+
+                        }
+                    });
                 } else if (lastCardBottom > listBottom) {
                     // new element added
                     int shiftUp = lastCardBottom - listBottom;
@@ -318,8 +332,15 @@ public class MainActivity extends AppCompatActivity {
                         shiftedDown = 0;
                     }
                     Log.i("run", " shift back a bit: " + shiftUp);
-                    runListView.getLayoutParams().height = listLength - shiftedDown;
-                    runListView.animate().translationYBy(-shiftUp).setDuration(100);
+                    if (shiftUp != 0) {
+                        runListView.animate().translationYBy(-shiftUp).setDuration(100).withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.i("run", "layoutparam: " + runListOriginalParams.width + " * " + runListOriginalParams.height);
+                                Log.i("run", "layoutparam: " + runListOriginalParams.topMargin);
+                            }
+                        });
+                    }
                 }
             }
         }, 300);
