@@ -314,15 +314,8 @@ public class MainActivity extends AppCompatActivity {
                         shiftedDown = enterRunBottom - listTop;
                         Log.i("run", " shift with short list: " + shiftedDown);
                     }
-                    runListView.animate().translationY(shiftedDown).setDuration(700).withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.i("run", "layoutparam: " + runListOriginalParams.width + " * " + runListOriginalParams.height);
-                            Log.i("run", "layoutparam: " + runListOriginalParams.topMargin);
-                            runListOriginalParams.height = 1430 - shiftedDown;
-
-                        }
-                    });
+                    runListView.animate().translationY(shiftedDown).setDuration(700);
+                    findViewById(R.id.main_layout).invalidate();
                 } else if (lastCardBottom > listBottom) {
                     // new element added
                     int shiftUp = lastCardBottom - listBottom;
@@ -333,13 +326,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     Log.i("run", " shift back a bit: " + shiftUp);
                     if (shiftUp != 0) {
-                        runListView.animate().translationYBy(-shiftUp).setDuration(100).withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.i("run", "layoutparam: " + runListOriginalParams.width + " * " + runListOriginalParams.height);
-                                Log.i("run", "layoutparam: " + runListOriginalParams.topMargin);
-                            }
-                        });
+                        runListView.animate().translationYBy(-shiftUp).setDuration(100);
+                        findViewById(R.id.main_layout).invalidate();
                     }
                 }
             }

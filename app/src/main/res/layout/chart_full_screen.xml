@@ -79,5 +79,16 @@
             android:text="Done" />
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/chart_full_screen_rotate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/rotate" />
+    </RelativeLayout>
     
 </net.takoli.simpleruntracker.VerticalLayout>

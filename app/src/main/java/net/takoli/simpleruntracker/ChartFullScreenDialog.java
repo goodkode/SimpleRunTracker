@@ -57,12 +57,25 @@ public class ChartFullScreenDialog extends DialogFragment {
         view.setLayoutParams(new FrameLayout.LayoutParams(height - heightPadding, width - widthPadding, Gravity.CENTER));
         view.requestLayout();
 		chartFullScreenView.findViewById(R.id.chart_full_screen_done_button).setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View view, MotionEvent motionEvent) {
-				ChartFullScreenDialog.this.dismiss();
-				return true;
-			}
-		});
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                ChartFullScreenDialog.this.dismiss();
+                return true;
+            }
+        });
+
+        final View rotate = chartFullScreenView.findViewById(R.id.chart_full_screen_rotate);
+        rotate.animate().rotation(-90).setDuration(3000).setStartDelay(1000).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                rotate.animate().alpha(0).setDuration(3000).setStartDelay(1000).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        rotate.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
 
     	// get resources and listeners
     	int listSize = main.getRunDB().getRunList().size();
