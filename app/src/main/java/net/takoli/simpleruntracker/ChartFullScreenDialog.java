@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -65,10 +66,11 @@ public class ChartFullScreenDialog extends DialogFragment {
         });
 
         final View rotate = chartFullScreenView.findViewById(R.id.chart_full_screen_rotate);
-        rotate.animate().rotation(-90).setDuration(3000).setStartDelay(1000).withEndAction(new Runnable() {
+        rotate.animate().rotation(-90).setDuration(2300).setStartDelay(700)
+                        .setInterpolator(new DecelerateInterpolator()).withEndAction(new Runnable() {
             @Override
             public void run() {
-                rotate.animate().alpha(0).setDuration(3000).setStartDelay(1000).withEndAction(new Runnable() {
+                rotate.animate().alpha(0).setDuration(2000).setStartDelay(700).withEndAction(new Runnable() {
                     @Override
                     public void run() {
                         rotate.setVisibility(View.GONE);
