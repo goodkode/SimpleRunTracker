@@ -205,14 +205,15 @@ public class EnterRunFragment extends Fragment {
 				} else {
                     enterRunButton.startAnimation(blowup);
                     Run newRun = new Run(runDate, dd, _dd, unit, h, mm, ss);
-					int lastIndex = runListDB.addNewRun(main, newRun);
-					runAdapter.notifyItemInserted(lastIndex + 1);
+					int lastAddedIndex = runListDB.addNewRun(main, newRun) + 1;
+                    runAdapter.notifyItemAddedHelper(lastAddedIndex);
+					runAdapter.notifyItemInserted(lastAddedIndex);
 					main.shiftRunListAfterRun();
-					runListView.smoothScrollToPosition(lastIndex + 1);
+					runListView.smoothScrollToPosition(lastAddedIndex);
 					main.updateGraph();
 					// todo: off the UI thread
 					runListDB.saveRunDB(main);
-                    runAdapter.updateHeader();
+                    runListView.invalidate();
 
                     main.gTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Run!")

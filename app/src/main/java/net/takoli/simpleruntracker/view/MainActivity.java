@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 		runListView = (RecyclerView) findViewById(R.id.my_runs);
         runListView.setLayoutManager(runListLM);
         runListView.setAdapter(runAdapter);
-        runListView.setItemAnimator(new FadeInUpAnimator(getResources()));
+        runListView.setItemAnimator(new FadeInUpAnimator(runAdapter, getResources()));
 		runListView.setHasFixedSize(true);
 
         // Graph initial setup

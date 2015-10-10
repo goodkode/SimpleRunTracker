@@ -29,6 +29,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
     private final ArrayList<Run> runList;
     private HeaderViewHolder header;
     private int expanded = -1;
+    private int lastAdded = -1;
 
     public RunAdapter(MainActivity main, RunDB runListDB) {
         this.main = main;
@@ -97,6 +98,18 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
     public void notifyItemRemovedHelper() {
         expanded = -1;
         updateHeader();
+    }
+
+    public void notifyItemAddedHelper(int justAdded) {
+        lastAdded = justAdded;
+    }
+
+    public int getLastAddedPosition() {
+        return lastAdded;
+    }
+
+    public void invalidateLastAddedPosition() {
+        lastAdded = -1;
     }
 
     public void expandItem(int position) {
