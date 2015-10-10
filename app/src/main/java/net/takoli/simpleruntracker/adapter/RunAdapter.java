@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.takoli.simpleruntracker.MainActivity;
+import com.google.android.gms.analytics.HitBuilders;
+
+import net.takoli.simpleruntracker.view.MainActivity;
 import net.takoli.simpleruntracker.R;
-import net.takoli.simpleruntracker.Run;
-import net.takoli.simpleruntracker.RunDB;
-import net.takoli.simpleruntracker.RunUpdateDialog;
+import net.takoli.simpleruntracker.model.Run;
+import net.takoli.simpleruntracker.model.RunDB;
+import net.takoli.simpleruntracker.view.dialog.RunUpdateDialog;
 
 import java.util.ArrayList;
 
@@ -36,7 +38,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
 
     @Override
     public RunViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-       RunViewHolder viewHolder = null;
+       RunViewHolder viewHolder;
         if (viewType == HEADER) {
             View cardView = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.run_header, viewGroup, false);
@@ -44,7 +46,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         } else if (viewType == EXPANDED) {
             View cardView = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.one_run_expanded, viewGroup, false);
-            viewHolder = new ExtendedRunViewHolder(cardView, this);
+            viewHolder = new ExtendedRunViewHolder(cardView, this, main);
         } else {
             View cardView = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.one_run, viewGroup, false);
@@ -93,6 +95,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
 
     public void notifyItemRemovedHelper() {
         expanded = -1;
+        updateHeader();
     }
 
     public void expandItem(int position) {
@@ -112,7 +115,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
 
     public void updateHeader() {
         if (header == null)
-            return;;
+            return;
         if (runList.size() == 0)
             header.info.setText("Empty list");
         else {
@@ -180,7 +183,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         TextView rPerfPace;
         View rRunEdit;
 
-        public ExtendedRunViewHolder(View runView, final RunAdapter adapter) {
+        public ExtendedRunViewHolder(View runView, final RunAdapter adapter, final MainActivity main) {
             super(runView, adapter);
             rSpeed = (TextView) runView.findViewById(R.id.run_speed);
             rPerformScore = (TextView) runView.findViewById(R.id.perform_score);
@@ -191,6 +194,10 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
                 @Override
                 public boolean onLongClick(View view) {
                     adapter.openRunEditDialog(getAdapterPosition());
+                    main.gTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Run Edit")
+                            .setAction("run edit via onLongClick")
+                            .build());
                     return true;
                 }
             });
@@ -198,6 +205,10 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
                 @Override
                 public void onClick(View view) {
                     adapter.openRunEditDialog(getAdapterPosition());
+                    main.gTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Run Edit")
+                            .setAction("run edit via edit icon")
+                            .build());
                 }
             });
         }

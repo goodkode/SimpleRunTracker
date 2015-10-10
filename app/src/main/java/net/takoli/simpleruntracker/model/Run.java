@@ -1,14 +1,14 @@
 package net.takoli.simpleruntracker.model;
 
+import android.util.Log;
+
 import java.util.Calendar;
 import java.util.Locale;
 
-import android.util.Log;
-
 public class Run {
-	int dd, _dd;	// distance in units and in decimals
-	int distU;		// COMMON UNIT (100 * MI)
-	int h, mm, ss;   // timeU in hour, min, and sec
+	public int dd, _dd;		// distance in units and in decimals
+	public int h, mm, ss;   // timeU in hour, min, and sec
+	int distU;		 // COMMON UNIT (100 * MI)
 	int timeU;		 // COMMON UNIT (SEC)
 	int paceU;		 // COMMON UNIT (SEC / MI)
 	String unit;     // miles or kilometers
@@ -254,19 +254,11 @@ public class Run {
 	}
 	public static Calendar setTodayDate() {
 		Calendar today =  Calendar.getInstance();
-//		today.set(Calendar.HOUR_OF_DAY, 0);
-//		today.set(Calendar.MINUTE, 0);
-//		today.set(Calendar.SECOND, 0);
-//		today.set(Calendar.MILLISECOND, 0);
 		return today;
 	}
 	public static Calendar setYesterdayDate() {
 		Calendar yesterday =  Calendar.getInstance();
 		yesterday.add(Calendar.DAY_OF_YEAR, -1);
-//		yesterday.set(Calendar.HOUR_OF_DAY, 0);
-//		yesterday.set(Calendar.MINUTE, 0);
-//		yesterday.set(Calendar.SECOND, 0);
-//		yesterday.set(Calendar.MILLISECOND, 0);
 		return yesterday;
 	}
 	public static Calendar setCustomDate(int month, int day, int year) {

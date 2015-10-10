@@ -1,6 +1,5 @@
 package net.takoli.simpleruntracker.view;
 
-import android.animation.ValueAnimator;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -9,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +22,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -50,12 +47,12 @@ public class EnterRunFragment extends Fragment {
 	TextView div_d, div_th, div_tm;
 	TextView distance, time, distUnit;
 	Button enterRunButton;
+    long lastHitTime;
 	DisplayMetrics dm;
 	MainActivity main;
 	RunDB runListDB;
 	RecyclerView runListView;
 	RunAdapter runAdapter;
-	ValueAnimator colorAnimation;
     Animation shake;
     Animation blowup;
 
@@ -192,7 +189,10 @@ public class EnterRunFragment extends Fragment {
 		enterRunButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-                enterRunButton = (Button) getView().findViewById(R.id.enter_run_button);
+                if (lastHitTime + 1500 > System.currentTimeMillis())
+                    return;
+                else
+                    lastHitTime = System.currentTimeMillis();
 				String unit = main.settingsManager.getUnit();
 				int dd = dist10.getValue() * 10 + dist1.getValue();
 				int _dd = dist_1.getValue() * 10 + dist_01.getValue();
@@ -200,39 +200,42 @@ public class EnterRunFragment extends Fragment {
 				int mm = min10.getValue() * 10 + min1.getValue();
 				int ss = sec10.getValue() * 10 + sec1.getValue();
 				// save it to runDB and update the ListView
-                if ((dd + _dd) == 0)  {
+                if ((dd + _dd) == 0 || (h + mm + ss) == 0)  {
                     enterRunButton.startAnimation(shake);
-					Toast.makeText(main, "You probably ran more than 0 " + main.settingsManager.getUnit(), Toast.LENGTH_SHORT).show();
-				} else if ((h + mm + ss) == 0) {
-                    enterRunButton.startAnimation(shake);
-					Toast.makeText(main, "Woah that fast, 0 seconds?", Toast.LENGTH_SHORT).show();
 				} else {
                     enterRunButton.startAnimation(blowup);
                     Run newRun = new Run(runDate, dd, _dd, unit, h, mm, ss);
 					int lastIndex = runListDB.addNewRun(main, newRun);
 					runAdapter.notifyItemInserted(lastIndex + 1);
-					main.shiftRunList();
-					runListView.smoothScrollToPosition(runListDB.getRunList().size());
+					main.shiftRunListAfterRun();
+					runListView.smoothScrollToPosition(lastIndex + 1);
 					main.updateGraph();
 					// todo: off the UI thread
 					runListDB.saveRunDB(main);
 
                     main.gTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Run!")
+                            .setAction("run entered")
                             .build());
                     main.gTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("run stats")
+                            .setAction("distance stats")
                             .setLabel("run distance in mile/100")
                             .setValue(newRun.getDistUNIT())
                             .build());
                     main.gTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("run stats")
+                            .setAction("time stats")
                             .setLabel("run time in sec")
                             .setValue(newRun.getTimeUNIT())
                             .build());
                     main.gTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("run stats")
+                            .setAction("pace stats")
                             .setLabel("run pace in sec/mile")
                             .setValue(newRun.getPaceUNIT())
                             .build());
-                    Log.i("new run", newRun.getDistUNIT() + ", " + newRun.getTimeUNIT() + ", " + newRun.getPaceUNIT());
+                    //Log.i("new run", newRun.getDistUNIT() + ", " + newRun.getTimeUNIT() + ", " + newRun.getPaceUNIT());
 				}
 			}
 		});

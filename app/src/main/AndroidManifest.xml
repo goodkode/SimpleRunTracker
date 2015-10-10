@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.takoli.simpleruntracker"
-    android:versionCode="9"
-    android:versionName="1.42" >
+    package="net.takoli.simpleruntracker" >
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     
     <uses-sdk
         android:minSdkVersion="12"
@@ -12,13 +11,14 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".RunApp"
         android:allowBackup="true"
         android:icon="@drawable/runtracker_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         
 	        <activity
-	            android:name="net.takoli.simpleruntracker.MainActivity"
+	            android:name=".view.MainActivity"
 	            android:label="@string/app_name"
                 android:screenOrientation="portrait"
                 android:configChanges="orientation|keyboardHidden" >

@@ -29,9 +29,13 @@ import net.takoli.simpleruntracker.R;
 import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.adapter.RunAdapter;
 import net.takoli.simpleruntracker.adapter.animator.FadeInUpAnimator;
-import net.takoli.simpleruntracker.graph.GraphViewSmall;
+import net.takoli.simpleruntracker.view.graph.GraphViewSmall;
 import net.takoli.simpleruntracker.model.RunDB;
 import net.takoli.simpleruntracker.model.SettingsManager;
+import net.takoli.simpleruntracker.view.dialog.ChartFullScreenDialog;
+import net.takoli.simpleruntracker.view.dialog.ConfirmDeleteDialog;
+import net.takoli.simpleruntracker.view.dialog.FirstRunDialog;
+import net.takoli.simpleruntracker.view.dialog.SettingsDialog;
 import net.takoli.simpleruntracker.view.widget.VerticalTextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -168,6 +172,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
 	protected void onStop() {
         super.onStop();
         runDB.saveRunDB(this);
@@ -207,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
 	    		}
                 gTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Stats")
+                        .setAction("")
                         .build());
 	            return true;
 	    	case R.id.settings:
@@ -338,7 +348,22 @@ public class MainActivity extends AppCompatActivity {
                     }
                     runListView.animate().translationY(shiftedDown).setDuration(700);
                     findViewById(R.id.main_layout).invalidate();
-                } else if (lastCardBottom > listBottom) {
+                }
+            }
+        }, 300);
+    }
+
+    public void shiftRunListAfterRun() {
+        if (shiftedDown == 0)
+            return;
+        runListView.post(new Runnable() {
+            @Override
+            public void run() {
+                final int noOfCards = runListLM.getChildCount();
+                if (noOfCards < 1)
+                    return;
+                final int lastCardBottom = listTop + runListLM.getChildAt(noOfCards - 1).getBottom() + shiftedDown;
+                if (lastCardBottom > listBottom) {
                     // new element added
                     int shiftUp = lastCardBottom - listBottom;
                     shiftedDown -= shiftUp;
@@ -353,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-        }, 300);
+        });
     }
 	
 	

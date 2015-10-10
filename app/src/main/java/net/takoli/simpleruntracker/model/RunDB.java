@@ -6,8 +6,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.widget.Toast;
 
-import net.takoli.simpleruntracker.model.Run;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +21,7 @@ import java.util.Comparator;
 public class RunDB {
 
 	private ArrayList<Run> runList;
+	private Comparator runComparator;
 	private int MAXSIZE;
 	private long sumDistU, sumTimeU;
 	private final String FILE_NAME = "RunTracker-runlist.csv";
@@ -36,6 +35,11 @@ public class RunDB {
 		sumDistU = 0;
 		sumTimeU = 0;
 		Run nRun;
+		runComparator = new Comparator<Run>() {
+			public int compare(Run a, Run b) {
+				return a.date.compareTo(b.date);
+			}
+		};
 		// /data/data/net.takoli.simpleruntracker/files/ - where OpenFileOutput saves
 		try {
 			FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_APPEND);
@@ -72,11 +76,6 @@ public class RunDB {
 	}
 	
 	public void ensureDBLimit() {
-		Collections.sort(runList, new Comparator<Run>() {
-			public int compare(Run a, Run b) {
-		        return a.date.compareTo(b.date);
-		    }
-		});
 		int size = runList.size();
 		if (MAXSIZEisUsed) {
 			int toDelete = size - MAXSIZE;
@@ -108,6 +107,7 @@ public class RunDB {
 		
 	public int addNewRun(Context context, Run newRun) {
 		runList.add(newRun);
+		Collections.sort(runList, runComparator);
 		sumDistU += newRun.getDistUNIT();
 		sumTimeU += newRun.getTimeUNIT();
 		return runList.indexOf(newRun);

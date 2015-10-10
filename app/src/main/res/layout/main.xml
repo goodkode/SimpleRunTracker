@@ -33,7 +33,7 @@
             android:layout_below="@id/my_runs"
             android:layout_alignParentBottom="true" />
 
-        <net.takoli.simpleruntracker.graph.GraphViewSmall
+        <net.takoli.simpleruntracker.view.graph.GraphViewSmall
             android:id="@+id/graph"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -54,7 +54,7 @@
             android:background="#FFFFFF" >
 
             <fragment
-                android:name="net.takoli.simpleruntracker.EnterRun"
+                android:name="net.takoli.simpleruntracker.view.EnterRunFragment"
                 android:tag="@string/enter_run_tag"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -11,7 +11,8 @@
         app:layout_heightPercent="65%"
         app:layout_widthPercent="15%"
         android:gravity="center" >
-        <net.takoli.simpleruntracker.VerticalTextView android:id="@+id/distance"
+        <net.takoli.simpleruntracker.view.widget.VerticalTextView
+            android:id="@+id/distance"
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:gravity="bottom" android:text="Distance"  />
     </RelativeLayout>
@@ -24,12 +25,12 @@
         app:layout_widthPercent="70%"
         android:layout_toRightOf="@id/left" >
 
-        <net.takoli.simpleruntracker.BigNumberPicker
+        <net.takoli.simpleruntracker.view.widget.BigNumberPicker
             android:id="@+id/dist10"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="4" />
-        <net.takoli.simpleruntracker.BigNumberPicker
+        <net.takoli.simpleruntracker.view.widget.BigNumberPicker
             android:id="@+id/dist1"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
@@ -40,12 +41,12 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="." />
-        <net.takoli.simpleruntracker.BigNumberPicker
+        <net.takoli.simpleruntracker.view.widget.BigNumberPicker
             android:id="@+id/dist_1"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="4" />
-        <net.takoli.simpleruntracker.BigNumberPicker
+        <net.takoli.simpleruntracker.view.widget.BigNumberPicker
             android:id="@+id/dist_01"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
@@ -64,7 +65,7 @@
                 android:text="mi" />
         </LinearLayout>
 
-        <net.takoli.simpleruntracker.BigNumberPicker
+        <net.takoli.simpleruntracker.view.widget.BigNumberPicker
             android:id="@+id/hour"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
@@ -74,12 +75,12 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text=":" />
-        <net.takoli.simpleruntracker.BigNumberPicker
+        <net.takoli.simpleruntracker.view.widget.BigNumberPicker
             android:id="@+id/min10"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="4" />
-        <net.takoli.simpleruntracker.BigNumberPicker
+        <net.takoli.simpleruntracker.view.widget.BigNumberPicker
             android:id="@+id/min1"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
@@ -90,12 +91,12 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text=":" />
-        <net.takoli.simpleruntracker.BigNumberPicker
+        <net.takoli.simpleruntracker.view.widget.BigNumberPicker
             android:id="@+id/sec10"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="4" />
-        <net.takoli.simpleruntracker.BigNumberPicker
+        <net.takoli.simpleruntracker.view.widget.BigNumberPicker
             android:id="@+id/sec1"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
@@ -110,7 +111,8 @@
         app:layout_widthPercent="15%"
         android:layout_toRightOf="@id/enter_run_main"
         android:gravity="center" >
-              <net.takoli.simpleruntracker.VerticalTextView android:id="@+id/time"
+              <net.takoli.simpleruntracker.view.widget.VerticalTextView
+                  android:id="@+id/time"
                   android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:gravity="top" android:text="My Time"  />
     </RelativeLayout>
@@ -153,7 +155,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Enter run"
+            android:text="Enter Run"
+            android:textAllCaps="false"
             android:textSize="20sp" />
 
         <ImageView
