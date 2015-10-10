@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -12,6 +12,10 @@ import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.model.Run;
+import net.takoli.simpleruntracker.view.MainActivity;
 
 import java.util.Calendar;
 

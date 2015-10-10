@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -10,6 +10,10 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+
+import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.model.Run;
+import net.takoli.simpleruntracker.view.MainActivity;
 
 public class RunUpdateDialog extends DialogFragment {
 

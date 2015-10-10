@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker.graph;
+package net.takoli.simpleruntracker.view.graph;
 
 import java.util.ArrayList;
 
@@ -14,8 +14,8 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
-import net.takoli.simpleruntracker.Run;
-import net.takoli.simpleruntracker.RunDB;
+import net.takoli.simpleruntracker.model.Run;
+import net.takoli.simpleruntracker.model.RunDB;
 
 public class GraphViewSmall extends View {
 	

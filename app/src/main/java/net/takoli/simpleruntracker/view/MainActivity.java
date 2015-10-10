@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.view;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -22,10 +22,17 @@ import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Button;
 import android.widget.RadioGroup;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
+import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.adapter.RunAdapter;
 import net.takoli.simpleruntracker.adapter.animator.FadeInUpAnimator;
 import net.takoli.simpleruntracker.graph.GraphViewSmall;
+import net.takoli.simpleruntracker.model.RunDB;
 import net.takoli.simpleruntracker.model.SettingsManager;
+import net.takoli.simpleruntracker.view.widget.VerticalTextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 	private ChartFullScreenDialog graphFullFragment;
 
     // other
+    public Tracker gTracker;
     public SettingsManager settingsManager;
     private FragmentManager fragMngr;
     protected GestureDetector gestDect;
@@ -75,7 +83,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
 		//getActionBar().setDisplayShowTitleEnabled(false);
-		settingsManager = new SettingsManager(this);
+        gTracker = ((RunApp) getApplication()).getDefaultTracker();
+        gTracker.setScreenName("MainScreen");
+        gTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        settingsManager = new SettingsManager(this);
         runDB = new RunDB(this);
         runDB.setDBLimit(settingsManager.getDBLimit());
         fragMngr = getFragmentManager();
@@ -113,6 +124,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openFullGraph();
+                gTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Graph")
+                        .setAction("graph via small graph")
+                        .build());
             }
         });
 		
@@ -190,12 +205,19 @@ public class MainActivity extends AppCompatActivity {
 					else
 						statsFragment.animateIn();
 	    		}
+                gTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Stats")
+                        .build());
 	            return true;
 	    	case R.id.settings:
 	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
 	            return true; 
 	        case R.id.graph_it:
 	    		openFullGraph();
+                gTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Graph")
+                        .setAction("graph via menu")
+                        .build());
 	            return true; 
 	    	case R.id.export_list_of_runs:
 	        	runDB.saveToExternalMemory(this);

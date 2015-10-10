@@ -1,12 +1,13 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.view.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.TextView;
+
+import net.takoli.simpleruntracker.R;
 
 public class VerticalTextView extends TextView {
 	final boolean topDown;

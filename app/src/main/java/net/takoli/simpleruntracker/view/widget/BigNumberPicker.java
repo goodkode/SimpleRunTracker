@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.view.widget;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -7,6 +7,8 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+
+import net.takoli.simpleruntracker.R;
 
 import java.lang.reflect.Field;
 

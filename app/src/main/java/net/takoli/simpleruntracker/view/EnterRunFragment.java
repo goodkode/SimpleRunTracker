@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.view;
 
 import android.animation.ValueAnimator;
 import android.app.DatePickerDialog;
@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,14 +26,21 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+
+import net.takoli.simpleruntracker.R;
 import net.takoli.simpleruntracker.adapter.RunAdapter;
+import net.takoli.simpleruntracker.model.Run;
+import net.takoli.simpleruntracker.model.RunDB;
 import net.takoli.simpleruntracker.model.SettingsManager;
+import net.takoli.simpleruntracker.view.widget.BigNumberPicker;
+import net.takoli.simpleruntracker.view.widget.VerticalTextView;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
 
 
-public class EnterRun extends Fragment {
+public class EnterRunFragment extends Fragment {
 
 	BigNumberPicker dist10, dist1, dist_1, dist_01;
 	BigNumberPicker hour, min10, min1, sec10, sec1;
@@ -174,7 +182,7 @@ public class EnterRun extends Fragment {
 		dateRadioButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				EnterRun.this.pickDate(); }
+				EnterRunFragment.this.pickDate(); }
 		});
 		
 		// Send run details to the RunDB database
@@ -200,13 +208,31 @@ public class EnterRun extends Fragment {
 					Toast.makeText(main, "Woah that fast, 0 seconds?", Toast.LENGTH_SHORT).show();
 				} else {
                     enterRunButton.startAnimation(blowup);
-					int lastIndex = runListDB.addNewRun(main, new Run(runDate, dd, _dd, unit, h, mm, ss));
+                    Run newRun = new Run(runDate, dd, _dd, unit, h, mm, ss);
+					int lastIndex = runListDB.addNewRun(main, newRun);
 					runAdapter.notifyItemInserted(lastIndex + 1);
 					main.shiftRunList();
 					runListView.smoothScrollToPosition(runListDB.getRunList().size());
 					main.updateGraph();
 					// todo: off the UI thread
 					runListDB.saveRunDB(main);
+
+                    main.gTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Run!")
+                            .build());
+                    main.gTracker.send(new HitBuilders.EventBuilder()
+                            .setLabel("run distance in mile/100")
+                            .setValue(newRun.getDistUNIT())
+                            .build());
+                    main.gTracker.send(new HitBuilders.EventBuilder()
+                            .setLabel("run time in sec")
+                            .setValue(newRun.getTimeUNIT())
+                            .build());
+                    main.gTracker.send(new HitBuilders.EventBuilder()
+                            .setLabel("run pace in sec/mile")
+                            .setValue(newRun.getPaceUNIT())
+                            .build());
+                    Log.i("new run", newRun.getDistUNIT() + ", " + newRun.getTimeUNIT() + ", " + newRun.getPaceUNIT());
 				}
 			}
 		});
@@ -274,7 +300,7 @@ public class EnterRun extends Fragment {
 		}
 
 		public void onDateSet(DatePicker view, int year, int month, int day) {
-			EnterRun enterRun = (EnterRun) ((MainActivity) getActivity()).enterRun;
+			EnterRunFragment enterRun = (EnterRunFragment) ((MainActivity) getActivity()).enterRun;
 			enterRun.runDate = Run.setCustomDate(month, day, year);
 			String m;
 			switch (month) {

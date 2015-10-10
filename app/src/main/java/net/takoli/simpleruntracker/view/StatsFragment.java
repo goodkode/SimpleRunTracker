@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.view;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -12,6 +12,9 @@ import android.widget.RadioButton;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
+
+import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.model.RunDB;
 
 public class StatsFragment extends Fragment {
 

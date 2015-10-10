@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.model;
 
 import java.util.Calendar;
 import java.util.Locale;

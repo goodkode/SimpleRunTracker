@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker.graph;
+package net.takoli.simpleruntracker.view.graph;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,8 +18,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import net.takoli.simpleruntracker.R;
-import net.takoli.simpleruntracker.Run;
-import net.takoli.simpleruntracker.RunDB;
+import net.takoli.simpleruntracker.model.Run;
+import net.takoli.simpleruntracker.model.RunDB;
 
 import java.util.ArrayList;
 

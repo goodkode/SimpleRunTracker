@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,7 +15,9 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import net.takoli.simpleruntracker.R;
 import net.takoli.simpleruntracker.graph.GraphViewFull;
+import net.takoli.simpleruntracker.view.MainActivity;
 
 public class ChartFullScreenDialog extends DialogFragment {
 	

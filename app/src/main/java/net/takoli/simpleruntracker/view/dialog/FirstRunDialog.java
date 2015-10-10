@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.view.MainActivity;
 
 public class FirstRunDialog extends DialogFragment {
 

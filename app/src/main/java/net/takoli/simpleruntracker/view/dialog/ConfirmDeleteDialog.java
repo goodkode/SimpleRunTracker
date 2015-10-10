@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -6,6 +6,8 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import net.takoli.simpleruntracker.view.MainActivity;
 
 public class ConfirmDeleteDialog extends DialogFragment {
 

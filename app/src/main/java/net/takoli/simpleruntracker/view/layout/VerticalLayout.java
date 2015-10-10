@@ -1,4 +1,4 @@
-package net.takoli.simpleruntracker;
+package net.takoli.simpleruntracker.view.layout;
 
 import android.content.Context;
 import android.graphics.Canvas;
