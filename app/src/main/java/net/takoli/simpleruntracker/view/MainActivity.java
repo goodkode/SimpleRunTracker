@@ -29,13 +29,13 @@ import net.takoli.simpleruntracker.R;
 import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.adapter.RunAdapter;
 import net.takoli.simpleruntracker.adapter.animator.FadeInUpAnimator;
-import net.takoli.simpleruntracker.view.graph.GraphViewSmall;
 import net.takoli.simpleruntracker.model.RunDB;
 import net.takoli.simpleruntracker.model.SettingsManager;
 import net.takoli.simpleruntracker.view.dialog.ChartFullScreenDialog;
 import net.takoli.simpleruntracker.view.dialog.ConfirmDeleteDialog;
 import net.takoli.simpleruntracker.view.dialog.FirstRunDialog;
 import net.takoli.simpleruntracker.view.dialog.SettingsDialog;
+import net.takoli.simpleruntracker.view.graph.GraphViewSmall;
 import net.takoli.simpleruntracker.view.widget.VerticalTextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                         .build());
 	            return true;
 	    	case R.id.settings:
-	    		(new SettingsDialog()).show(fragMngr, "SettingsDialog");
+	    		openSettings();
 	            return true; 
 	        case R.id.graph_it:
 	    		openFullGraph();
@@ -276,6 +276,10 @@ public class MainActivity extends AppCompatActivity {
             graphFullFragment = new ChartFullScreenDialog();
             graphFullFragment.show(fragMngr, "ChartFullScreen");
         }
+    }
+
+    public void openSettings() {
+        (new SettingsDialog()).show(fragMngr, "SettingsDialog");
     }
 
 	private void openSmallGraph() {

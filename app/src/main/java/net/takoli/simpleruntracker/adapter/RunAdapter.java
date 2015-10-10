@@ -2,7 +2,6 @@ package net.takoli.simpleruntracker.adapter;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +9,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 
-import net.takoli.simpleruntracker.view.MainActivity;
 import net.takoli.simpleruntracker.R;
 import net.takoli.simpleruntracker.model.Run;
 import net.takoli.simpleruntracker.model.RunDB;
+import net.takoli.simpleruntracker.view.MainActivity;
 import net.takoli.simpleruntracker.view.dialog.RunUpdateDialog;
 
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         if (viewType == HEADER) {
             View cardView = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.run_header, viewGroup, false);
-            viewHolder = new HeaderViewHolder(cardView);
+            viewHolder = new HeaderViewHolder(cardView, main);
             header = (HeaderViewHolder) viewHolder;
         } else if (viewType == EXPANDED) {
             View cardView = LayoutInflater.from(viewGroup.getContext())
@@ -231,13 +230,13 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
     public static class HeaderViewHolder extends RunViewHolder {
         TextView info;
 
-        public HeaderViewHolder(View headerView) {
+        public HeaderViewHolder(View headerView, final MainActivity main) {
             super(headerView);
             info = (TextView) headerView.findViewById(R.id.header_info);
             headerView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("run", "Header clicked.");
+                    main.openSettings();
                 }
             });
         }
