@@ -43,6 +43,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
             View cardView = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.run_header, viewGroup, false);
             viewHolder = new HeaderViewHolder(cardView);
+            header = (HeaderViewHolder) viewHolder;
         } else if (viewType == EXPANDED) {
             View cardView = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.one_run_expanded, viewGroup, false);
@@ -133,7 +134,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
                     header.info.setText("Showing " + runList.size() + " workouts");
                 else
                     header.info.setText("Showing " + runList.size() + " workout");
-                header.info.setText(" since " + Run.getFullStringDate(limit));
+                header.info.append(" since " + Run.getFullStringDate(limit));
             }
         }
     }

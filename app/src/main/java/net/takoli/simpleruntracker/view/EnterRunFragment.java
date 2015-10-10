@@ -212,6 +212,7 @@ public class EnterRunFragment extends Fragment {
 					main.updateGraph();
 					// todo: off the UI thread
 					runListDB.saveRunDB(main);
+                    runAdapter.updateHeader();
 
                     main.gTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Run!")
