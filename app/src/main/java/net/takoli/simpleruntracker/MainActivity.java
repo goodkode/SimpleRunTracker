@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.percent.PercentRelativeLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView runListView;
     private RunAdapter runAdapter;
     private RecyclerView.LayoutManager runListLM;
-    private PercentRelativeLayout.LayoutParams runListOriginalParams;
-    private PercentRelativeLayout.LayoutParams runListShiftedParams;
     private int layoutParamsHeight;
 
     // Graphs
@@ -69,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 	private int listLength;
 	private int listGap;
     private int shiftedDown;
+	private int graphHeight;
 
 
 	@Override
@@ -112,6 +110,12 @@ public class MainActivity extends AppCompatActivity {
         // Graph initial setup
 		graphSmall = (GraphViewSmall) findViewById(R.id.graph);
 		graphSmall.setRunList(runDB, settingsManager.getUnit());
+        graphSmall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFullGraph();
+            }
+        });
 		
 		// check for first run
 		if (runDB.isEmpty())
@@ -130,13 +134,10 @@ public class MainActivity extends AppCompatActivity {
         enterRunBottom = (int) (settingsManager.getMainScreenHeight() * 0.58); // 58% height
         enterRunSlideDistance = enterRunBottom - listTop;
         listGap = listBottom - enterRunBottom;
-        runListOriginalParams = (PercentRelativeLayout.LayoutParams) runListView.getLayoutParams();
-        runListShiftedParams = new PercentRelativeLayout.LayoutParams(runListOriginalParams);
+		graphHeight = findViewById(R.id.graph_space).getHeight();
         Log.i("run", "M screen: " + settingsManager.getMainScreenWidth() + " * " + settingsManager.getMainScreenHeight() +
                 " || run bottom and slide: " + enterRunBottom + ", " + enterRunSlideDistance +
                 " | list top, bottom, length, shift: " + listTop + ", " + listBottom + ", " + listLength + ", " + shiftedDown);
-        Log.i("run", "layoutparam: " + runListOriginalParams.width + " * " + runListOriginalParams.height);
-        Log.i("run", "layoutparam: " + runListOriginalParams.topMargin);
     }
 
     @Override
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
             runListView.smoothScrollToPosition(runDB.getRunList().size());
             runAdapter.notifyDataSetChanged();
             slideDown();
+			openSmallGraph();
         }
     }
 
@@ -212,12 +214,7 @@ public class MainActivity extends AppCompatActivity {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (event.getY() / settingsManager.getMainScreenHeight() > 0.8) {
-			openFullGraph();
-			return true;
-		}
-		else
-			return gestDect.onTouchEvent(event);
+		return gestDect.onTouchEvent(event);
 	}
 
     public GraphViewSmall getGraphView() {
@@ -248,6 +245,13 @@ public class MainActivity extends AppCompatActivity {
             graphFullFragment = new ChartFullScreenDialog();
             graphFullFragment.show(fragMngr, "ChartFullScreen");
         }
+    }
+
+	private void openSmallGraph() {
+		graphSmall.getLayoutParams().height = graphHeight;
+        graphSmall.setTranslationY(graphHeight);
+        graphSmall.setVisibility(View.VISIBLE);
+        graphSmall.animate().translationYBy(-graphHeight).setDuration(700);
     }
 
     private void slideUp() {
@@ -292,7 +296,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void shiftBackRunList() {
         shiftedDown = 0;
-        runListView.setLayoutParams(runListOriginalParams);
         runListView.animate().translationY(0).setDuration(700);
     }
 

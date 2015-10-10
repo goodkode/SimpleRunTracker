@@ -26,17 +26,24 @@
             android:paddingRight="6dp"
             android:stackFromBottom="true" />
 
-        <net.takoli.simpleruntracker.graph.GraphViewSmall
-            android:id="@+id/graph"
+        <Space
+            android:id="@+id/graph_space"
             app:layout_heightPercent="20%"
             app:layout_widthPercent="100%"
             android:layout_below="@id/my_runs"
+            android:layout_alignParentBottom="true" />
+
+        <net.takoli.simpleruntracker.graph.GraphViewSmall
+            android:id="@+id/graph"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_alignParentBottom="true"
-            android:background="#FFFFFF"
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
             android:paddingBottom="15dp"
-            android:paddingTop="10dp"  />
+            android:paddingTop="10dp"
+            android:background="@android:color/white"
+            android:visibility="invisible" />
 
 
         <!--Enter Run Fragment-->

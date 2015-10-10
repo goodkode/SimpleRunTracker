@@ -105,6 +105,9 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
             notifyItemChanged(prevExpanded);
             notifyItemChanged(expanded);
         }
+        if (position == getItemCount() - 1) {
+            main.shiftRunList();
+        }
     }
 
     public void updateHeader() {
