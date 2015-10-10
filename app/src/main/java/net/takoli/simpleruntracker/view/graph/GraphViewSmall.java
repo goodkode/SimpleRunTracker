@@ -1,7 +1,5 @@
 package net.takoli.simpleruntracker.view.graph;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -10,12 +8,15 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
 import net.takoli.simpleruntracker.model.Run;
 import net.takoli.simpleruntracker.model.RunDB;
+
+import java.util.ArrayList;
 
 public class GraphViewSmall extends View {
 	
@@ -99,6 +100,7 @@ public class GraphViewSmall extends View {
 		for (int i = fullSize - dataPlotSize; i < fullSize; i++) {
 			dists[j] = runList.get(i).getDistUNIT();
 			speeds[j] = runList.get(i).getSpeedUNIT();
+			Log.i("run", "dist: " + dists[j]);
 			//Log.i("run", "speed " + j + ": " + speeds[j]);
 			j++;
 		}

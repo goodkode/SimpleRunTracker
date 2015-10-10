@@ -117,11 +117,7 @@ public class RunDB {
 		Run toUpdate = runList.get(pos);
 		sumDistU -= toUpdate.getDistUNIT();
 		sumTimeU -= toUpdate.getTimeUNIT();
-		toUpdate.dd = updates[0];
-		toUpdate._dd = updates[1];
-		toUpdate.h = updates[2];
-		toUpdate.mm = updates[3];
-		toUpdate.ss = updates[4];
+        toUpdate.updateRun(updates[0], updates[1], updates[2], updates[3], updates[4]);
 		sumDistU += toUpdate.getDistUNIT();
 		sumTimeU += toUpdate.getTimeUNIT();
 	}

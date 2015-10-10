@@ -13,7 +13,6 @@ public class Run {
 	int paceU;		 // COMMON UNIT (SEC / MI)
 	String unit;     // miles or kilometers
 	Calendar date;
-	boolean expanded;
 	private static final float KM_TO_MI = 1.60934f;
 	
 	public Run(Calendar date, int dd, int _dd, String unit, int h, int mm, int ss) {
@@ -30,7 +29,6 @@ public class Run {
 			distU = km2mi(distU);
 		timeU = 60 * 60 * h + 60 * mm + ss;
 		paceU = 100 * timeU / distU;
-		expanded = false;
 	}
 	
 	public Run(String line) {
@@ -54,12 +52,20 @@ public class Run {
 			distU = km2mi(distU);
 		timeU = 60 * 60 * h + 60 * mm + ss;
 		paceU = 100 * timeU / distU;
-		expanded = false;
 	}
 	
-	public void switchExpanded() {
-		if (expanded)   expanded = false;
-		else expanded = true;
+	public void updateRun(int dd, int _dd, int h, int mm, int ss) {
+		this.dd = dd;
+		this._dd = _dd;
+		this.h = h;
+		this.mm = mm;
+		this.ss = ss;
+		// Common units:
+		distU = 100 * dd + _dd;
+		if (unit.compareTo("km") == 0)
+			distU = km2mi(distU);
+		timeU = 60 * 60 * h + 60 * mm + ss;
+		paceU = 100 * timeU / distU;
 	}
 	
 	public String getDateString() {

@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup dateRadioGroup;
     private Button enterRunButton;
     private View enterRunOpenIcon;
+    private float moveTextBy;
     private boolean isEnterRunOpen;
     private static final AnticipateOvershootInterpolator slideUpInterpolator =
                                                 new AnticipateOvershootInterpolator(0.8f);
@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         enterRunSlideDistance = enterRunBottom - listTop;
         listGap = listBottom - enterRunBottom;
 		graphHeight = findViewById(R.id.graph_space).getHeight();
+        moveTextBy = enterRun.getView().findViewById(R.id.left).getWidth() * 0.2f;
 //        Log.i("run", "M screen: " + settingsManager.getMainScreenWidth() + " * " + settingsManager.getMainScreenHeight() +
 //                " || run bottom and slide: " + enterRunBottom + ", " + enterRunSlideDistance +
 //                " | list top, bottom, length, shift: " + listTop + ", " + listBottom + ", " + listLength + ", " + shiftedDown);
@@ -308,7 +309,6 @@ public class MainActivity extends AppCompatActivity {
         shiftBackRunList();
 	}
     private void slideDown() {
-		float moveTextBy = 50; //todo: change this
 		distance.animate().translationXBy(moveTextBy).setDuration(1000);
 		time.animate().translationXBy(-moveTextBy).setDuration(1000);
 		// make the date radio buttons reappear
@@ -345,10 +345,10 @@ public class MainActivity extends AppCompatActivity {
                     final int currListLength = lastCardBottom - listTop;
                     if (currListLength > listGap && isEnterRunOpen) {
                         shiftedDown = listBottom - lastCardBottom;
-                        Log.i("run", " shift with longer list: " + shiftedDown);
+                        //Log.i("run", " shift with longer list: " + shiftedDown);
                     } else if (isEnterRunOpen) {
                         shiftedDown = enterRunBottom - listTop;
-                        Log.i("run", " shift with short list: " + shiftedDown);
+                        //Log.i("run", " shift with short list: " + shiftedDown);
                     }
                     runListView.animate().translationY(shiftedDown).setDuration(700);
                     findViewById(R.id.main_layout).invalidate();
@@ -375,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
                         shiftUp += shiftedDown;
                         shiftedDown = 0;
                     }
-                    Log.i("run", " shift back a bit: " + shiftUp);
+                    //Log.i("run", " shift back a bit: " + shiftUp);
                     if (shiftUp != 0) {
                         runListView.animate().translationYBy(-shiftUp).setDuration(100);
                         findViewById(R.id.main_layout).invalidate();
