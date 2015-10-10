@@ -1,18 +1,20 @@
 package net.takoli.simpleruntracker;
 
+import android.animation.ValueAnimator;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.NumberPicker;
@@ -45,11 +47,16 @@ public class EnterRun extends Fragment {
 	RunDB runListDB;
 	RecyclerView runListView;
 	RunAdapter runAdapter;
+	ValueAnimator colorAnimation;
+    Animation shake;
+    Animation blowup;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		main = (MainActivity) getActivity();
+        shake = AnimationUtils.loadAnimation(main, R.anim.shake);
+        blowup = AnimationUtils.loadAnimation(main, R.anim.blowup);
 	}
 	
 	@Override
@@ -178,12 +185,6 @@ public class EnterRun extends Fragment {
 			@Override
 			public void onClick(View v) {
                 enterRunButton = (Button) getView().findViewById(R.id.enter_run_button);
-				enterRunButton.setEnabled(false);
-				new Handler().postDelayed(new Runnable() {
-					public void run() {
-						enterRunButton.setEnabled(true);
-					}
-				}, 700);
 				String unit = main.settingsManager.getUnit();
 				int dd = dist10.getValue() * 10 + dist1.getValue();
 				int _dd = dist_1.getValue() * 10 + dist_01.getValue();
@@ -192,10 +193,13 @@ public class EnterRun extends Fragment {
 				int ss = sec10.getValue() * 10 + sec1.getValue();
 				// save it to runDB and update the ListView
                 if ((dd + _dd) == 0)  {
+                    enterRunButton.startAnimation(shake);
 					Toast.makeText(main, "You probably ran more than 0 " + main.settingsManager.getUnit(), Toast.LENGTH_SHORT).show();
 				} else if ((h + mm + ss) == 0) {
+                    enterRunButton.startAnimation(shake);
 					Toast.makeText(main, "Woah that fast, 0 seconds?", Toast.LENGTH_SHORT).show();
 				} else {
+                    enterRunButton.startAnimation(blowup);
 					int lastIndex = runListDB.addNewRun(main, new Run(runDate, dd, _dd, unit, h, mm, ss));
 					runAdapter.notifyItemInserted(lastIndex + 1);
 					main.shiftRunList();

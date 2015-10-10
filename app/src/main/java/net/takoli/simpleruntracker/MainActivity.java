@@ -24,7 +24,6 @@ import android.widget.RadioGroup;
 
 import net.takoli.simpleruntracker.adapter.RunAdapter;
 import net.takoli.simpleruntracker.adapter.animator.FadeInUpAnimator;
-import net.takoli.simpleruntracker.graph.GraphViewFull;
 import net.takoli.simpleruntracker.graph.GraphViewSmall;
 import net.takoli.simpleruntracker.model.SettingsManager;
 
@@ -37,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private VerticalTextView distance, time;
     private RadioGroup dateRadioGroup;
     private Button enterRunButton;
-    private boolean enterRunIsOpen;
+    private View enterRunOpenIcon;
+    private boolean isEnterRunOpen;
     private static final AnticipateOvershootInterpolator slideUpInterpolator =
                                                 new AnticipateOvershootInterpolator(0.8f);
     private static final AnticipateOvershootInterpolator slideDownInterpolator =
@@ -48,11 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView runListView;
     private RunAdapter runAdapter;
     private RecyclerView.LayoutManager runListLM;
-    private int layoutParamsHeight;
 
     // Graphs
 	private GraphViewSmall graphSmall;
-	private GraphViewFull graphFull;
 	private ChartFullScreenDialog graphFullFragment;
 
     // other
@@ -89,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         time = (VerticalTextView) findViewById(R.id.time);
         dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
         enterRunButton = (Button) findViewById(R.id.enter_run_button);
+        enterRunOpenIcon = findViewById(R.id.enter_run_open_icon);
 		// enable fling up and down to open/close the top panel
 		gestDect = new GestureDetector(this, new MainGestureListener());
         enterRunFrame.setOnTouchListener(new OnTouchListener() {
@@ -135,9 +134,9 @@ public class MainActivity extends AppCompatActivity {
         enterRunSlideDistance = enterRunBottom - listTop;
         listGap = listBottom - enterRunBottom;
 		graphHeight = findViewById(R.id.graph_space).getHeight();
-        Log.i("run", "M screen: " + settingsManager.getMainScreenWidth() + " * " + settingsManager.getMainScreenHeight() +
-                " || run bottom and slide: " + enterRunBottom + ", " + enterRunSlideDistance +
-                " | list top, bottom, length, shift: " + listTop + ", " + listBottom + ", " + listLength + ", " + shiftedDown);
+//        Log.i("run", "M screen: " + settingsManager.getMainScreenWidth() + " * " + settingsManager.getMainScreenHeight() +
+//                " || run bottom and slide: " + enterRunBottom + ", " + enterRunSlideDistance +
+//                " | list top, bottom, length, shift: " + listTop + ", " + listBottom + ", " + listLength + ", " + shiftedDown);
     }
 
     @Override
@@ -260,16 +259,15 @@ public class MainActivity extends AppCompatActivity {
 		// make the date radio buttons disappear
 		dateRadioGroup.animate().setDuration(700).alpha(0);
 		// change the button text
-		enterRunButton.setText("Open");
-		enterRunButton.setTextColor(0xFFFFFFFF);
-		enterRunButton.animate().setDuration(700).alpha(0.5f);
-		enterRunButton.setClickable(false);
+        enterRunButton.setClickable(false);
+		enterRunButton.animate().setDuration(700).alpha(0);
+        enterRunOpenIcon.animate().setDuration(700).alpha(1);
 		// slide the fragment up
 		enterRunFrame.animate()
                 .setDuration(700)
                 .setInterpolator(slideUpInterpolator)
                 .translationY(-enterRunSlideDistance);
-		enterRunIsOpen = false;
+		isEnterRunOpen = false;
         // adjust runList visibility
         shiftBackRunList();
 	}
@@ -280,16 +278,15 @@ public class MainActivity extends AppCompatActivity {
 		// make the date radio buttons reappear
 		dateRadioGroup.animate().setDuration(700).alpha(1);
 		// change the button text
-		enterRunButton.setText("Enter Run");
-		enterRunButton.setTextColor(0xFF000000);
+        enterRunButton.setClickable(true);
 		enterRunButton.animate().setDuration(700).alpha(1);
-		enterRunButton.setClickable(true);
+        enterRunOpenIcon.animate().setDuration(700).alpha(0);
 		// slide the fragment down
 		enterRunFrame.animate()
                 .setDuration(700)
                 .setInterpolator(slideDownInterpolator)
                 .translationY(0);
-		enterRunIsOpen = true;
+		isEnterRunOpen = true;
         // adjust runList visibility
         shiftRunList();
 	}
@@ -310,10 +307,10 @@ public class MainActivity extends AppCompatActivity {
                 if ((lastCardBottom - listGap / 2) < enterRunBottom) {
                     // barely visible, we want to shift
                     final int currListLength = lastCardBottom - listTop;
-                    if (currListLength > listGap) {
+                    if (currListLength > listGap && isEnterRunOpen) {
                         shiftedDown = listBottom - lastCardBottom;
                         Log.i("run", " shift with longer list: " + shiftedDown);
-                    } else {
+                    } else if (isEnterRunOpen) {
                         shiftedDown = enterRunBottom - listTop;
                         Log.i("run", " shift with short list: " + shiftedDown);
                     }
@@ -363,13 +360,13 @@ public class MainActivity extends AppCompatActivity {
 				return true; }
 			else if (deltaY > SWIPE_MIN_DISTANCE) {
 				//Log.i("run", "onFling DOWN");
-				if (!enterRunIsOpen) slideDown();
+				if (!isEnterRunOpen) slideDown();
 					return true; }
 			return false;
 		}
 		@Override
 		public boolean onDown(MotionEvent e) {
-			if (!enterRunIsOpen)
+			if (!isEnterRunOpen)
 				slideDown();
 			return true; }
 	}
