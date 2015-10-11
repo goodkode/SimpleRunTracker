@@ -26,7 +26,7 @@
             android:textColor="@color/green_dark"
             android:textStyle="bold|italic"
             android:textSize="20dp"
-            android:text="Run Tracker" />
+            android:text="@string/app_name" />
 
     </LinearLayout>
 
