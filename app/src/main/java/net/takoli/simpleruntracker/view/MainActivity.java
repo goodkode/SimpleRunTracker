@@ -28,9 +28,7 @@ import net.takoli.simpleruntracker.R;
 import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.adapter.RunAdapter;
 import net.takoli.simpleruntracker.adapter.animator.FadeInUpAnimator;
-import net.takoli.simpleruntracker.model.RunDB;
 import net.takoli.simpleruntracker.model.SettingsManager;
-import net.takoli.simpleruntracker.view.dialog.ChartFullScreenDialog;
 import net.takoli.simpleruntracker.view.dialog.ConfirmDeleteDialog;
 import net.takoli.simpleruntracker.view.dialog.FirstRunDialog;
 import net.takoli.simpleruntracker.view.dialog.SettingsDialog;
@@ -38,6 +36,8 @@ import net.takoli.simpleruntracker.view.graph.GraphViewSmall;
 import net.takoli.simpleruntracker.view.widget.VerticalTextView;
 
 public class MainActivity extends AppCompatActivity {
+
+    private RunApp app;
 
     // Enter run and stats fragment
     protected Fragment enterRun;
@@ -55,18 +55,15 @@ public class MainActivity extends AppCompatActivity {
                                                 new AnticipateOvershootInterpolator(0.92f);
 
     // Run list view
-    private RunDB runDB;
     private RecyclerView runListView;
     private RunAdapter runAdapter;
     private RecyclerView.LayoutManager runListLM;
 
     // Graphs
 	private GraphViewSmall graphSmall;
-	private ChartFullScreenDialog graphFullFragment;
 
     // other
     public Tracker gTracker;
-    public SettingsManager settingsManager;
     private FragmentManager fragMngr;
     protected GestureDetector gestDect;
     private int enterRunBottom;
@@ -86,13 +83,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
+        app = (RunApp) getApplication();
+
 		//getActionBar().setDisplayShowTitleEnabled(false);
         gTracker = ((RunApp) getApplication()).getDefaultTracker();
         gTracker.setScreenName("MainScreen");
         gTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        settingsManager = new SettingsManager(this);
-        runDB = new RunDB(this);
-        runDB.setDBLimit(settingsManager.getDBLimit());
+        app.settingsManager = new SettingsManager(this);
+        app.getRunDB().setDBLimit(app.settingsManager.getDBLimit());
         fragMngr = getFragmentManager();
 
 		// "Enter Run" top fragment setup:
@@ -113,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // List of Runs setup:
-        runAdapter = new RunAdapter(this, runDB);
+        runAdapter = new RunAdapter(this, app.getRunDB());
         runListLM = new LinearLayoutManager(MainActivity.this);
 		runListView = (RecyclerView) findViewById(R.id.my_runs);
         runListView.setLayoutManager(runListLM);
@@ -123,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Graph initial setup
 		graphSmall = (GraphViewSmall) findViewById(R.id.graph);
-		graphSmall.setRunList(runDB, settingsManager.getUnit());
+		graphSmall.setRunList(app.getRunDB(), app.settingsManager.getUnit());
         graphSmall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,25 +134,25 @@ public class MainActivity extends AppCompatActivity {
         });
 		
 		// check for first run
-		if (runDB.isEmpty())
+		if (app.getRunDB().isEmpty())
 			(new FirstRunDialog()).show(fragMngr, "FirstRunDialog");
     }
 
     private void initScreenSizeVariables() {
         View mainScreen = findViewById(R.id.main_layout);
-		settingsManager.setMainScreenHeight(mainScreen.getHeight());
-		settingsManager.setMainScreenWidth(mainScreen.getWidth());
+		app.settingsManager.setMainScreenHeight(mainScreen.getHeight());
+		app.settingsManager.setMainScreenWidth(mainScreen.getWidth());
         // runList and enterRun
-        listTop = (int) (settingsManager.getMainScreenHeight() * 0.18); // 18% margin
-        listBottom = (int) (settingsManager.getMainScreenHeight() * (0.18 + 0.62)); // 62% height
+        listTop = (int) (app.settingsManager.getMainScreenHeight() * 0.18); // 18% margin
+        listBottom = (int) (app.settingsManager.getMainScreenHeight() * (0.18 + 0.62)); // 62% height
 		listLength = runListView.getHeight();
         shiftedDown = 0;
-        enterRunBottom = (int) (settingsManager.getMainScreenHeight() * 0.58); // 58% height
+        enterRunBottom = (int) (app.settingsManager.getMainScreenHeight() * 0.58); // 58% height
         enterRunSlideDistance = enterRunBottom - listTop;
         listGap = listBottom - enterRunBottom;
 		graphHeight = findViewById(R.id.graph_space).getHeight();
         moveTextBy = enterRun.getView().findViewById(R.id.left).getWidth() * 0.2f;
-//        Log.i("run", "M screen: " + settingsManager.getMainScreenWidth() + " * " + settingsManager.getMainScreenHeight() +
+//        Log.i("run", "M screen: " + app.settingsManager.getMainScreenWidth() + " * " + app.settingsManager.getMainScreenHeight() +
 //                " || run bottom and slide: " + enterRunBottom + ", " + enterRunSlideDistance +
 //                " | list top, bottom, length, shift: " + listTop + ", " + listBottom + ", " + listLength + ", " + shiftedDown);
     }
@@ -162,10 +160,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (settingsManager.isAppStart() && hasFocus) {
+        if (app.settingsManager.isAppStart() && hasFocus) {
             initScreenSizeVariables();
             enterRunFrame.setY(-enterRunSlideDistance);
-            runListView.smoothScrollToPosition(runDB.getRunList().size());
+            runListView.smoothScrollToPosition(app.getRunDB().getRunList().size());
             runAdapter.notifyDataSetChanged();
             slideDown();
 			openSmallGraph();
@@ -173,14 +171,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
 	protected void onStop() {
         super.onStop();
-        runDB.saveRunDB(this);
+        app.getRunDB().saveRunDB(this);
 	}
 	
 	@Override
@@ -231,8 +224,8 @@ public class MainActivity extends AppCompatActivity {
                         .build());
 	            return true; 
 	    	case R.id.export_list_of_runs:
-	        	runDB.saveToExternalMemory(this);
-	        	Intent emailIntent = runDB.emailIntent(this);
+                app.getRunDB().saveToExternalMemory(this);
+	        	Intent emailIntent = app.getRunDB().emailIntent(this);
 	        	if (emailIntent != null)
 	        		startActivity(emailIntent);
 	            return true;
@@ -252,10 +245,6 @@ public class MainActivity extends AppCompatActivity {
     public GraphViewSmall getGraphView() {
 		return graphSmall;
 	}
-	
-	public RunDB getRunDB() {
-		return runDB;
-    }
 
 	public RecyclerView getRunList() {
 		return runListView;
@@ -272,11 +261,8 @@ public class MainActivity extends AppCompatActivity {
 	}
 
     public void openFullGraph() {
-        graphFullFragment = (ChartFullScreenDialog) getFragmentManager().findFragmentByTag("ChartFullScreen");
-        if (graphFullFragment == null) {
-            graphFullFragment = new ChartFullScreenDialog();
-            graphFullFragment.show(fragMngr, "ChartFullScreen");
-        }
+        Intent openFullGraphIntent = new Intent(this, GraphFullActivity.class);
+        startActivity(openFullGraphIntent);
     }
 
     public void openSettings() {
@@ -398,8 +384,8 @@ public class MainActivity extends AppCompatActivity {
 				return false;
 			float deltaY = e2.getY() - e1.getY();
 			float deltaX = e2.getX() - e1.getX();
-			if ((e1.getX() / settingsManager.getMainScreenHeight() > 0.15 &&  e1.getX() / settingsManager.getMainScreenHeight() < 0.85)
-					&&  e1.getY() / settingsManager.getMainScreenHeight() < 0.33) {
+			if ((e1.getX() / app.settingsManager.getMainScreenHeight() > 0.15 &&  e1.getX() / app.settingsManager.getMainScreenHeight() < 0.85)
+					&&  e1.getY() / app.settingsManager.getMainScreenHeight() < 0.33) {
 				//Log.i("run", "onFling out of area");
 				return false; }
 			if (Math.abs(deltaX) > SWIPE_BAD_MAX_DIST || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {

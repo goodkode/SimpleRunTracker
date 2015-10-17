@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import net.takoli.simpleruntracker.RunApp;
+import net.takoli.simpleruntracker.model.RunDB;
 import net.takoli.simpleruntracker.view.MainActivity;
 
 public class ConfirmDeleteDialog extends DialogFragment {
@@ -25,11 +27,13 @@ public class ConfirmDeleteDialog extends DialogFragment {
                 .setPositiveButton("Delete",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                        	((MainActivity) getActivity()).getRunDB().deleteDB(getActivity());
-                            ((MainActivity) getActivity()).getRunAdapter().notifyDataSetChanged();
-                            ((MainActivity) getActivity()).getRunDB().saveToExternalMemory(getActivity());
-                            ((MainActivity) getActivity()).updateGraph();
-                			Toast.makeText(getActivity(), "Backed up in the Downloads folder",Toast.LENGTH_SHORT).show(); }
+                            final MainActivity main = (MainActivity) getActivity();
+                            final RunDB runDB = ((RunApp) main.getApplication()).getRunDB();
+                            runDB.deleteDB(getActivity());
+                            main.getRunAdapter().notifyDataSetChanged();
+                            runDB.saveToExternalMemory(getActivity());
+                            main.updateGraph();
+                			Toast.makeText(main, "Backed up in the Downloads folder",Toast.LENGTH_SHORT).show(); }
                     }
                 ).create();
     }

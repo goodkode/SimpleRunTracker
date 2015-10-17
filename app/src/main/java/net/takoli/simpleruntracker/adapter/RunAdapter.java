@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 
 import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.model.Run;
 import net.takoli.simpleruntracker.model.RunDB;
 import net.takoli.simpleruntracker.view.MainActivity;
@@ -132,7 +133,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         if (runList.size() == 0)
             header.info.setText("Empty list");
         else {
-            String limit = main.settingsManager.getDBLimit();
+            String limit = ((RunApp) main.getApplication()).settingsManager.getDBLimit();
             boolean numberLimitUsed = true;
             try {
                 Integer.parseInt(limit);

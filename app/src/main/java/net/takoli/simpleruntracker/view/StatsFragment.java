@@ -14,12 +14,13 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.model.RunDB;
 
 public class StatsFragment extends Fragment {
 
+	private RunApp app;
 	private boolean active = true;
-	private MainActivity mainActivity;
 	private View thisView, leftOverlay;
 	private RunDB runDB;
 	private String unit;
@@ -36,8 +37,8 @@ public class StatsFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		//Log.i("run", "onCreateView");
-		mainActivity = (MainActivity) getActivity();
-		runDB = mainActivity.getRunDB();
+		app = (RunApp) getActivity().getApplication();
+		runDB = app.getRunDB();
 		thisView = inflater.inflate(R.layout.stats_layout, container, false);
 		return thisView;
 	}
@@ -85,7 +86,7 @@ public class StatsFragment extends Fragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked) 
 					onStatsInKm(); } });
-		unit = mainActivity.settingsManager.getUnit();
+		unit = app.settingsManager.getUnit();
 		if (unit.compareTo("km") == 0)   
 			kmChB.setChecked(true);
 		else 							

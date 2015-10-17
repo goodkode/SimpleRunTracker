@@ -7,18 +7,20 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.model.Run;
+import net.takoli.simpleruntracker.model.RunDB;
 import net.takoli.simpleruntracker.view.MainActivity;
 
 public class RunUpdateDialog extends DialogFragment {
 
     public static final String POSITION = "position";
     private MainActivity main;
+    private RunDB runDB;
     private AlertDialog runUpdateDialog;
     private int position;
     private Run run;
@@ -33,8 +35,8 @@ public class RunUpdateDialog extends DialogFragment {
 		super.onCreate(bundle);
         main = (MainActivity) getActivity();
 		position = getArguments().getInt(POSITION);
-		run = main.getRunDB().getRunList().get(position);
-        Log.i("run", "runUpdate: " + run + " from pos: " + position);
+        runDB = ((RunApp) main.getApplication()).getRunDB();
+		run = runDB.getRunList().get(position);
 	}
 	
     @Override
@@ -91,14 +93,14 @@ public class RunUpdateDialog extends DialogFragment {
     }
     
     private void updateRun(int position) {
-        main.getRunDB().updateRun(position, new int[]{toInt(dd), toInt(_dd), toInt(h), toInt(mm), toInt(ss)});
+        runDB.updateRun(position, new int[]{toInt(dd), toInt(_dd), toInt(h), toInt(mm), toInt(ss)});
         int adapterPosition = position + 1;
     	main.getRunAdapter().notifyItemChanged(adapterPosition);
         main.updateGraph();
     }
     
     private void removeRun(int position) {
-    	main.getRunDB().removeRun(position);
+    	runDB.removeRun(position);
         int adapterPosition = position + 1;
         main.getRunAdapter().notifyItemRemovedHelper();
         main.getRunAdapter().notifyItemRemoved(adapterPosition);

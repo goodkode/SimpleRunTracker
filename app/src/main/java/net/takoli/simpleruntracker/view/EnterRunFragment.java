@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 
 import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.adapter.RunAdapter;
 import net.takoli.simpleruntracker.model.Run;
 import net.takoli.simpleruntracker.model.RunDB;
@@ -39,26 +40,28 @@ import java.util.Calendar;
 
 public class EnterRunFragment extends Fragment {
 
-	BigNumberPicker dist10, dist1, dist_1, dist_01;
-	BigNumberPicker hour, min10, min1, sec10, sec1;
-	RadioGroup dateGroup;
-	RadioButton dateRadioButton;
-	Calendar runDate;
-	TextView div_d, div_th, div_tm;
-	TextView distance, time, distUnit;
-	Button enterRunButton;
-    long lastHitTime;
-	DisplayMetrics dm;
-	MainActivity main;
-	RunDB runListDB;
-	RecyclerView runListView;
-	RunAdapter runAdapter;
-    Animation shake;
-    Animation blowup;
+	private RunApp app;
+	private BigNumberPicker dist10, dist1, dist_1, dist_01;
+	private BigNumberPicker hour, min10, min1, sec10, sec1;
+	private RadioGroup dateGroup;
+	private RadioButton dateRadioButton;
+	private Calendar runDate;
+	private TextView div_d, div_th, div_tm;
+	private TextView distance, time, distUnit;
+	private Button enterRunButton;
+	private long lastHitTime;
+	private DisplayMetrics dm;
+	private MainActivity main;
+	private RunDB runListDB;
+	private RecyclerView runListView;
+	private RunAdapter runAdapter;
+	private Animation shake;
+	private Animation blowup;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		app = (RunApp) getActivity().getApplication();
 		main = (MainActivity) getActivity();
         shake = AnimationUtils.loadAnimation(main, R.anim.shake);
         blowup = AnimationUtils.loadAnimation(main, R.anim.blowup);
@@ -74,7 +77,7 @@ public class EnterRunFragment extends Fragment {
 	public void onStart() {
 		super.onStart();
 
-        runListDB = main.getRunDB();
+        runListDB = app.getRunDB();
         runListView = main.getRunList();
         runAdapter = main.getRunAdapter();
 		dm = getResources().getDisplayMetrics();
@@ -87,7 +90,7 @@ public class EnterRunFragment extends Fragment {
 		dist_1 = (BigNumberPicker) getView().findViewById(R.id.dist_1);
 		dist_01 = (BigNumberPicker) getView().findViewById(R.id.dist_01);
 		distUnit = (TextView) getView().findViewById(R.id.dist_unit);
-			distUnit.setText(main.settingsManager.getUnit());
+			distUnit.setText(app.settingsManager.getUnit());
 			distUnit.setTextSize(dist1.getTextSize() * 0.8f);
 			distUnit.animate().translationYBy(4);
 			
@@ -123,7 +126,7 @@ public class EnterRunFragment extends Fragment {
 			int secPerMile = runListDB.getAvgPaceUNIT();
 			int secs = 0;
 			int dist = 0;
-			boolean inMile = main.settingsManager.getUnit().compareTo("mi") == 0;
+			boolean inMile = app.settingsManager.getUnit().compareTo("mi") == 0;
 			@Override
 			public void onScrollStateChange(NumberPicker view, int scrollState) {
 				dist = dist10.getValue() * 1000 + dist1.getValue() * 100 + dist_1.getValue() * 10 + dist_01.getValue();
@@ -193,7 +196,7 @@ public class EnterRunFragment extends Fragment {
                     return;
                 else
                     lastHitTime = System.currentTimeMillis();
-				String unit = main.settingsManager.getUnit();
+				String unit = app.settingsManager.getUnit();
 				int dd = dist10.getValue() * 10 + dist1.getValue();
 				int _dd = dist_1.getValue() * 10 + dist_01.getValue();
 				int h = hour.getValue();
@@ -259,7 +262,7 @@ public class EnterRunFragment extends Fragment {
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			// Use the current date as the default date in the picker
 			final ColorDrawable greenDrawable = new ColorDrawable(getResources().getColor(R.color.green_light));
-            settingsManager = ((MainActivity) getActivity()).settingsManager;
+            settingsManager = ((RunApp) getActivity().getApplication()).settingsManager;
             int[] lastDatePickedOrDefault = settingsManager.getLastRunDatePicked();
 			int year = lastDatePickedOrDefault[2];
 			int month = lastDatePickedOrDefault[1];

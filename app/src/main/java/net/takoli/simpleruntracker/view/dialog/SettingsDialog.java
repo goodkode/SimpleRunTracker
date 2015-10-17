@@ -14,13 +14,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.model.Run;
 import net.takoli.simpleruntracker.view.MainActivity;
 
 import java.util.Calendar;
 
 public class SettingsDialog extends DialogFragment {
-	
+
+	private RunApp app;
 	private MainActivity main;
 	private AlertDialog settingsView;
 	private RadioButton rMiles, rKm, r100, r300, r500, rDate;
@@ -32,6 +34,7 @@ public class SettingsDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+		app = (RunApp) getActivity().getApplication();
     	main = (MainActivity) getActivity();
         settingsView =  new AlertDialog.Builder(getActivity())
         		.setView(getActivity().getLayoutInflater().inflate(R.layout.settings_dialog, null))
@@ -55,8 +58,8 @@ public class SettingsDialog extends DialogFragment {
     	r300 = (RadioButton) settingsView.findViewById(R.id.settings_300);
     	r500 = (RadioButton) settingsView.findViewById(R.id.settings_500);
     	rDate = (RadioButton) settingsView.findViewById(R.id.settings_starting_date);
-    	origUnit = main.settingsManager.getUnit();
-    	origLimit = main.settingsManager.getDBLimit();
+    	origUnit = app.settingsManager.getUnit();
+    	origLimit = app.settingsManager.getDBLimit();
     	// origUnit set-up
     	if (origUnit.compareTo("km") == 0)
     		rKm.setChecked(true);
@@ -103,10 +106,10 @@ public class SettingsDialog extends DialogFragment {
     	else
     		newUnit = "km";
     	if (newUnit.compareTo(origUnit) != 0) {
-    		main.settingsManager.setUnit(newUnit);
-    		Toast.makeText(main, "New runs will be entered in " + main.settingsManager.getUnitInFull(), Toast.LENGTH_SHORT).show();
+    		app.settingsManager.setUnit(newUnit);
+    		Toast.makeText(main, "New runs will be entered in " + app.settingsManager.getUnitInFull(), Toast.LENGTH_SHORT).show();
 	    	((TextView) main.findViewById(R.id.dist_unit)).setText(newUnit);
-	    	main.getGraphView().setRunList(main.getRunDB(), newUnit);
+	    	main.getGraphView().setRunList(app.getRunDB(), newUnit);
 	    	main.updateGraph();
     	}
     	// DB origLimit
@@ -121,8 +124,8 @@ public class SettingsDialog extends DialogFragment {
     	else 
     		newLimit = origLimit;
     	if (newLimit.compareTo(origLimit) != 0) {
-    		main.settingsManager.setDBLimit(main.getRunDB(), newLimit);
-    		main.getRunDB().ensureDBLimit();
+    		app.settingsManager.setDBLimit(app.getRunDB(), newLimit);
+    		app.getRunDB().ensureDBLimit();
     		if (rDate.isChecked())
     			Toast.makeText(main, "Workouts after " + Run.getFullStringDate(newLimitDate) + " will be recorded", 
     					Toast.LENGTH_SHORT).show();

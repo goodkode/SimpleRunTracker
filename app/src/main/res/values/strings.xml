@@ -9,5 +9,6 @@
     <string name="statistics">Statistics</string>
     <string name="stats">Stats</string>
     <string name="graph_it">Graph</string>
+    <string name="title_activity_graph_full"></string>
 
 </resources>

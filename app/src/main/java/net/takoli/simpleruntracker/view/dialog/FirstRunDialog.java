@@ -9,19 +9,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.takoli.simpleruntracker.R;
+import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.view.MainActivity;
 
 public class FirstRunDialog extends DialogFragment {
 
-	MainActivity main;
-	TextView unitTV;
-	String unit;
-	boolean updated = false;
+	private RunApp app;
+	private MainActivity main;
+	private TextView unitTV;
+	private String unit;
+	private boolean updated = false;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+		app = (RunApp) getActivity().getApplication();
     	main = (MainActivity) getActivity();
-    	unit = main.settingsManager.getUnit();
+    	unit = app.settingsManager.getUnit();
         return new AlertDialog.Builder(getActivity())
         		.setTitle("Choose unit of distance")
         		.setMessage("Do you want to enter distance in miles or kilometers")
@@ -45,11 +48,11 @@ public class FirstRunDialog extends DialogFragment {
     public void onStop() {
     	super.onStop();
     	if (updated) {
-    	main.settingsManager.setUnit(unit);
-	    	Toast.makeText(main, "New runs will be entered in " + main.settingsManager.getUnitInFull(), Toast.LENGTH_SHORT).show();
+    	app.settingsManager.setUnit(unit);
+	    	Toast.makeText(main, "New runs will be entered in " + app.settingsManager.getUnitInFull(), Toast.LENGTH_SHORT).show();
 	    	unitTV = ((TextView) main.findViewById(R.id.dist_unit));
 	    	unitTV.setText(unit);
-	    	main.getGraphView().setRunList(main.getRunDB(), main.settingsManager.getUnit());
+	    	main.getGraphView().setRunList(app.getRunDB(), app.settingsManager.getUnit());
 	    	main.updateGraph();}
     }
 }

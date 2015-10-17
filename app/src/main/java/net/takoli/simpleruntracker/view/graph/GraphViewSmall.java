@@ -100,7 +100,6 @@ public class GraphViewSmall extends View {
 		for (int i = fullSize - dataPlotSize; i < fullSize; i++) {
 			dists[j] = runList.get(i).getDistUNIT();
 			speeds[j] = runList.get(i).getSpeedUNIT();
-			Log.i("run", "dist: " + dists[j]);
 			//Log.i("run", "speed " + j + ": " + speeds[j]);
 			j++;
 		}
