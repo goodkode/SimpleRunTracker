@@ -17,13 +17,9 @@ public class RunApp extends Application {
     private RunDB runDB;
     private Tracker mTracker;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        this.runDB = new RunDB(this);
-    }
-
     public RunDB getRunDB() {
+        if (runDB == null)
+            runDB = new RunDB(this);
         return runDB;
     }
 

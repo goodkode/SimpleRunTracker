@@ -102,6 +102,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
 
     public void notifyItemAddedHelper(int justAdded) {
         lastAdded = justAdded;
+        updateHeader();
     }
 
     public int getLastAddedPosition() {
@@ -150,6 +151,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
                 header.info.append(" since " + Run.getFullStringDate(limit));
             }
         }
+        header.itemView.invalidate();
     }
 
     public void openRunEditDialog(int pos) {
