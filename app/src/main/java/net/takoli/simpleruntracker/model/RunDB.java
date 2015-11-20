@@ -31,7 +31,11 @@ public class RunDB {
 
 	// This will run every time the app starts up (or OnCreate is called...)
 	public RunDB(Context context) {
-		runList = new ArrayList<Run>();
+        init(context);
+    }
+
+    public void init(Context context) {
+		runList = new ArrayList<>();
 		sumDistU = 0;
 		sumTimeU = 0;
 		Run nRun;
@@ -40,7 +44,6 @@ public class RunDB {
 				return a.date.compareTo(b.date);
 			}
 		};
-		// /data/data/net.takoli.simpleruntracker/files/ - where OpenFileOutput saves
 		try {
 			FileOutputStream outputStream = context.openFileOutput(FILE_NAME, Context.MODE_APPEND);
 			outputStream.close();     // we just made sure the file existed in a tricky way
@@ -290,9 +293,37 @@ public class RunDB {
 		} catch (Exception e) {
 			Toast.makeText(context, "File write error", Toast.LENGTH_LONG).show(); }
 	}
+
+	// Backup from SD Card
+	public void restoreFromExternalMemory(Context context) {
+		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+			Toast.makeText(context, "SD Card is not available",Toast.LENGTH_LONG).show();
+			return;
+		}
+		try {
+			intDir = context.getFilesDir();
+			extDownloadsDir =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File src = new File(extDownloadsDir, FILE_NAME);
+			File dst = new File(intDir, FILE_NAME);
+            if(src.exists()) {
+                InputStream is = new FileInputStream(src);
+                OutputStream os = new FileOutputStream(dst);
+                byte[] data = new byte[is.available()];
+                is.read(data);
+                os.write(data);
+                is.close();
+                os.close();
+            } else {
+                Toast.makeText(context, "RunTracker-runlist.csv file does not exist", Toast.LENGTH_LONG).show();
+            }
+		} catch (Exception e) {
+			Toast.makeText(context, "File write error", Toast.LENGTH_LONG).show(); }
+        init(context);
+	}
 	
 	// delete ALL records
 	public void deleteDB(Context context) {
+        saveToExternalMemory(context);
 		runList.clear();
 		sumDistU = 0;
 		sumTimeU = 0;

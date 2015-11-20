@@ -26,7 +26,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
     private static final int EXPANDED = 2;
     private final MainActivity main;
     private final RunDB runListDB;
-    private final ArrayList<Run> runList;
+    private ArrayList<Run> runList;
     private HeaderViewHolder header;
     private int expanded = -1;
     private int lastAdded = -1;
@@ -55,6 +55,11 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
             viewHolder = new RunViewHolder(cardView, this);
         }
         return viewHolder;
+    }
+
+    public void resetRunDB() {
+        runList = runListDB.getRunList();
+        notifyDataSetChanged();
     }
 
     @Override

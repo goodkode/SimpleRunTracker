@@ -31,7 +31,6 @@ public class ConfirmDeleteDialog extends DialogFragment {
                             final RunDB runDB = ((RunApp) main.getApplication()).getRunDB();
                             runDB.deleteDB(getActivity());
                             main.getRunAdapter().notifyDataSetChanged();
-                            runDB.saveToExternalMemory(getActivity());
                             main.updateGraph();
                 			Toast.makeText(main, "Backed up in the Downloads folder",Toast.LENGTH_SHORT).show(); }
                     }

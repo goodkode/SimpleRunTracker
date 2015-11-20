@@ -31,11 +31,17 @@
         android:id="@+id/export_list_of_runs"
         android:orderInCategory="5"
         android:title="@string/export_list_of_runs"/>
+
+    <item
+        app:showAsAction="never"
+        android:id="@+id/restore_list_of_runs"
+        android:orderInCategory="6"
+        android:title="@string/restore_list_of_runs"/>
     
     <item
         app:showAsAction="never"
         android:id="@+id/delete_db"
-        android:orderInCategory="6"
+        android:orderInCategory="7"
         android:title="@string/delete_db"/>
 
 </menu>

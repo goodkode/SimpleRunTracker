@@ -5,10 +5,14 @@
     <string name="enter_run_tag">enterRunTag</string>
     <string name="settings">Settings</string>
     <string name="export_list_of_runs">Export list of runs</string>
+    <string name="restore_list_of_runs">Restore list of runs</string>
     <string name="delete_db">Delete all runs</string>
     <string name="statistics">Statistics</string>
     <string name="stats">Stats</string>
     <string name="graph_it">Graph</string>
     <string name="title_activity_graph_full"></string>
+    <string name="restore_fragment">You need to have a previously backed up RunTracker-runlist.csv file in your Download directory.
+                                                            \nThis file will overwrite your current app data
+                                                            \nAre you sure you want to go ahead?</string>
 
 </resources>

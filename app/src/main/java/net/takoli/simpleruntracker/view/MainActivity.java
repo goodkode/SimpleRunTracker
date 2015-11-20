@@ -229,6 +229,10 @@ public class MainActivity extends AppCompatActivity {
 	        	if (emailIntent != null)
 	        		startActivity(emailIntent);
 	            return true;
+            case R.id.restore_list_of_runs:
+                RestoreDialog confim = new RestoreDialog();
+                confim.show(getSupportFragmentManager(), "confirm");
+                return true;
 	        case R.id.delete_db:
 	        	(new ConfirmDeleteDialog()).show(fragMngr, "confirmDeleteDB");
 	            return true;
@@ -369,6 +373,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void refreshListWithNewData() {
+        runAdapter.resetRunDB();
     }
 	
 	
