@@ -1,16 +1,12 @@
 package net.takoli.simpleruntracker.view;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
-
-import net.takoli.simpleruntracker.R;
-import net.takoli.simpleruntracker.RunApp;
-import net.takoli.simpleruntracker.model.RunDB;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,21 +15,20 @@ public class RestoreDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog dialog = new AlertDialog.Builder(getActivity()).setView(getActivity()
-                .getLayoutInflater().inflate(R.layout.restore_dialog_fragment, null))
+        return new AlertDialog.Builder(getActivity())
                 .setTitle("Restore from SD Card")
+                .setMessage("You need to have a previously backed up RunTracker-runlist.csv file in your Download directory." +
+                        "\n\nThis file will overwrite your current app data" +
+                        "\n\nAre you sure you want to go ahead?")
                 .setPositiveButton("Yes, restore", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         final MainActivity main = (MainActivity) getActivity();
-                        final RunDB runDB = ((RunApp) main.getApplication()).getRunDB();
-                        runDB.restoreFromExternalMemory(getContext());
-                        main.refreshListWithNewData();
+                        main.tryStorageTask(MainActivity.RESTORE_FROM_SD);
                     }
                 })
                 .setNegativeButton("Cancel", null)
                 .create();
-        return dialog;
     }
 
 }

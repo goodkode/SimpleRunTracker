@@ -1,10 +1,14 @@
 package net.takoli.simpleruntracker.view;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +24,7 @@ import android.view.WindowManager;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Button;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -36,6 +41,10 @@ import net.takoli.simpleruntracker.view.graph.GraphViewSmall;
 import net.takoli.simpleruntracker.view.widget.VerticalTextView;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final int WRITE_TO_SD = 1;
+    public static final int WRITE_TO_SD_DELETE_LOCAL = 2;
+    public static final int RESTORE_FROM_SD = 3;
 
     private RunApp app;
 
@@ -224,17 +233,18 @@ public class MainActivity extends AppCompatActivity {
                         .build());
 	            return true; 
 	    	case R.id.export_list_of_runs:
-                app.getRunDB().saveToExternalMemory(this);
 	        	Intent emailIntent = app.getRunDB().emailIntent(this);
 	        	if (emailIntent != null)
 	        		startActivity(emailIntent);
+                tryStorageTask(WRITE_TO_SD);
 	            return true;
             case R.id.restore_list_of_runs:
-                RestoreDialog confim = new RestoreDialog();
-                confim.show(getSupportFragmentManager(), "confirm");
+                RestoreDialog confirmRestoreDialog = new RestoreDialog();
+                confirmRestoreDialog.show(fragMngr, "confirm");
                 return true;
 	        case R.id.delete_db:
-	        	(new ConfirmDeleteDialog()).show(fragMngr, "confirmDeleteDB");
+                ConfirmDeleteDialog confirmDeleteDialog = new ConfirmDeleteDialog();
+                confirmDeleteDialog.show(fragMngr, "confirmDeleteDB");
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -375,8 +385,62 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void refreshListWithNewData() {
+    public void tryStorageTask(int requestCode) {
+        int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
+        else if (requestCode == WRITE_TO_SD)
+            writeToSd();
+        else if (requestCode == WRITE_TO_SD_DELETE_LOCAL)
+            writeToSdDeleteLocal();
+        else if (requestCode == RESTORE_FROM_SD)
+            app.getRunDB().restoreFromExternalMemory(this);
+            runAdapter.resetRunDB();
+            updateGraph();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == WRITE_TO_SD)
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                writeToSd();
+            } else
+                Toast.makeText(this, "Skipping backup to SD Card", Toast.LENGTH_LONG).show();
+        else if (requestCode == WRITE_TO_SD_DELETE_LOCAL)
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                writeToSdDeleteLocal();
+            }
+            else {
+                deleteLocalData();
+                Toast.makeText(this, "Skipping restore, permission needed", Toast.LENGTH_LONG).show();
+            }
+        else if (requestCode == RESTORE_FROM_SD)
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                restoreFromSd();
+            }
+            else
+                Toast.makeText(this, "Skipping restore, permission needed", Toast.LENGTH_LONG).show();
+    }
+
+    private void deleteLocalData() {
+        app.getRunDB().deleteDB(this);
         runAdapter.resetRunDB();
+        updateGraph();
+    }
+
+    private void writeToSdDeleteLocal() {
+        app.getRunDB().saveToExternalMemory(this);
+        deleteLocalData();
+    }
+
+    private void writeToSd() {
+        app.getRunDB().saveToExternalMemory(this);
+    }
+
+    private void restoreFromSd() {
+        app.getRunDB().restoreFromExternalMemory(this);
+        runAdapter.resetRunDB();
+        updateGraph();
     }
 	
 	

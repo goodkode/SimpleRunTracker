@@ -289,7 +289,8 @@ public class RunDB {
 			is.read(data);
         	os.write(data);
         	is.close();
-    		os.close();	
+    		os.close();
+            Toast.makeText(context, "Backed up in the Downloads folder",Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
 			Toast.makeText(context, "File write error", Toast.LENGTH_LONG).show(); }
 	}
@@ -323,7 +324,6 @@ public class RunDB {
 	
 	// delete ALL records
 	public void deleteDB(Context context) {
-        saveToExternalMemory(context);
 		runList.clear();
 		sumDistU = 0;
 		sumTimeU = 0;
