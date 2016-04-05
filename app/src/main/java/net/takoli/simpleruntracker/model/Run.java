@@ -117,7 +117,7 @@ public class Run {
 	
 	public String getSpeedString() {
 		int speed = Math.round((100 * dd + _dd) / (timeU / 60f / 60f));
-		return (speed / 100) + "." + (speed % 100) + 
+		return (speed / 100) + "." + ((speed % 100) < 10 ? "0" + (speed % 100) : (speed % 100)) +
 				(unit.compareTo("km") != 0 ? " mph" : " km/h");
 	}
 	
