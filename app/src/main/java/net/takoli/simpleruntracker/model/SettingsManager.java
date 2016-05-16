@@ -3,7 +3,6 @@ package net.takoli.simpleruntracker.model;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import java.util.Calendar;
 
@@ -81,7 +80,7 @@ public class SettingsManager {
         lastDatePicked[0] = settings.getInt("day", defaultDate.get(Calendar.DAY_OF_MONTH));
         lastDatePicked[1] = settings.getInt("month", defaultDate.get(Calendar.MONTH));
         lastDatePicked[2] = settings.getInt("year", defaultDate.get(Calendar.YEAR));
-        Log.i("run", "getLastRunDatePicked: " + (lastDatePicked[1] + 1) + "/" + lastDatePicked[0] + "/" + lastDatePicked[2]);
+        //Log.i("run", "getLastRunDatePicked: " + (lastDatePicked[1] + 1) + "/" + lastDatePicked[0] + "/" + lastDatePicked[2]);
         return lastDatePicked;
     }
     public void setLastRunDatePicked(int day, int month, int year) {
@@ -94,12 +93,12 @@ public class SettingsManager {
             editor.remove("day");
             editor.remove("month");
             editor.remove("year");
-            Log.i("run", "setLastRunDatePicked: default");
+            //Log.i("run", "setLastRunDatePicked: default");
         } else {
             editor.putInt("day", day);
             editor.putInt("month", month);
             editor.putInt("year", year);
-            Log.i("run", "setLastRunDatePicked: " + (month + 1) + "/" + day + "/" + year);
+            //Log.i("run", "setLastRunDatePicked: " + (month + 1) + "/" + day + "/" + year);
         }
         editor.commit();
     }

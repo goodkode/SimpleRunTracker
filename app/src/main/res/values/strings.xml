@@ -10,6 +10,76 @@
     <string name="statistics">Statistics</string>
     <string name="stats">Stats</string>
     <string name="graph_it">Graph</string>
-    <string name="title_activity_graph_full"></string>
+
+    <string name="day">day</string>
+    <string name="month">month</string>
+    <string name="year">year</string>
+    <string name="limit">limit</string>
+    <string name="unit">unit</string>
+    <string name="distance">distance</string>
+    <string name="speed">speed</string>
+
+    <string name="Jan">Jan</string>
+    <string name="Feb">Feb</string>
+    <string name="Mar">Mar</string>
+    <string name="Apr">Apr</string>
+    <string name="May">May</string>
+    <string name="Jun">Jun</string>
+    <string name="Jul">Jul</string>
+    <string name="Aug">Aug</string>
+    <string name="Sep">Sep</string>
+    <string name="Oct">Oct</string>
+    <string name="Nov">Nov</string>
+    <string name="Dec">Dec</string>
+
+    <string name="no_runs">"No runs to chart yet"</string>
+    <string name="last_runs">"Last %d workouts"</string>
+    <string name="get_some_first">"Get some running first!"</string>
+
+    <string name="stats_since">"Since %s ( %d workouts)"</string>
+    <string name="stats_avg_distance">"Average: %s mi"</string>
+    <string name="stats_longest_distance">"Longest: %s mi"</string>
+    <string name="stats_total_distance">"Total: %s mi"</string>
+    <string name="stats_avg_pace_and_speed">"Average: %d min/mi (%s mph)"</string>
+    <string name="stats_max_pace_and_speed">"Fastest: %d min/mi (%s mph)"</string>
+    <string name="stats_average_overall_1">"Your average is %s miles weekly."</string>
+    <string name="stats_average_overall_2">"That's %s miles daily."</string>
+    <string name="stats_average_overall_3">"You run every %s days."</string>
+    <string name="stats_not_yet">"No stats to display yet"</string>
+
+    <string name="miles">Miles</string>
+    <string name="kilometers">Kilometers</string>
+    <string name="ok">OK</string>
+    <string name="no">NO</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="update_run">Update Run</string>
+    <string name="delete_run">Delete Run</string>
+    <string name="confirm_delete">Confirm delete</string>
+    <string name="delete_message">"This will remove all run records and cannot be undone.\n\nYou might need to grant permission to safely back up your current list in the Download folder"</string>
+    <string name="choose_unit">Choose unit of distance</string>
+    <string name="choose_message">"Do you want to enter distance in miles or kilometers"</string>
+    <string name="new_runs_in_toast">"New runs will be entered in %s"</string>
+    <string name="update_details">"Update details of %s's run"</string>
+    <string name="workouts_after">"Workouts after %s will be recorded"</string>
+    <string name="last_workouts">"Last %d workouts will be recorded""</string>
+
+    <string name="cant_read">Can't read</string>
+    <string name="cant_delete">Can't delete </string>
+    <string name="cant_be_saved"> can't be saved :(</string>
+    <string name="sd_card_no_avail">SD Card is not available</string>
+    <string name="backed_up">Backed up in the Downloads folder</string>
+    <string name="file_write_error">File write error</string>
+    <string name="csv_does_not_exist">RunTracker-runlist.csv file does not exist</string>
+    <string name="email_not_sent">Email is not sent</string>
+    <string name="email_title">RunTracker runlist for Excel</string>
+    <string name="email_header">RunTracker-runlist.csv is attached.</string>
+    <string name="email_body">"RunTracker-runlist.csv is attached.\n\nThe file can be opened with any spreadsheet application, like MS Excel, or with a simple text editor"</string>
+    <string name="skip_backup">Skipping backup to SD Card</string>
+    <string name="skip_restore">Skipping restore, permission needed</string>
+    <string name="restore_from_sd">Restore from SD Card</string>
+    <string name="restore_message">"You need to have a previously backed up RunTracker-runlist.csv file in your Download directory. \n\nThis file will overwrite your current app data.\n\nAre you sure you want to go ahead?"</string>
+    <string name="restore_yes">"Yes, restore"</string>
+
 
 </resources>
