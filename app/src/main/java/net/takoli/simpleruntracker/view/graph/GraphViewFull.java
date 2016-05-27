@@ -24,6 +24,11 @@ import net.takoli.simpleruntracker.model.RunDB;
 import java.util.ArrayList;
 
 public class GraphViewFull extends View {
+
+	private static final String KM = "km";
+	private static final String MI = "mi";
+	private static final String MPH = "mph";
+	private static final String KMPH = "km/h";
 	
 	private RunDB runListDB;
 	private ArrayList<Run> runList;
@@ -85,15 +90,14 @@ public class GraphViewFull extends View {
 	public void setRunList(RunDB runListDB, String unit) {
 		this.runListDB = runListDB;
 		this.runList = runListDB.getRunList();
-		inMiles = (unit.compareTo("mi") == 0);
-		if (inMiles)	{ dUnit = "mi"; sUnit = "mph";}
-		else			{ dUnit = "km"; sUnit = "km/h"; }
+		inMiles = (unit.compareTo(MI) == 0);
+		if (inMiles)	{ dUnit = MI; sUnit = MPH;}
+		else			{ dUnit = KM; sUnit = KMPH; }
 		this.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				initial = false;
 				fingerAt = event.getX();
-				//	```````1					`1Log.i("run", "fingerAt: " + fingerAt);
 				GraphViewFull.this.invalidate();
 				return true; } } );
 		fingerAt = this.getWidth() * 0.8f;
@@ -116,7 +120,6 @@ public class GraphViewFull extends View {
 		for (int i = fullSize - plots + 1; i < fullSize; i++) {
 			dists[j] = runList.get(i).getDistUNIT();
 			speeds[j] = runList.get(i).getSpeedUNIT();
-			//Log.i("run", "speed " + j + ": " + speeds[j]);
 			j++;
 		}
 		// rescale for KM:
@@ -166,9 +169,9 @@ public class GraphViewFull extends View {
 		// miles or km and mph or km/h
 		cornerLabelPaint.setTextSize(height * 0.1f);
 		cornerLabelPaint.setColor(MY_GREEN);
-		canvas.drawText("distance", 0, 0 + height * 0.1f, cornerLabelPaint);
+		canvas.drawText(getResources().getString(R.string.distance), 0, 0 + height * 0.1f, cornerLabelPaint);
 		cornerLabelPaint.setColor(MY_BLUE);
-		canvas.drawText("speed", width - height * 0.3f, 0 + height * 0.1f, cornerLabelPaint);
+		canvas.drawText(getResources().getString(R.string.speed), width - height * 0.3f, 0 + height * 0.1f, cornerLabelPaint);
 	}
 	
 	private void drawPath(Canvas canvas, Path path, Paint pathPaint, float[] X, float[] Y) {
@@ -210,7 +213,7 @@ public class GraphViewFull extends View {
 		if (runIndex < 0)						runIndex = 0;
 		Run currentRun = runList.get(runIndex);
 		TextView dateLabel = (TextView) getRootView().findViewById(R.id.chart_date_label);
-		dateLabel.setText(currentRun.getDateString());
+		dateLabel.setText(currentRun.getDateString(this.getContext()));
 		String distText = currentRun.getDistanceString();
 		String speedText = currentRun.getSpeedString();
 		Rect distTextBounds = new Rect();
@@ -278,7 +281,6 @@ public class GraphViewFull extends View {
 	    	if (estX > pm.getLength())	estX = pm.getLength() - PROXIMITY;
 	    	pm.getPosTan(estX, coords, null);
 	    	diff = fingerAt - coords[0];
-	    	//Log.i("run", "tries: " + tries + "; coord c[0]/estX/diff: " + coords[0] + " / " + estX + " / " + diff);
 	    	tries++;
 	    }
 		return coords;
@@ -289,8 +291,10 @@ public class GraphViewFull extends View {
 	}
 	
 	private int i(int i) {
-		if (i >= plots)	return plots - 1;
-	        else if (i < 0)		return 0;
-	        return i;
-	    }
+		if (i >= plots)
+            return plots - 1;
+        else if (i < 0)
+            return 0;
+        return i;
+    }
 }

@@ -48,13 +48,12 @@
             android:layout_marginTop="12dp"
             android:textSize="28sp"
             android:textStyle="italic"
-            android:text="Stats" />
+            android:text="@string/stats" />
         <TextView
             android:id="@+id/stats_for_period"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text="for period" />
+            android:textSize="14sp"/>
         
         <TextView
             android:id="@+id/stats_distance_label"
@@ -62,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textSize="18sp"
-            android:text="Distance" />
+            android:text="@string/distance_cap" />
         <TextView
             android:id="@+id/stats_distance_avg"
             android:layout_width="wrap_content"
@@ -70,7 +69,7 @@
             android:layout_marginLeft="10dp"
             android:textSize="14sp"
             android:textColor="#555555"
-            android:text="Distance average" />
+            android:text="@string/distance_average" />
         <TextView
             android:id="@+id/stats_distance_max"
             android:layout_width="wrap_content"
@@ -78,7 +77,7 @@
             android:layout_marginLeft="10dp"
             android:textSize="14sp"
             android:textColor="#555555"
-            android:text="Distance maximum"  />
+            android:text="@string/distance_max"  />
         <TextView
             android:id="@+id/stats_distance_total"
             android:layout_width="wrap_content"
@@ -86,7 +85,7 @@
             android:layout_marginLeft="10dp"
             android:textSize="14sp"
             android:textColor="#555555"
-            android:text="Distance total"  />
+            android:text="@string/distance_total"  />
             
         <TextView
             android:id="@+id/stats_pace_label"
@@ -94,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textSize="18sp"
-            android:text="Pace and Speed" />
+            android:text="@string/pace_speed" />
         <TextView
             android:id="@+id/stats_pace_speed_avg"
             android:layout_width="wrap_content"
@@ -102,7 +101,7 @@
             android:layout_marginLeft="10dp"
             android:textSize="14sp"
             android:textColor="#555555"
-            android:text="Pace and speed average" />
+            android:text="@string/pace_speed_avg" />
         <TextView
             android:id="@+id/stats_pace_speed_max"
             android:layout_width="wrap_content"
@@ -110,7 +109,7 @@
             android:layout_marginLeft="10dp"
             android:textSize="14sp"
             android:textColor="#555555"
-            android:text="Pace and speed maximum"  />
+            android:text="@string/pace_speed_max"  />
             
         <RadioGroup 
         	android:layout_width="wrap_content"
@@ -121,13 +120,13 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:minEms="7"
-	            android:text="Miles" />
+	            android:text="@string/miles" />
 	        <RadioButton  
 	            android:id="@+id/stats_km"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:minEms="7"
-	            android:text="Kilometers" />
+	            android:text="@string/kilometers" />
         </RadioGroup>
         
         <TextView 

@@ -61,7 +61,7 @@
             android:paddingTop="3dp" >
 
             <TextView android:id="@+id/perf_score"
-                android:text="PerformScore: "
+                android:text="@string/perform_score"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:paddingLeft="20dp"
@@ -72,7 +72,7 @@
                 android:layout_toRightOf="@id/perf_score"
                 android:textSize="12sp" />
             <TextView android:id="@+id/speed"
-                android:text="Speed: "
+                android:text="@string/speed_colon"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:paddingLeft="50dp"
@@ -100,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:textSize="12sp"
-                android:text="performace"/>
+                android:text="@string/performance"/>
             <TextView android:id="@+id/perf_pace"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"

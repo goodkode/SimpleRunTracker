@@ -19,6 +19,7 @@ import net.takoli.simpleruntracker.view.MainActivity;
 public class RunUpdateDialog extends DialogFragment {
 
     public static final String POSITION = "position";
+
     private MainActivity main;
     private RunDB runDB;
     private AlertDialog runUpdateDialog;
@@ -44,21 +45,21 @@ public class RunUpdateDialog extends DialogFragment {
     	View view = getActivity().getLayoutInflater().inflate(R.layout.update_run, null);
     	runUpdateDialog = new AlertDialog.Builder(getActivity())
     			.setView(view)
-                .setTitle("Update details of " + run.getDateString() + "'s run")
-                .setPositiveButton("Delete Run", new DialogInterface.OnClickListener() {
+                .setTitle(String.format(getResources().getString(R.string.update_details), run.getDateString(main)))
+                .setPositiveButton(getResources().getString(R.string.delete_run), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                         	removeRun(position);
                         	return; }
                     }
                 )
-                .setNeutralButton("Update Run", new DialogInterface.OnClickListener() {
+                .setNeutralButton(getResources().getString(R.string.update_run), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 updateRun(position);
                                 return;
                             }
                         }
                 )
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 return;
                             }

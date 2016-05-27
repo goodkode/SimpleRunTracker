@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Environment;
 import android.widget.Toast;
 
+import net.takoli.simpleruntracker.R;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,11 +22,14 @@ import java.util.Comparator;
 
 public class RunDB {
 
+	private static final String FILE_NAME = "RunTracker-runlist.csv";
+	private static final String MI = "mi";
+	private static final String KM = "km";
+
 	private ArrayList<Run> runList;
 	private Comparator runComparator;
 	private int MAXSIZE;
 	private long sumDistU, sumTimeU;
-	private final String FILE_NAME = "RunTracker-runlist.csv";
 	private Calendar FROMDATE;
 	private boolean MAXSIZEisUsed;
 	private File intDir, extDownloadsDir;
@@ -59,9 +64,9 @@ public class RunDB {
 			}
 			inputStream.close();
 		} catch (Exception e) {
-			Toast.makeText(context,"Can't read " + FILE_NAME, Toast.LENGTH_LONG).show();
-			e.printStackTrace(); }
-		//Log.i("run", "RunDB initiated");
+			Toast.makeText(context, String.format(context.getString(R.string.cant_read_), FILE_NAME), Toast.LENGTH_LONG).show();
+			e.printStackTrace();
+		}
 	}
 	
 	public void setDBLimit(String limit) {
@@ -169,9 +174,9 @@ public class RunDB {
 	// for STATISTICS return Strings
 	public String getAvgDistString(String unit) {
 		if (runList.size() == 0) return "-";
-		if (unit.equals("mi"))
+		if (unit.equals(MI))
 			return Run.dec2string(getAvgDistUNIT());
-		if (unit.equals("km"))
+		if (unit.equals(KM))
 			return Run.dec2string(Run.mi2km(getAvgDistUNIT()));
 		else return "-";
 	}
@@ -182,23 +187,23 @@ public class RunDB {
 		for (int i = 0; i < size; i++)
 			if (runList.get(i).getDistUNIT() > maxDistUnit)
 				maxDistUnit = runList.get(i).getDistUNIT();
-		if (unit.equals("mi"))
+		if (unit.equals(MI))
 			return Run.dec2string(maxDistUnit);
-		if (unit.equals("km"))
+		if (unit.equals(KM))
 			return Run.dec2string(Run.mi2km(maxDistUnit));
 		else return "-";
 	}
 	public String getTotalDistString(String unit) {
-		if (unit.equals("mi")) 
+		if (unit.equals(MI))
 			return Run.dec2string(sumDistU); 
-		if (unit.equals("km")) 
+		if (unit.equals(KM))
 			return Run.dec2string(Run.mi2km(sumDistU)); 
 		else return "-";
 	}
 	public String getDailyAvgString(String unit) {
-		if (unit.equals("mi")) 
+		if (unit.equals(MI))
 			return Run.dec2string(getDailyAvgUNIT()); 
-		if (unit.equals("km")) 
+		if (unit.equals(KM))
 			return Run.dec2string(Run.mi2km(getDailyAvgUNIT())); 
 		else return "-";
 	}
@@ -209,23 +214,23 @@ public class RunDB {
 		return freq10 / 10 + "." + freq10 % 10;
 	}
 	public String getWeeklyAvgString(String unit) {
-		if (unit.equals("mi")) 
+		if (unit.equals(MI))
 			return Run.dec2string(getDailyAvgUNIT() * 7); 
-		if (unit.equals("km")) 
+		if (unit.equals(KM))
 			return Run.dec2string(Run.mi2km(getDailyAvgUNIT()) * 7); 
 		else return "-";
 	}
 	public String getAvgPaceString(String unit) {
-		if (unit.equals("mi")) 
+		if (unit.equals(MI))
 			return Run.sec2MMss(getAvgPaceUNIT()); 
-		if (unit.equals("km")) 
+		if (unit.equals(KM))
 			return Run.sec2MMss(Run.km2mi(getAvgPaceUNIT())); 
 		else return "-";
 	}
 	public String getAvgSpeedString(String unit) {
-		if (unit.equals("mi")) 
+		if (unit.equals(MI))
 			return Run.dec2string(getAvgSpeedUNIT()); 
-		if (unit.equals("km")) 
+		if (unit.equals(KM))
 			return Run.dec2string(Run.mi2km(getAvgSpeedUNIT())); 
 		else return "-";
 	}
@@ -236,9 +241,9 @@ public class RunDB {
 		for (int i = 1; i < size; i++) 
 			if (runList.get(i).getPaceUNIT() < maxPaceU)
 				maxPaceU = runList.get(i).getPaceUNIT();
-		if (unit.equals("mi")) 
+		if (unit.equals(MI))
 			return Run.sec2MMss(maxPaceU); 
-		if (unit.equals("km")) 
+		if (unit.equals(KM))
 			return Run.sec2MMss(Run.km2mi(maxPaceU));
 		else return "-";
 	}
@@ -249,9 +254,9 @@ public class RunDB {
 		for (int i = 1; i < size; i++) 
 			if (runList.get(i).getSpeedUNIT() > maxSpeedU)
 				maxSpeedU = runList.get(i).getSpeedUNIT();
-		if (unit.equals("mi")) 
+		if (unit.equals(MI))
 			return Run.dec2string(maxSpeedU); 
-		if (unit.equals("km")) 
+		if (unit.equals(KM))
 			return Run.dec2string(Run.mi2km(maxSpeedU));
 		else return "-";
 	}
@@ -265,7 +270,7 @@ public class RunDB {
 				outputStream.write((runList.get(i).toString()+"\n").getBytes());
 			outputStream.close();
 		} catch (Exception e) {
-			Toast.makeText(context, FILE_NAME +" can't be saved :(",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, context.getString(R.string._cant_be_saved),Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
 	}
@@ -275,7 +280,7 @@ public class RunDB {
 	public void saveToExternalMemory(Context context) {
 		saveRunDB(context);
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			Toast.makeText(context, "SD Card is not available",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, context.getString(R.string.sd_card_no_avail), Toast.LENGTH_LONG).show();
 			return;
 		}
 		try {
@@ -290,15 +295,15 @@ public class RunDB {
         	os.write(data);
         	is.close();
     		os.close();
-            Toast.makeText(context, "Backed up in the Downloads folder",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.backed_up), Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
-			Toast.makeText(context, "File write error", Toast.LENGTH_LONG).show(); }
+			Toast.makeText(context, context.getString(R.string.file_write_error), Toast.LENGTH_LONG).show(); }
 	}
 
 	// Backup from SD Card
 	public void restoreFromExternalMemory(Context context) {
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			Toast.makeText(context, "SD Card is not available",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, context.getString(R.string.sd_card_no_avail), Toast.LENGTH_LONG).show();
 			return;
 		}
 		try {
@@ -315,10 +320,10 @@ public class RunDB {
                 is.close();
                 os.close();
             } else {
-                Toast.makeText(context, "RunTracker-runlist.csv file does not exist", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getString(R.string.csv_does_not_exist), Toast.LENGTH_LONG).show();
             }
 		} catch (Exception e) {
-			Toast.makeText(context, "File write error", Toast.LENGTH_LONG).show(); }
+			Toast.makeText(context, context.getString(R.string.file_write_error), Toast.LENGTH_LONG).show(); }
         init(context);
 	}
 	
@@ -330,7 +335,7 @@ public class RunDB {
 		try {
 			context.deleteFile(FILE_NAME);
 		} catch (Exception e) {
-			Toast.makeText(context,"Can't delete " + FILE_NAME, Toast.LENGTH_LONG).show();
+			Toast.makeText(context, String.format(context.getString(R.string.cant_delete_), FILE_NAME), Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
 	}
@@ -341,13 +346,12 @@ public class RunDB {
 	    	Uri fileUri = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), FILE_NAME));
 	    	Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND); 
 	    	emailIntent.setType("text/plain"); 
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "RunTracker runlist for Excel"); 
-	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "RunTracker-runlist.csv is attached.\n\n" +
-	    		"The file can be opened with any spreadsheet application, like MS Excel, or with a simple text editor"); 
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, context.getString(R.string.email_title));
+	    	emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, context.getString(R.string.email_body));
 	    	emailIntent.putExtra(Intent.EXTRA_STREAM, fileUri); 
 	    	return emailIntent;
 		} catch(Exception e) {
-			Toast.makeText(context, "Email is not sent", Toast.LENGTH_LONG).show();
+			Toast.makeText(context, context.getString(R.string.email_not_sent), Toast.LENGTH_LONG).show();
 		}
 		return null;
 	}

@@ -55,7 +55,7 @@
 
             <fragment
                 android:name="net.takoli.simpleruntracker.view.EnterRunFragment"
-                android:tag="@string/enter_run_tag"
+                android:tag="enterRunTag"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:layout="@layout/enter_run" />

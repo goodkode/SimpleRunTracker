@@ -14,6 +14,9 @@ import net.takoli.simpleruntracker.view.MainActivity;
 
 public class FirstRunDialog extends DialogFragment {
 
+	private static final String KM = "km";
+	private static final String MI = "mi";
+
 	private RunApp app;
 	private MainActivity main;
 	private TextView unitTV;
@@ -26,20 +29,20 @@ public class FirstRunDialog extends DialogFragment {
     	main = (MainActivity) getActivity();
     	unit = app.settingsManager.getUnit();
         return new AlertDialog.Builder(getActivity())
-        		.setTitle("Choose unit of distance")
-        		.setMessage("Do you want to enter distance in miles or kilometers")
-                .setNegativeButton("Miles",
+        		.setTitle(getResources().getString(R.string.choose_unit))
+        		.setMessage(getResources().getString(R.string.choose_message))
+                .setNegativeButton(getResources().getString(R.string.miles),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                        	updated = unit.compareTo("ni") != 0;
-                        	unit = "mi"; }
+                        	updated = unit.compareTo(MI) != 0;
+                        	unit = MI; }
                     }
                 )
-                .setPositiveButton("Kilometers",
+                .setPositiveButton(getResources().getString(R.string.kilometers),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                        	updated = unit.compareTo("km") != 0;
-                        	unit = "km"; }
+                        	updated = unit.compareTo(KM) != 0;
+                        	unit = KM; }
                     }
                 ).create();
     }
@@ -49,7 +52,8 @@ public class FirstRunDialog extends DialogFragment {
     	super.onStop();
     	if (updated) {
     	app.settingsManager.setUnit(unit);
-	    	Toast.makeText(main, "New runs will be entered in " + app.settingsManager.getUnitInFull(), Toast.LENGTH_SHORT).show();
+            final String toastMsg = String.format(getResources().getString(R.string.new_runs_in_toast), app.settingsManager.getUnitInFull());
+            Toast.makeText(main, toastMsg, Toast.LENGTH_SHORT).show();
 	    	unitTV = ((TextView) main.findViewById(R.id.dist_unit));
 	    	unitTV.setText(unit);
 	    	main.getGraphView().setRunList(app.getRunDB(), app.settingsManager.getUnit());

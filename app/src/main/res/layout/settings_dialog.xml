@@ -17,7 +17,7 @@
         android:layout_marginTop="6dp"
         android:gravity="center_horizontal"
         android:textSize="17sp"
-        android:text="Please select the distance unit of your workouts" />
+        android:text="@string/please_select_unit" />
 
     <RadioGroup
         android:layout_width="wrap_content"
@@ -30,14 +30,14 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="6dp"
             android:textSize="16sp"
-            android:text="Miles" />
+            android:text="@string/miles" />
 
         <RadioButton
             android:id="@+id/settings_kilometers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="Kilometers" />
+            android:text="@string/kilometers" />
     </RadioGroup>
     
     <View
@@ -53,7 +53,7 @@
         android:layout_marginTop="6dp"
         android:gravity="center_horizontal"
         android:textSize="17sp"
-        android:text="How many workouts to save:" />
+        android:text="@string/how_many_to_save" />
 
     <RadioGroup
         android:layout_width="wrap_content"
@@ -88,14 +88,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:textSize="17sp"
-        android:text="Or starting this date:" />
+        android:text="@string/or_starting_date" />
 
     <RadioButton
         android:id="@+id/settings_starting_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="Pick a date..." />
+        android:text="@string/pick_date" />
     
 </LinearLayout>
 </ScrollView>

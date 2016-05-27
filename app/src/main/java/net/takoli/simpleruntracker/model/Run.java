@@ -1,20 +1,27 @@
 package net.takoli.simpleruntracker.model;
 
-import android.util.Log;
+import android.content.Context;
 
+import net.takoli.simpleruntracker.R;
+
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class Run {
-	public int dd, _dd;		// distance in units and in decimals
+
+    public static final String KM = "km";
+    private static final float KM_TO_MI = 1.60934f;
+	private static DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+
+    public int dd, _dd;		// distance in units and in decimals
 	public int h, mm, ss;   // timeU in hour, min, and sec
 	int distU;		 // COMMON UNIT (100 * MI)
 	int timeU;		 // COMMON UNIT (SEC)
 	int paceU;		 // COMMON UNIT (SEC / MI)
 	String unit;     // miles or kilometers
-	Calendar date;
-	private static final float KM_TO_MI = 1.60934f;
-	
+    Calendar date;
+
 	public Run(Calendar date, int dd, int _dd, String unit, int h, int mm, int ss) {
 		this.date = date;
 		this.dd = dd;
@@ -25,7 +32,7 @@ public class Run {
 		this.ss = ss;
 		// Common units:
 		distU = 100 * dd + _dd;
-		if (unit.compareTo("km") == 0)
+		if (unit.compareTo(KM) == 0)
 			distU = km2mi(distU);
 		timeU = 60 * 60 * h + 60 * mm + ss;
 		paceU = 100 * timeU / distU;
@@ -48,7 +55,7 @@ public class Run {
 		this.ss = Integer.parseInt(timeSt[2]);
 		// Common units:
 		distU = 100 * dd + _dd;
-		if (unit.compareTo("km") == 0)
+		if (unit.compareTo(KM) == 0)
 			distU = km2mi(distU);
 		timeU = 60 * 60 * h + 60 * mm + ss;
 		paceU = 100 * timeU / distU;
@@ -62,38 +69,22 @@ public class Run {
 		this.ss = ss;
 		// Common units:
 		distU = 100 * dd + _dd;
-		if (unit.compareTo("km") == 0)
+		if (unit.compareTo(KM) == 0)
 			distU = km2mi(distU);
 		timeU = 60 * 60 * h + 60 * mm + ss;
 		paceU = 100 * timeU / distU;
 	}
 	
-	public String getDateString() {
+	public String getDateString(Context context) {
 		Calendar today = Calendar.getInstance();
 		if (date.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) &&
 				date.get(Calendar.YEAR) == today.get(Calendar.YEAR))
-			return "Today";
-		if (date.get(Calendar.DAY_OF_YEAR) == (today.get(Calendar.DAY_OF_YEAR) - 1) &&
+			return context.getResources().getString(R.string.today);
+		else if (date.get(Calendar.DAY_OF_YEAR) == (today.get(Calendar.DAY_OF_YEAR) - 1) &&
 				date.get(Calendar.YEAR) == today.get(Calendar.YEAR))
-			return "Yesterday";
-		String month;
-		switch (date.get(Calendar.MONTH)) {
-			case 0: month = "Jan"; break;
-			case 1: month = "Feb"; break;
-			case 2: month = "Mar"; break;
-			case 3: month = "Apr"; break;
-			case 4: month = "May"; break;
-			case 5: month = "Jun"; break;
-			case 6: month = "Jul"; break;
-			case 7: month = "Aug"; break;
-			case 8: month = "Sep"; break;
-			case 9: month = "Oct"; break;
-			case 10: month = "Nov"; break;
-			case 11: month = "Dec"; break;
-			default: month = ""; break; }
-		int y = date.get(Calendar.YEAR) % 100;
-		String year = y < 10 ? ("'0" + y) : ("'" + y);
-		return month + " " + date.get(Calendar.DAY_OF_MONTH) + ", " + year;
+			return context.getResources().getString(R.string.tomorrow);
+		else
+			return dateFormat.format(date.getTimeInMillis());
 	}
 	
 	public String getDistanceString() {
@@ -107,7 +98,7 @@ public class Run {
 		else   sTime += mm + ":";
 		if (ss < 10)   sTime += "0" + ss;
 		else   sTime += ss;
-		return  sTime;
+		return  sTime + "s ";
 	}
 	
 	public String getPaceString() {
@@ -118,7 +109,7 @@ public class Run {
 	public String getSpeedString() {
 		int speed = Math.round((100 * dd + _dd) / (timeU / 60f / 60f));
 		return (speed / 100) + "." + ((speed % 100) < 10 ? "0" + (speed % 100) : (speed % 100)) +
-				(unit.compareTo("km") != 0 ? " mph" : " km/h");
+				(unit.compareTo(KM) != 0 ? " mph" : " km/h");
 	}
 	
 	
@@ -178,18 +169,21 @@ public class Run {
 		else
 			return whole + "." + dec;
 	}
+
 	public static int km2mi(float km) {
 		int m =  Math.round(km / KM_TO_MI);
 		if (m % 100 == 99)	m++;
 		if (m % 100 == 1)  m--;
 		return m;
 	}
+
 	public static int mi2km(float mi) {
 		int km = Math.round(mi * KM_TO_MI);
 		if (km % 100 == 99)	km++;
 		if (km % 100 == 1)  km--;
 		return km;
 	}
+
 	public static String sec2MMss(int sec) {
 		String MM = "" + (sec / 60);
 		sec %= 60;
@@ -198,6 +192,7 @@ public class Run {
 		else
 			return MM + ":" + sec;
 	}
+
 	public static String sec2hMMss(int sec) {
 		String h = "" + (sec / 60 / 60);
 		sec /= 60;
@@ -208,26 +203,12 @@ public class Run {
 		else
 			return h + ":" + MM + ":" + sec;
 	}
+
 	public static String getFullStringDate(int year, int month, int day) {
-		String m = "";
-		switch (month) {
-			case 0: 	m = "Jan"; break;
-			case 1: 	m = "Feb"; break;
-			case 2: 	m = "Mar"; break;
-			case 3: 	m = "Apr"; break;
-			case 4: 	m = "May"; break;
-			case 5: 	m = "Jun"; break;
-			case 6: 	m = "Jul"; break;
-			case 7: 	m = "Aug"; break;
-			case 8: 	m = "Sep"; break;
-			case 9: 	m = "Oct"; break;
-			case 10: 	m = "Nov"; break;
-			case 11: 	m = "Dec"; break;
-		}
-		String y = year % 100 < 10 ? ("'0" + year % 100)
-				: ("'" + year % 100);
-		return m + " " + day + ", " + y;
+		final Calendar customDate = setCustomDate(month, day, year);
+		return dateFormat.format(customDate.getTimeInMillis());
 	}
+
 	public static String getFullStringDate(String stringDate) {
 		String[] stringDateArray = stringDate.split("/");
 		try {
@@ -235,8 +216,8 @@ public class Run {
 									 Integer.parseInt(stringDateArray[0]) - 1,
 									 Integer.parseInt(stringDateArray[1]));
 		} catch (Exception e) {
-			Log.i("run", "date parse exception");
-			return getFullStringDate(2010, 0, 1); }
+			return getFullStringDate(2010, 0, 1);
+		}
 	}
 
 	public static Calendar string2calendar(String stringDate) {
@@ -250,7 +231,6 @@ public class Run {
 			date.set(Calendar.YEAR, Integer.parseInt(stringDateArray[2]));
 			return date;
 		} catch (Exception e) {
-			Log.i("run", "date parse exception");
 			date.setTimeInMillis(0);
 			date.set(Calendar.MONTH, 0);
 			date.set(Calendar.DAY_OF_MONTH, 1);
@@ -258,15 +238,18 @@ public class Run {
 			return date;
 		}
 	}
+
 	public static Calendar setTodayDate() {
 		Calendar today =  Calendar.getInstance();
 		return today;
 	}
+
 	public static Calendar setYesterdayDate() {
 		Calendar yesterday =  Calendar.getInstance();
 		yesterday.add(Calendar.DAY_OF_YEAR, -1);
 		return yesterday;
 	}
+
 	public static Calendar setCustomDate(int month, int day, int year) {
 		Calendar date =  Calendar.getInstance();
 		date.set(year, month, day);

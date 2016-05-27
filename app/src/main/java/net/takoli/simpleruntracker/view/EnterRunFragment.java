@@ -272,7 +272,7 @@ public class EnterRunFragment extends Fragment {
 			DatePickerDialog datePickerDialog =  new DatePickerDialog(getActivity(), this, year, month, day);
 			// Change all dividers to green
 			DatePicker datePicker = datePickerDialog.getDatePicker();
-			datePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
+			datePicker.setMaxDate(Calendar.getInstance().getTimeInMillis() - 2 * 24 * 60 * 60 * 1000);
 			datePickerDialog.setTitle(null);
 			try {
 				Field datePickerField = DatePicker.class.getDeclaredField("mDaySpinner");
@@ -310,23 +310,7 @@ public class EnterRunFragment extends Fragment {
 		public void onDateSet(DatePicker view, int year, int month, int day) {
 			EnterRunFragment enterRun = (EnterRunFragment) ((MainActivity) getActivity()).enterRun;
 			enterRun.runDate = Run.setCustomDate(month, day, year);
-			String m;
-			switch (month) {
-				case 0: m = "Jan"; break;
-				case 1: m = "Feb"; break;
-				case 2: m = "Mar"; break;
-				case 3: m = "Apr"; break;
-				case 4: m = "May"; break;
-				case 5: m = "Jun"; break;
-				case 6: m = "Jul"; break;
-				case 7: m = "Aug"; break;
-				case 8: m = "Sep"; break;
-				case 9: m = "Oct"; break;
-				case 10: m = "Nov"; break;
-				case 11: m = "Dec"; break;
-				default: m = ""; break; }
-			String y = year%100 < 10 ? ("'0"+year%100) : ("'"+year%100);
-			enterRun.dateRadioButton.setText(m+" "+day+", "+y);
+			enterRun.dateRadioButton.setText(Run.getFullStringDate(year, month, day));
             settingsManager.setLastRunDatePicked(day, month, year);
 		}
 	}

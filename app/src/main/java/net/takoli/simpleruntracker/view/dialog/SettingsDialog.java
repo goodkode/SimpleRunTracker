@@ -22,6 +22,13 @@ import java.util.Calendar;
 
 public class SettingsDialog extends DialogFragment {
 
+    private static final String SETTINGS_DATE_PICKER_TAG = "settingsDatePicker";
+    private static final String KM = "km";
+    private static final String MI = "mi";
+    private static final String HUNDRED = "100";
+    private static final String THREE_HUNDRED = "300";
+    private static final String FIVE_HUNDRED = "500";
+
 	private RunApp app;
 	private MainActivity main;
 	private AlertDialog settingsView;
@@ -29,7 +36,8 @@ public class SettingsDialog extends DialogFragment {
 	private String origUnit;
 	private String origLimit;
 	private String newUnit;
-	private String newLimit, newLimitDate;
+	private String newLimit;
+    private String newLimitDate;
 	private boolean rDateUpdated = false;
 
     @Override
@@ -38,9 +46,9 @@ public class SettingsDialog extends DialogFragment {
     	main = (MainActivity) getActivity();
         settingsView =  new AlertDialog.Builder(getActivity())
         		.setView(getActivity().getLayoutInflater().inflate(R.layout.settings_dialog, null))
-        		.setTitle("Settings")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Ok",
+        		.setTitle(getResources().getString(R.string.settings))
+                .setNegativeButton(getResources().getString(R.string.cancel), null)
+                .setPositiveButton(getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                         	updateValues(); }
@@ -61,16 +69,16 @@ public class SettingsDialog extends DialogFragment {
     	origUnit = app.settingsManager.getUnit();
     	origLimit = app.settingsManager.getDBLimit();
     	// origUnit set-up
-    	if (origUnit.compareTo("km") == 0)
+    	if (origUnit.compareTo(KM) == 0)
     		rKm.setChecked(true);
     	else
     		rMiles.setChecked(true);
     	// origLimit set-up
-    	if (origLimit.compareTo("100") == 0)
+    	if (origLimit.compareTo(HUNDRED) == 0)
     		r100.setChecked(true);
-    	else if (origLimit.compareTo("300") == 0)
+    	else if (origLimit.compareTo(THREE_HUNDRED) == 0)
     		r300.setChecked(true);
-    	else if (origLimit.compareTo("500") == 0)
+    	else if (origLimit.compareTo(FIVE_HUNDRED) == 0)
     		r500.setChecked(true);
     	else {
     		rDate.setText(Run.getFullStringDate(origLimit));
@@ -95,30 +103,31 @@ public class SettingsDialog extends DialogFragment {
 				SettingsDatePickerFragment datePicker = new SettingsDatePickerFragment();
 				datePicker.setParent(SettingsDialog.this);
 				datePicker.setParentView(settingsView);
-				datePicker.show(getFragmentManager(), "settingsDatePicker");
+				datePicker.show(getFragmentManager(), SETTINGS_DATE_PICKER_TAG);
 		} });
     }
     
     private void updateValues() {
     	// distance origUnit
     	if (rMiles.isChecked())
-    		newUnit = "mi";
+    		newUnit = MI;
     	else
-    		newUnit = "km";
+    		newUnit = KM;
     	if (newUnit.compareTo(origUnit) != 0) {
     		app.settingsManager.setUnit(newUnit);
-    		Toast.makeText(main, "New runs will be entered in " + app.settingsManager.getUnitInFull(), Toast.LENGTH_SHORT).show();
+            final String updateToast = String.format(getResources().getString(R.string.new_runs_in_toast), app.settingsManager.getUnitInFull());
+            Toast.makeText(main, updateToast, Toast.LENGTH_SHORT).show();
 	    	((TextView) main.findViewById(R.id.dist_unit)).setText(newUnit);
 	    	main.getGraphView().setRunList(app.getRunDB(), newUnit);
 	    	main.updateGraph();
     	}
     	// DB origLimit
     	if (r100.isChecked())
-    		newLimit = "100";
+    		newLimit = HUNDRED;
     	else if (r300.isChecked())
-    		newLimit = "300";
+    		newLimit = THREE_HUNDRED;
     	else if (r500.isChecked())
-    		newLimit = "500";
+    		newLimit = FIVE_HUNDRED;
     	else if (rDateUpdated)
     		newLimit = newLimitDate;
     	else 
@@ -126,12 +135,13 @@ public class SettingsDialog extends DialogFragment {
     	if (newLimit.compareTo(origLimit) != 0) {
     		app.settingsManager.setDBLimit(app.getRunDB(), newLimit);
     		app.getRunDB().ensureDBLimit();
-    		if (rDate.isChecked())
-    			Toast.makeText(main, "Workouts after " + Run.getFullStringDate(newLimitDate) + " will be recorded", 
-    					Toast.LENGTH_SHORT).show();
-    		else
-    			Toast.makeText(main, "Last " + newLimit + " workouts will be recorded", 
-    					Toast.LENGTH_SHORT).show();
+    		if (rDate.isChecked()) {
+                final String toastMsg = String.format(getResources().getString(R.string.workouts_after), Run.getFullStringDate(newLimitDate));
+                Toast.makeText(main, toastMsg, Toast.LENGTH_SHORT).show();
+            } else {
+                final String toastMsg = String.format(getResources().getString(R.string.last_workouts), newLimit);
+                Toast.makeText(main, toastMsg, Toast.LENGTH_SHORT).show();
+            }
     		main.getRunAdapter().notifyDataSetChanged();
     	}
     }
@@ -150,7 +160,7 @@ public class SettingsDialog extends DialogFragment {
 			datePickerDialog = new DatePickerDialog(getActivity(), this, 2010, 0, 1);
 			DatePicker datePicker = datePickerDialog.getDatePicker();
 			datePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
-			datePickerDialog.setTitle("Save workouts from this date on");
+			datePickerDialog.setTitle(getResources().getString(R.string.save_from_on));
 			return datePickerDialog;
 		}
 		
@@ -166,7 +176,7 @@ public class SettingsDialog extends DialogFragment {
 			main = (MainActivity) getActivity();
 			startDate = (RadioButton) settingsDialogView.findViewById(R.id.settings_starting_date);
 			startDate.setText(Run.getFullStringDate(year, month, day));
-			settingsDialog.newLimitDate = (month + 1) + "/" + day + "/" + year;
+			settingsDialog.newLimitDate = Run.getFullStringDate(year, month, day);
 			settingsDialog.rDateUpdated = true;
 		}
 	}

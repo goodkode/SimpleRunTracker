@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Run Stats Tracker</string>
-    <string name="enter_run_tag">enterRunTag</string>
     <string name="settings">Settings</string>
     <string name="export_list_of_runs">Export list of runs</string>
     <string name="restore_list_of_runs">Restore list of runs</string>
@@ -18,33 +17,22 @@
     <string name="unit">unit</string>
     <string name="distance">distance</string>
     <string name="speed">speed</string>
+    <string name="distance_cap">Distance</string>
+    <string name="speed_cap">Speed</string>
+    <string name="distance_colon">Distance: </string>
+    <string name="speed_colon">Speed: </string>
 
-    <string name="Jan">Jan</string>
-    <string name="Feb">Feb</string>
-    <string name="Mar">Mar</string>
-    <string name="Apr">Apr</string>
-    <string name="May">May</string>
-    <string name="Jun">Jun</string>
-    <string name="Jul">Jul</string>
-    <string name="Aug">Aug</string>
-    <string name="Sep">Sep</string>
-    <string name="Oct">Oct</string>
-    <string name="Nov">Nov</string>
-    <string name="Dec">Dec</string>
+    <string name="no_runs">No runs to chart yet</string>
+    <string name="last_runs">Last %d workouts</string>
+    <string name="get_some_first">Get some running first!</string>
 
-    <string name="no_runs">"No runs to chart yet"</string>
-    <string name="last_runs">"Last %d workouts"</string>
-    <string name="get_some_first">"Get some running first!"</string>
-
-    <string name="stats_since">"Since %s ( %d workouts)"</string>
-    <string name="stats_avg_distance">"Average: %s mi"</string>
-    <string name="stats_longest_distance">"Longest: %s mi"</string>
-    <string name="stats_total_distance">"Total: %s mi"</string>
-    <string name="stats_avg_pace_and_speed">"Average: %d min/mi (%s mph)"</string>
-    <string name="stats_max_pace_and_speed">"Fastest: %d min/mi (%s mph)"</string>
-    <string name="stats_average_overall_1">"Your average is %s miles weekly."</string>
-    <string name="stats_average_overall_2">"That's %s miles daily."</string>
-    <string name="stats_average_overall_3">"You run every %s days."</string>
+    <string name="stats_since">"Since %1$s ( %2$d workouts)"</string>
+    <string name="stats_avg_distance">"Average: %1$s %2$s"</string>
+    <string name="stats_longest_distance">"Longest: %1$s %2$s"</string>
+    <string name="stats_total_distance">"Total: %1$s %2$s"</string>
+    <string name="stats_avg_pace_and_speed">"Average: %1$s %2$s (%3$s %4$s)"</string>
+    <string name="stats_max_pace_and_speed">"Fastest: %1$s %2$s (%3$s %4$s)"</string>
+    <string name="stats_average_overall">"Your average is %1$s miles weekly.\nThat's %2$s miles daily.\n\nYou run every %3$s days."</string>
     <string name="stats_not_yet">"No stats to display yet"</string>
 
     <string name="miles">Miles</string>
@@ -62,11 +50,11 @@
     <string name="new_runs_in_toast">"New runs will be entered in %s"</string>
     <string name="update_details">"Update details of %s's run"</string>
     <string name="workouts_after">"Workouts after %s will be recorded"</string>
-    <string name="last_workouts">"Last %d workouts will be recorded""</string>
+    <string name="last_workouts">"Last %s workouts will be recorded""</string>
 
-    <string name="cant_read">Can't read</string>
-    <string name="cant_delete">Can't delete </string>
-    <string name="cant_be_saved"> can't be saved :(</string>
+    <string name="cant_read">Cant read</string>
+    <string name="cant_delete">Can\'t delete </string>
+    <string name="cant_be_saved"> can\'t be saved :(</string>
     <string name="sd_card_no_avail">SD Card is not available</string>
     <string name="backed_up">Backed up in the Downloads folder</string>
     <string name="file_write_error">File write error</string>
@@ -81,5 +69,41 @@
     <string name="restore_message">"You need to have a previously backed up RunTracker-runlist.csv file in your Download directory. \n\nThis file will overwrite your current app data.\n\nAre you sure you want to go ahead?"</string>
     <string name="restore_yes">"Yes, restore"</string>
 
+
+    <string name="save_from_on">Save workouts from this date on</string>
+    <string name="distance_average">Distance average</string>
+    <string name="distance_max">Distance maximum</string>
+    <string name="distance_total">Distance total</string>
+    <string name="pace_speed">Pace and Speed</string>
+    <string name="pace_speed_avg">Pace and speed average</string>
+    <string name="pace_speed_max">Pace and speed maximum</string>
+    <string name="performance_distance">%s of average distance,  </string>
+    <string name="performance_speed">%s of average speed</string>
+    <string name="showing_since">Showing %1$d workouts since %2$s</string>
+    <string name="showing_of">"Showing %1$d of %2$s workouts"</string>
+    <string name="empty_list">Empty list</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="cant_read_">Can\'t read %s</string>
+    <string name="cant_delete_">Can\'t delete  %s</string>
+    <string name="time_colon">Time: </string>
+    <string name="how_many_to_save">How many workouts to save:</string>
+    <string name="please_select_unit">Please select the distance unit of your workouts</string>
+    <string name="or_starting_date">Or starting this date:</string>
+    <string name="pick_date">Pick a date...</string>
+    <string name="info">info</string>
+    <string name="perform_score">PerformScore: </string>
+    <string name="performance">performance</string>
+    <string name="date">date</string>
+    <string name="time">time</string>
+    <string name="pace">pace</string>
+    <string name="my_time">My Time: </string>
+    <string name="yesterday_">Yesterday  </string>
+    <string name="today_">Today </string>
+    <string name="tomorrow_">Tomorrow </string>
+    <string name="date_">Date...  </string>
+    <string name="enter_run">Enter Run</string>
+    <string name="your_average">your average</string>
+    <string name="done">Done</string>
 
 </resources>

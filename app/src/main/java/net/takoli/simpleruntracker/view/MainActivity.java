@@ -42,6 +42,9 @@ import net.takoli.simpleruntracker.view.widget.VerticalTextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String ENTER_RUN_FRAGMENT_TAG = "enterRunTag";
+    private static final String STATS_FRAGMENT_TAG = "statsFragment";
+
     public static final int WRITE_TO_SD = 1;
     public static final int WRITE_TO_SD_DELETE_LOCAL = 2;
     public static final int RESTORE_FROM_SD = 3;
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
 		// "Enter Run" top fragment setup:
         enterRunFrame = findViewById(R.id.enter_run_frame);
-        enterRun = fragMngr.findFragmentByTag(getResources().getString(R.string.enter_run_tag));
+        enterRun = fragMngr.findFragmentByTag(ENTER_RUN_FRAGMENT_TAG);
         distance = (VerticalTextView) findViewById(R.id.distance);
         time = (VerticalTextView) findViewById(R.id.time);
         dateRadioGroup = (RadioGroup) findViewById(R.id.date_radiobuttons);
@@ -161,9 +164,6 @@ public class MainActivity extends AppCompatActivity {
         listGap = listBottom - enterRunBottom;
 		graphHeight = findViewById(R.id.graph_space).getHeight();
         moveTextBy = enterRun.getView().findViewById(R.id.left).getWidth() * 0.2f;
-//        Log.i("run", "M screen: " + app.settingsManager.getMainScreenWidth() + " * " + app.settingsManager.getMainScreenHeight() +
-//                " || run bottom and slide: " + enterRunBottom + ", " + enterRunSlideDistance +
-//                " | list top, bottom, length, shift: " + listTop + ", " + listBottom + ", " + listLength + ", " + shiftedDown);
     }
 
     @Override
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
 	
 	@Override
 	public void onBackPressed() {
-		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
+		statsFragment = (StatsFragment) fragMngr.findFragmentByTag(STATS_FRAGMENT_TAG);
 		if (statsFragment != null && statsFragment.isActive())
 			statsFragment.animateOut();
 		else
@@ -204,12 +204,12 @@ public class MainActivity extends AppCompatActivity {
 	    switch (item.getItemId()) {
 	    	case R.id.stats_icon:
 	    	case R.id.statistics:
-	    		statsFragment = (StatsFragment) fragMngr.findFragmentByTag("statsFragment");
+	    		statsFragment = (StatsFragment) fragMngr.findFragmentByTag(STATS_FRAGMENT_TAG);
 	    		if (statsFragment == null) {
 	    			statsFragment = new StatsFragment();
 	    			statsFragment.setRetainInstance(true);
                     FragmentTransaction fragTrans = fragMngr.beginTransaction();
-		    		fragTrans.add(R.id.main, statsFragment, "statsFragment");
+		    		fragTrans.add(R.id.main, statsFragment, STATS_FRAGMENT_TAG);
 		    		fragTrans.commit();
 		    	} else {
 	    			if (statsFragment.isActive())
@@ -405,21 +405,21 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 writeToSd();
             } else
-                Toast.makeText(this, "Skipping backup to SD Card", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.skip_backup), Toast.LENGTH_LONG).show();
         else if (requestCode == WRITE_TO_SD_DELETE_LOCAL)
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 writeToSdDeleteLocal();
             }
             else {
                 deleteLocalData();
-                Toast.makeText(this, "Skipping restore, permission needed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.skip_restore), Toast.LENGTH_LONG).show();
             }
         else if (requestCode == RESTORE_FROM_SD)
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 restoreFromSd();
             }
             else
-                Toast.makeText(this, "Skipping restore, permission needed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.skip_restore), Toast.LENGTH_LONG).show();
     }
 
     private void deleteLocalData() {

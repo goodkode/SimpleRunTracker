@@ -1,18 +1,18 @@
 package net.takoli.simpleruntracker.view.graph;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Display;
+import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 
+import net.takoli.simpleruntracker.R;
 import net.takoli.simpleruntracker.model.Run;
 import net.takoli.simpleruntracker.model.RunDB;
 
@@ -43,7 +43,7 @@ public class GraphViewSmall extends View {
 	        super(context, attrs);
 	        // initialize fields
 	        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-	        if (display.getRotation() == Configuration.ORIENTATION_PORTRAIT)
+	        if (display.getRotation() == Surface.ROTATION_0)
 	        	MAX_PLOTS = 31;
 	        else MAX_PLOTS = 16;
 	        dists = new long[MAX_PLOTS];
@@ -129,7 +129,7 @@ public class GraphViewSmall extends View {
 		if (dataPlotSize == 0) {
 			coordPaint.setTextSize(height / 5f);
 			coordPaint.setTextAlign(Paint.Align.CENTER);
-			canvas.drawText("No runs to chart yet", canvas.getWidth() / 2, canvas.getHeight() / 2, coordPaint);
+			canvas.drawText(getResources().getString(R.string.no_runs), canvas.getWidth() / 2, canvas.getHeight() / 2, coordPaint);
 			return; }
 		drawCoordSystem(canvas, distMin, distMax, speedMin, speedMax);
 		setPlotCoordinates();
@@ -163,7 +163,7 @@ public class GraphViewSmall extends View {
 		coordPaint.setTextSize(bPad * 0.5f);
         coordPaint.setStrokeWidth(1);
         coordPaint.setTextAlign(Paint.Align.CENTER);
-		canvas.drawText("Last " + dataPlotSize + " workouts", canvas.getWidth() / 2, tPad + height + bPad * 0.6f, coordPaint);
+		canvas.drawText(String.format(getResources().getString(R.string.last_workouts), dataPlotSize), canvas.getWidth() / 2, tPad + height + bPad * 0.6f, coordPaint);
 	}
 	
 	private void drawPath(Canvas canvas, Paint pathPaint, float[] X, float[] Y) {

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Run Stats Tracker</string>
+    <string name="settings">Paramètres</string>
+    <string name="export_list_of_runs">Exporter la liste des entraînement</string>
+    <string name="restore_list_of_runs">Restaurer la liste des entraînement</string>
+    <string name="delete_db">Supprimer tous les entraînements</string>
+    <string name="statistics">Statistiques</string>
+    <string name="stats">Stats</string>
+    <string name="graph_it">Graphique</string>
+
+    <string name="day">jour</string>
+    <string name="month">mois</string>
+    <string name="year">année</string>
+    <string name="limit">limite</string>
+    <string name="unit">unité</string>
+    <string name="distance">distance</string>
+    <string name="speed">vitesse</string>
+    <string name="distance_cap">Distance</string>
+    <string name="speed_cap">Vitesse</string>
+    <string name="distance_colon">Distance: </string>
+    <string name="speed_colon">Vitesse: </string>
+
+    <string name="no_runs">Pas d\'entraînement à afficher</string>
+    <string name="last_runs">%d derniers entraînements</string>
+    <string name="get_some_first">Un peu d\'entraînement d\'abord!</string>
+
+    <string name="stats_since">"Depuis le %1$s (%2$d entraînements)"</string>
+    <string name="stats_avg_distance">"En moyenne: %1$s %2$s"</string>
+    <string name="stats_longest_distance">"Le plus long: %1$s %2$s"</string>
+    <string name="stats_total_distance">"Total: %1$s %2$s"</string>
+    <string name="stats_avg_pace_and_speed">"En moyenne: %1$s %2$s (%3$s %4$s)"</string>
+    <string name="stats_max_pace_and_speed">"Le plus rapide: %1$s %2$s (%3$s %4$s)"</string>
+    <string name="stats_average_overall">"En moyenne %1$s miles hebdomadaire.\nCela %2$s miles quotidien.\n\nVous courez tous les %3$s jours."</string>
+    <string name="stats_not_yet">"Pas encore de stats à afficher"</string>
+
+    <string name="miles">Miles</string>
+    <string name="kilometers">Kilomètres</string>
+    <string name="ok">OK</string>
+    <string name="no">NO</string>
+    <string name="cancel">Annuler</string>
+    <string name="delete">Supprimer</string>
+    <string name="update_run">Mettre à jour l\'entraînement</string>
+    <string name="delete_run">Supprimer l\'entraînement</string>
+    <string name="confirm_delete">Confirmer la suppression</string>
+    <string name="delete_message">"Tous les entraînements vont être supprimés de manière irréversible.\n\nVous aurez peut être besoin de donner la permission de sauvegarder votre liste actuelle dans le dossier de téléchargement"</string>
+    <string name="choose_unit">Choisissez une unité de distance</string>
+    <string name="choose_message">"Voulez vous courir en miles ou en kilomètres"</string>
+    <string name="new_runs_in_toast">"Les entraînements futures seront sauvegardés en %s"</string>
+    <string name="update_details">"Mettre à jour l\'entraînement du %s"</string>
+    <string name="workouts_after">"Les entraînements après le %s seront sauvegardés"</string>
+    <string name="last_workouts">"Les %s derniers entraînements seront sauvegardés""</string>
+
+    <string name="cant_read">Erreur de lecture</string>
+    <string name="cant_delete">Erreur de suppression </string>
+    <string name="cant_be_saved"> Erreur de sauvegarde :(</string>
+    <string name="sd_card_no_avail">La carte SD n\'est pas disponible</string>
+    <string name="backed_up">Sauvegardé dans le répertoire de téléchargement</string>
+    <string name="file_write_error">Erreur d\'écriture fichier</string>
+    <string name="csv_does_not_exist">Le fichier RunTracker-runlist.csv n\'existe pas</string>
+    <string name="email_not_sent">L\'e-mail n\'a pas été envoyé</string>
+    <string name="email_title">RunTracker runlist pour Excel</string>
+    <string name="email_header">RunTracker-runlist.csv est attaché.</string>
+    <string name="email_body">"RunTracker-runlist.csv est attaché.\n\nLe fichier peut être ouvert avec n\'importe quel tableur, par exemple MS Excel, ou bien avec un simple éditeur de fichier"</string>
+    <string name="skip_backup">Sauvegarde sur la carte SD non effectuée</string>
+    <string name="skip_restore">Restauration non effectuée, une permission est nécessaire</string>
+    <string name="restore_from_sd">Restaurer depuis la carte SD</string>
+    <string name="restore_message">"Vous devez avoir un fichier RunTracker-runlist.csv déjà sauvegardé dans votre répertoire de téléchargement.\n\nÊtes vous sûr de vouloir continuer ?"</string>
+    <string name="restore_yes">"Oui, restaurer"</string>
+
+
+</resources>

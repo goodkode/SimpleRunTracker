@@ -19,6 +19,13 @@ import net.takoli.simpleruntracker.model.RunDB;
 
 public class StatsFragment extends Fragment {
 
+	private static final String KM = "km";
+	private static final String MI = "mi";
+	private static final String MIN_PER_MI = "min/mi";
+	private static final String MPH = "mph";
+	private static final String MIN_PER_KM = "min/km";
+	private static final String KMPH = "km/h";
+
 	private RunApp app;
 	private boolean active = true;
 	private View thisView, leftOverlay;
@@ -36,7 +43,6 @@ public class StatsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		//Log.i("run", "onCreateView");
 		app = (RunApp) getActivity().getApplication();
 		runDB = app.getRunDB();
 		thisView = inflater.inflate(R.layout.stats_layout, container, false);
@@ -45,7 +51,6 @@ public class StatsFragment extends Fragment {
 	
 	@Override
 	public void onStart() {
-		//Log.i("run", "onStart");
 		super.onStart();
 		View statsPanel = getActivity().findViewById(R.id.stats_panel);
 		View leftPanel = getActivity().findViewById(R.id.stats_left);
@@ -65,7 +70,6 @@ public class StatsFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		//Log.i("run", "onresume " + this.hashCode() + "; main: " + getActivity().hashCode());
 		leftOverlay = getActivity().findViewById(R.id.stats_left);
 		statPeriod = (TextView) getActivity().findViewById(R.id.stats_for_period);
 		distAvg = (TextView) getActivity().findViewById(R.id.stats_distance_avg);
@@ -87,7 +91,7 @@ public class StatsFragment extends Fragment {
 				if (isChecked) 
 					onStatsInKm(); } });
 		unit = app.settingsManager.getUnit();
-		if (unit.compareTo("km") == 0)   
+		if (unit.compareTo(KM) == 0)
 			kmChB.setChecked(true);
 		else 							
 			mileChB.setChecked(true);
@@ -120,49 +124,61 @@ public class StatsFragment extends Fragment {
 		kmChB.setChecked(false);
 		if (noStats())
 			return;
-		statPeriod.setText("Since " + runDB.getRunList().get(0).getDateString() + 
-					" (" + runDB.getRunList().size() +
-					(runDB.getRunList().size() == 1 ? " workout)" : " workouts)"));
-		distAvg.setText("Average: " + runDB.getAvgDistString("mi") + " mi");
-		distMax.setText("Longest: " + runDB.getMaxDistString("mi") + " mi");
-		distTotal.setText("Total: " + runDB.getTotalDistString("mi") + " mi");
-		paceSpeedAvg.setText("Average: " + runDB.getAvgPaceString("mi") + " min/mi" +
-									" (" + runDB.getAvgSpeedString("mi") + " mph)");
-		paceSpeedMax.setText("Fastest: " + runDB.getMaxPaceString("mi") + " min/mi" +
-									" (" + runDB.getMaxSpeedString("mi") + " mph)");
+		statPeriod.setText(String.format(getResources().getString(R.string.stats_since),
+				runDB.getRunList().get(0).getDateString(app),
+				runDB.getRunList().size()));
+		distAvg.setText(String.format(getResources().getString(R.string.stats_avg_distance),
+				runDB.getAvgDistString(MI), MI));
+		distMax.setText(String.format(getResources().getString(R.string.stats_longest_distance),
+				runDB.getMaxDistString(MI), MI));
+		distTotal.setText(String.format(getResources().getString(R.string.stats_total_distance),
+				runDB.getTotalDistString(MI), MI));
+		paceSpeedAvg.setText(String.format(getResources().getString(R.string.stats_avg_pace_and_speed),
+                runDB.getAvgPaceString(MI), MIN_PER_MI,
+				runDB.getAvgSpeedString(MI), MPH));
+        paceSpeedMax.setText(String.format(getResources().getString(R.string.stats_max_pace_and_speed),
+                runDB.getMaxPaceString(MI), MIN_PER_MI,
+                runDB.getMaxSpeedString(MI), MPH));
 		if (dailyAvg != null)
-			dailyAvg.setText("Your average is " + runDB.getWeeklyAvgString("mi") + " miles weekly." + 
-								"\nThat's " + runDB.getDailyAvgString("mi") + " miles daily." +
-								"\n\nYou run every " + runDB.getRunFrequencyString() + " days.");
+			dailyAvg.setText(String.format(getResources().getString(R.string.stats_average_overall),
+                    runDB.getWeeklyAvgString(MI),
+                    runDB.getDailyAvgString(MI),
+                    runDB.getRunFrequencyString()));
 	}
 	public void onStatsInKm() {
 		mileChB.setChecked(false);
 		if (noStats())
 			return;
-		statPeriod.setText("Since " + runDB.getRunList().get(0).getDateString() + 
-				" (" + runDB.getRunList().size() +
-				(runDB.getRunList().size() == 1 ? " workout)" : " workouts)"));
-		distAvg.setText("Average: " + runDB.getAvgDistString("km") + " km");
-		distMax.setText("Longest: " + runDB.getMaxDistString("km") + " km");
-		distTotal.setText("Total: " + runDB.getTotalDistString("km") + " km");
-		paceSpeedAvg.setText("Average: " + runDB.getAvgPaceString("km") + " min/km" +
-									" (" + runDB.getAvgSpeedString("km") + " km/h)");
-		paceSpeedMax.setText("Fastest: " + runDB.getMaxPaceString("km") + " min/km" +
-									" (" + runDB.getMaxSpeedString("km") + " km/h)");
+		statPeriod.setText(String.format(getResources().getString(R.string.stats_since),
+				runDB.getRunList().get(0).getDateString(app),
+				runDB.getRunList().size()));
+		distAvg.setText(String.format(getResources().getString(R.string.stats_avg_distance),
+				runDB.getAvgDistString(KM), KM));
+		distMax.setText(String.format(getResources().getString(R.string.stats_longest_distance),
+				runDB.getMaxDistString(KM), KM));
+		distTotal.setText(String.format(getResources().getString(R.string.stats_total_distance),
+				runDB.getTotalDistString(KM), KM));
+        paceSpeedAvg.setText(String.format(getResources().getString(R.string.stats_avg_pace_and_speed),
+                runDB.getAvgPaceString(KM), MIN_PER_KM,
+                runDB.getAvgSpeedString(KM), KMPH));
+        paceSpeedMax.setText(String.format(getResources().getString(R.string.stats_max_pace_and_speed),
+                runDB.getMaxPaceString(KM), MIN_PER_KM,
+                runDB.getMaxSpeedString(KM), KMPH));
 		if (dailyAvg != null)
-			dailyAvg.setText("Your average is " + runDB.getWeeklyAvgString("km") + " km weekly." + 
-									"\nThat's " + runDB.getDailyAvgString("km") + " km daily." +
-									"\n\nYou run every " + runDB.getRunFrequencyString() + " days.");
+            dailyAvg.setText(String.format(getResources().getString(R.string.stats_average_overall),
+                    runDB.getWeeklyAvgString(KM),
+                    runDB.getDailyAvgString(KM),
+                    runDB.getRunFrequencyString()));
 	}
 	
 	public boolean noStats() {
 		if (runDB.isEmpty()) {
-			statPeriod.setText("No stats to display yet");
-			distAvg.setText("Average: -");
-			distMax.setText("Longest: -");
-			distTotal.setText("Total: -");
-			paceSpeedAvg.setText("Average: -");
-			paceSpeedMax.setText("Fastest: -");
+			statPeriod.setText(getResources().getString(R.string.stats_not_yet));
+            distAvg.setText(String.format(getResources().getString(R.string.stats_avg_distance), "-", ""));
+            distMax.setText(String.format(getResources().getString(R.string.stats_longest_distance), "-", ""));
+            distTotal.setText(String.format(getResources().getString(R.string.stats_total_distance), "-", ""));
+            paceSpeedAvg.setText(String.format(getResources().getString(R.string.stats_avg_distance), "-", ""));
+            paceSpeedMax.setText(null);
 			return true;
 		}
 		else

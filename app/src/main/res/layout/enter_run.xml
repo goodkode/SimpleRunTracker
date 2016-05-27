@@ -14,7 +14,8 @@
         <net.takoli.simpleruntracker.view.widget.VerticalTextView
             android:id="@+id/distance"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:gravity="bottom" android:text="Distance"  />
+            android:gravity="bottom"
+            android:text="@string/distance_cap"  />
     </RelativeLayout>
 
     <!-- MILES & TIME SECTION -->
@@ -114,7 +115,8 @@
               <net.takoli.simpleruntracker.view.widget.VerticalTextView
                   android:id="@+id/time"
                   android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:gravity="top" android:text="My Time"  />
+                  android:gravity="top"
+                  android:text="@string/my_time"  />
     </RelativeLayout>
 	
     <!-- DATE selector -->
@@ -130,17 +132,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Today  " />
+            android:text="@string/today_" />
         <RadioButton
             android:id="@+id/date_yesterday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Yesterday  " />
+            android:text="@string/yesterday_" />
         <RadioButton
             android:id="@+id/date_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date...  " />
+            android:text="@string/date_" />
     </RadioGroup>
 	    
     <!-- BUTTON -->
@@ -155,7 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Enter Run"
+            android:text="@string/enter_run"
             android:textAllCaps="false"
             android:textSize="20sp" />
 

@@ -56,7 +56,7 @@ public class GraphFullActivity extends AppCompatActivity {
             needMoreData = (TextView) findViewById(R.id.chart_avg_label);
             needMoreData.setTextSize(app.settingsManager.getMainScreenWidth() / 50);
             needMoreData.setTextColor(0xAA000000);
-            needMoreData.setText("Get some running first!");
+            needMoreData.setText(String.format(getResources().getString(R.string.get_some_first)));
             needMoreData.setVisibility(View.VISIBLE);
             findViewById(R.id.seekBar).setVisibility(View.GONE);
             return;		// not enough data
@@ -90,7 +90,7 @@ public class GraphFullActivity extends AppCompatActivity {
     }
 
     private void showCurrentNumber(int n) {
-        currentNumber.setText("last " + n + " workouts");
+        currentNumber.setText(String.format(getResources().getString(R.string.last_runs), n));
         currentNumber.setVisibility(View.VISIBLE);
         currentNumber.setAlpha(1);
         currentNumber.animate().alpha(0).setDuration(1000);

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
 
+    private static final String EDIT_RUN_TAG = "editRun";
     private static final int HEADER = 0;
     private static final int RUN = 1;
     private static final int EXPANDED = 2;
@@ -69,9 +70,9 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         } else {
             Run run = runList.get(position - 1);
             runViewHolder.rDist.setText(run.getDistanceString());
-            runViewHolder.rDate.setText(run.getDateString());
+            runViewHolder.rDate.setText(run.getDateString(main));
             runViewHolder.rDist.setText(run.getDistanceString());
-            runViewHolder.rTime.setText(run.getTimeString() + "s ");
+            runViewHolder.rTime.setText(run.getTimeString());
             runViewHolder.rPace.setText(run.getPaceString());
             if (runViewHolder instanceof ExtendedRunViewHolder) {
                 ExtendedRunViewHolder expRunViewHolder = (ExtendedRunViewHolder) runViewHolder;
@@ -79,8 +80,8 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
                 int avgPaceU = runListDB.getAvgPaceUNIT();
                 expRunViewHolder.rSpeed.setText(run.getSpeedString());
                 expRunViewHolder.rPerformScore.setText(run.getPerfScore(avgDistU, avgPaceU));
-                expRunViewHolder.rPerfDist.setText(run.getPerfDist(avgDistU) + " of average distance,  ");
-                expRunViewHolder.rPerfPace.setText(run.getPerfPace(avgPaceU) + " of average speed");
+                expRunViewHolder.rPerfDist.setText(String.format(main.getString(R.string.performance_distance), run.getPerfDist(avgDistU)));
+                expRunViewHolder.rPerfPace.setText(String.format(main.getString(R.string.performance_speed), run.getPerfPace(avgPaceU)));
             }
         }
     }
@@ -137,7 +138,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         if (header == null)
             return;
         if (runList.size() == 0)
-            header.info.setText("Empty list");
+            header.info.setText(main.getString(R.string.empty_list));
         else {
             String limit = ((RunApp) main.getApplication()).settingsManager.getDBLimit();
             boolean numberLimitUsed = true;
@@ -145,16 +146,10 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
                 Integer.parseInt(limit);
             } catch (NumberFormatException nfe) {
                 numberLimitUsed = false; }
-            if (numberLimitUsed) {
-                header.info.setText("Showing " + runList.size() + " of " + limit + " workouts");
-            }
-            else {
-                if (runList.size() != 1)
-                    header.info.setText("Showing " + runList.size() + " workouts");
-                else
-                    header.info.setText("Showing " + runList.size() + " workout");
-                header.info.append(" since " + Run.getFullStringDate(limit));
-            }
+            if (numberLimitUsed)
+                header.info.setText(String.format(main.getString(R.string.showing_of), runList.size(), limit));
+            else
+                header.info.setText(String.format(main.getString(R.string.showing_since), runList.size(), Run.getFullStringDate(limit)));
         }
         header.itemView.invalidate();
     }
@@ -165,7 +160,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         Bundle bundle = new Bundle();
         bundle.putInt(RunUpdateDialog.POSITION, position);
         updateRunDialog.setArguments(bundle);
-        updateRunDialog.show(main.getFragmentManager(), "editRun");
+        updateRunDialog.show(main.getFragmentManager(), EDIT_RUN_TAG);
     }
 
 

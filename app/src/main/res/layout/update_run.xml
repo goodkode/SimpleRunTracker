@@ -16,7 +16,7 @@
 	        android:layout_width="wrap_content" 
 	        android:layout_height="wrap_content"
 	        android:padding="8dp"
-	        android:text="Distance: " 
+	        android:text="@string/distance_colon"
 	        android:textSize="20sp"  />
 	    
 	    <EditText
@@ -62,7 +62,7 @@
 	        android:layout_width="wrap_content" 
 	        android:layout_height="wrap_content"
 	        android:padding="8dp"
-	        android:text="Time: "
+	        android:text="@string/time_colon"
 	        android:textSize="20sp" />
 	    
    	    <EditText
