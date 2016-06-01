@@ -81,13 +81,13 @@
     <string name="showing_since">Montrer %1$d entraînements depuis %2$s</string>
     <string name="showing_of">"Montrer %1$d sur %2$s entraînements"</string>
     <string name="empty_list">Liste vide</string>
-    <string name="today">Aujourd'hui</string>
+    <string name="today">Aujourd\'hui</string>
     <string name="tomorrow">Demain</string>
     <string name="cant_read_">%s ne peut être lu</string>
     <string name="cant_delete_">%s ne peut être effacé</string>
     <string name="time_colon">Temps : </string>
-    <string name="how_many_to_save">Combien d'entraînement à sauvegarder :</string>
-    <string name="please_select_unit">Choisir l'unité de distance des entraînements</string>
+    <string name="how_many_to_save">Combien d\'entraînement à sauvegarder :</string>
+    <string name="please_select_unit">Choisir l\'unité de distance des entraînements</string>
     <string name="or_starting_date">Ou choisir cette date :</string>
     <string name="pick_date">Choisir une date...</string>
     <string name="info">info</string>
@@ -96,14 +96,14 @@
     <string name="date">date</string>
     <string name="time">temps</string>
     <string name="pace">rythme</string>
-    <string name="my_time">mon temps : </string>
-    <string name="yesterday_">hier  </string>
-    <string name="today_">Aujourd'hui </string>
+    <string name="my_time">Mon Temps</string>
+    <string name="yesterday">"Hier"</string>
+    <string name="yesterday_">"Hier  "</string>
+    <string name="today_">"Aujourd\'hui  "</string>
     <string name="tomorrow_">Demain </string>
-    <string name="date_">Date...  </string>
-    <string name="enter_run">Enregistrer la course</string>
+    <string name="date_">"Date…  "</string>
+    <string name="enter_run">Enregistrer</string>
     <string name="your_average">votre moyenne</string>
     <string name="done">Terminé</string>
-
 
 </resources>

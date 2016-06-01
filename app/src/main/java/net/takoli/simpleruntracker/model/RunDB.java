@@ -270,7 +270,7 @@ public class RunDB {
 				outputStream.write((runList.get(i).toString()+"\n").getBytes());
 			outputStream.close();
 		} catch (Exception e) {
-			Toast.makeText(context, context.getString(R.string._cant_be_saved),Toast.LENGTH_LONG).show();
+			Toast.makeText(context, context.getString(R.string.cant_be_saved),Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
 	}

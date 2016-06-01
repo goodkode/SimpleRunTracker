@@ -82,7 +82,7 @@ public class Run {
 			return context.getResources().getString(R.string.today);
 		else if (date.get(Calendar.DAY_OF_YEAR) == (today.get(Calendar.DAY_OF_YEAR) - 1) &&
 				date.get(Calendar.YEAR) == today.get(Calendar.YEAR))
-			return context.getResources().getString(R.string.tomorrow);
+			return context.getResources().getString(R.string.yesterday);
 		else
 			return dateFormat.format(date.getTimeInMillis());
 	}

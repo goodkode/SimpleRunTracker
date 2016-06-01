@@ -69,7 +69,6 @@
     <string name="restore_message">"You need to have a previously backed up RunTracker-runlist.csv file in your Download directory. \n\nThis file will overwrite your current app data.\n\nAre you sure you want to go ahead?"</string>
     <string name="restore_yes">"Yes, restore"</string>
 
-
     <string name="save_from_on">Save workouts from this date on</string>
     <string name="distance_average">Distance average</string>
     <string name="distance_max">Distance maximum</string>
@@ -97,11 +96,12 @@
     <string name="date">date</string>
     <string name="time">time</string>
     <string name="pace">pace</string>
-    <string name="my_time">My Time: </string>
-    <string name="yesterday_">Yesterday  </string>
-    <string name="today_">Today </string>
+    <string name="my_time">My Time</string>
+    <string name="yesterday">"Yesterday"</string>
+    <string name="yesterday_">"Yesterday  "</string>
+    <string name="today_">"Today  "</string>
     <string name="tomorrow_">Tomorrow </string>
-    <string name="date_">Date...  </string>
+    <string name="date_">"Date…  "</string>
     <string name="enter_run">Enter Run</string>
     <string name="your_average">your average</string>
     <string name="done">Done</string>
