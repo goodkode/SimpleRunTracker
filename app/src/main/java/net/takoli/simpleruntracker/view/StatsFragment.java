@@ -143,7 +143,8 @@ public class StatsFragment extends Fragment {
 			dailyAvg.setText(String.format(getResources().getString(R.string.stats_average_overall),
                     runDB.getWeeklyAvgString(MI),
                     runDB.getDailyAvgString(MI),
-                    runDB.getRunFrequencyString()));
+                    runDB.getRunFrequencyString(),
+					MI));
 	}
 	public void onStatsInKm() {
 		mileChB.setChecked(false);
@@ -168,7 +169,8 @@ public class StatsFragment extends Fragment {
             dailyAvg.setText(String.format(getResources().getString(R.string.stats_average_overall),
                     runDB.getWeeklyAvgString(KM),
                     runDB.getDailyAvgString(KM),
-                    runDB.getRunFrequencyString()));
+                    runDB.getRunFrequencyString(),
+					KM));
 	}
 	
 	public boolean noStats() {
