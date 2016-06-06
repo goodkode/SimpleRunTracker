@@ -79,7 +79,7 @@
     <string name="performance_distance">%s de la distance moyenne,  </string>
     <string name="performance_speed">%s de la vitesse moyenne</string>
     <string name="showing_since">Montrer %1$d entraînements depuis %2$s</string>
-    <string name="showing_of">"Montrer %1$d sur %2$s entraînements"</string>
+    <string name="showing_of">"Montrer %1$d entraînements sur %2$s"</string>
     <string name="empty_list">Liste vide</string>
     <string name="today">Aujourd\'hui</string>
     <string name="tomorrow">Demain</string>
