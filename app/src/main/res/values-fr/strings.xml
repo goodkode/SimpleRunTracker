@@ -32,7 +32,7 @@
     <string name="stats_total_distance">"Total: %1$s %2$s"</string>
     <string name="stats_avg_pace_and_speed">"En moyenne: %1$s %2$s (%3$s %4$s)"</string>
     <string name="stats_max_pace_and_speed">"Le plus rapide: %1$s %2$s (%3$s %4$s)"</string>
-    <string name="stats_average_overall">"En moyenne %1$s miles hebdomadaire.\nCela %2$s miles quotidien.\n\nVous courez tous les %3$s jours."</string>
+    <string name="stats_average_overall">"En moyenne %1$s miles hebdomadaire.\nCela représente %2$s miles quotidien.\n\nVous courez tous les %3$s jours."</string>
     <string name="stats_not_yet">"Pas encore de stats à afficher"</string>
 
     <string name="miles">Miles</string>
