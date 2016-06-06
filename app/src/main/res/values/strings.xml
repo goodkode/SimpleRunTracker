@@ -19,8 +19,8 @@
     <string name="speed">speed</string>
     <string name="distance_cap">Distance</string>
     <string name="speed_cap">Speed</string>
-    <string name="distance_colon">Distance: </string>
-    <string name="speed_colon">Speed: </string>
+    <string name="distance_colon">Distance:</string>
+    <string name="speed_colon">"Speed: "</string>
 
     <string name="no_runs">No runs to chart yet</string>
     <string name="last_runs">Last %d workouts</string>
@@ -32,7 +32,7 @@
     <string name="stats_total_distance">"Total: %1$s %2$s"</string>
     <string name="stats_avg_pace_and_speed">"Average: %1$s %2$s (%3$s %4$s)"</string>
     <string name="stats_max_pace_and_speed">"Fastest: %1$s %2$s (%3$s %4$s)"</string>
-    <string name="stats_average_overall">"Your average is %1$s miles weekly.\nThat's %2$s miles daily.\n\nYou run every %3$s days."</string>
+    <string name="stats_average_overall">"Your average is %1$s %4$s weekly.\nThat's %2$s %4$s daily.\n\nYou run every %3$s days."</string>
     <string name="stats_not_yet">"No stats to display yet"</string>
 
     <string name="miles">Miles</string>
@@ -76,7 +76,7 @@
     <string name="pace_speed">Pace and Speed</string>
     <string name="pace_speed_avg">Pace and speed average</string>
     <string name="pace_speed_max">Pace and speed maximum</string>
-    <string name="performance_distance">%s of average distance,  </string>
+    <string name="performance_distance">"%s of average distance,  "</string>
     <string name="performance_speed">%s of average speed</string>
     <string name="showing_since">Showing %1$d workouts since %2$s</string>
     <string name="showing_of">"Showing %1$d of %2$s workouts"</string>
@@ -85,13 +85,13 @@
     <string name="tomorrow">Tomorrow</string>
     <string name="cant_read_">Can\'t read %s</string>
     <string name="cant_delete_">Can\'t delete  %s</string>
-    <string name="time_colon">Time: </string>
+    <string name="time_colon">Time:</string>
     <string name="how_many_to_save">How many workouts to save:</string>
     <string name="please_select_unit">Please select the distance unit of your workouts</string>
     <string name="or_starting_date">Or starting this date:</string>
-    <string name="pick_date">Pick a date...</string>
+    <string name="pick_date">Pick a date…</string>
     <string name="info">info</string>
-    <string name="perform_score">PerformScore: </string>
+    <string name="perform_score">"PerformScore: "</string>
     <string name="performance">performance</string>
     <string name="date">date</string>
     <string name="time">time</string>
