@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import net.takoli.simpleruntracker.R;
 import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.model.Run;
@@ -210,10 +208,6 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
                 @Override
                 public boolean onLongClick(View view) {
                     adapter.openRunEditDialog(getAdapterPosition());
-                    main.gTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Run Edit")
-                            .setAction("run edit via onLongClick")
-                            .build());
                     return true;
                 }
             });
@@ -221,10 +215,6 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
                 @Override
                 public void onClick(View view) {
                     adapter.openRunEditDialog(getAdapterPosition());
-                    main.gTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Run Edit")
-                            .setAction("run edit via edit icon")
-                            .build());
                 }
             });
         }

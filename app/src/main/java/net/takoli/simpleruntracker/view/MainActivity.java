@@ -26,9 +26,6 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import net.takoli.simpleruntracker.R;
 import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.adapter.RunAdapter;
@@ -75,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 	private GraphViewSmall graphSmall;
 
     // other
-    public Tracker gTracker;
     private FragmentManager fragMngr;
     protected GestureDetector gestDect;
     private int enterRunBottom;
@@ -98,9 +94,6 @@ public class MainActivity extends AppCompatActivity {
         app = (RunApp) getApplication();
 
 		//getActionBar().setDisplayShowTitleEnabled(false);
-        gTracker = ((RunApp) getApplication()).getDefaultTracker();
-        gTracker.setScreenName("MainScreen");
-        gTracker.send(new HitBuilders.ScreenViewBuilder().build());
         app.settingsManager = new SettingsManager(this);
         app.getRunDB().setDBLimit(app.settingsManager.getDBLimit());
         fragMngr = getFragmentManager();
@@ -138,10 +131,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openFullGraph();
-                gTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Graph")
-                        .setAction("graph via small graph")
-                        .build());
             }
         });
 		
@@ -217,20 +206,13 @@ public class MainActivity extends AppCompatActivity {
 					else
 						statsFragment.animateIn();
 	    		}
-                gTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Stats")
-                        .setAction("")
-                        .build());
+
 	            return true;
 	    	case R.id.settings:
 	    		openSettings();
 	            return true; 
 	        case R.id.graph_it:
 	    		openFullGraph();
-                gTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Graph")
-                        .setAction("graph via menu")
-                        .build());
 	            return true; 
 	    	case R.id.export_list_of_runs:
 	        	Intent emailIntent = app.getRunDB().emailIntent(this);

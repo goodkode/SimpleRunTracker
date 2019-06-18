@@ -23,8 +23,6 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import net.takoli.simpleruntracker.R;
 import net.takoli.simpleruntracker.RunApp;
 import net.takoli.simpleruntracker.adapter.RunAdapter;
@@ -217,29 +215,6 @@ public class EnterRunFragment extends Fragment {
 					// todo: off the UI thread
 					runListDB.saveRunDB(main);
                     runListView.invalidate();
-
-                    main.gTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Run!")
-                            .setAction("run entered")
-                            .build());
-                    main.gTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("run stats")
-                            .setAction("distance stats")
-                            .setLabel("run distance in mile/100")
-                            .setValue(newRun.getDistUNIT())
-                            .build());
-                    main.gTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("run stats")
-                            .setAction("time stats")
-                            .setLabel("run time in sec")
-                            .setValue(newRun.getTimeUNIT())
-                            .build());
-                    main.gTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("run stats")
-                            .setAction("pace stats")
-                            .setLabel("run pace in sec/mile")
-                            .setValue(newRun.getPaceUNIT())
-                            .build());
                     //Log.i("new run", newRun.getDistUNIT() + ", " + newRun.getTimeUNIT() + ", " + newRun.getPaceUNIT());
 				}
 			}
